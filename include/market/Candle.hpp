@@ -12,9 +12,15 @@ private:
     double close_;
     long long volume_;
 
+    void validate() const;
+
 public:
-    Candle(const std::string& timestamp,double open,double high,
-    double low,double close,long long volume);
+    Candle(const std::string& timestamp,
+           double open,
+           double high,
+           double low,
+           double close,
+           long long volume);
 
     const std::string& getTimestamp() const;
 
