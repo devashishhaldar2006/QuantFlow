@@ -1,11 +1,25 @@
 #include <iostream>
-#include "market/MarketData.hpp"
+#include "io/CSVParser.hpp"
 int main()
 {
-    std::cout << "Welcome to QuantFlow!\n";
-    MarketData marketData;
-    marketData.addCandle(Candle("2023-01-01T00:00:00Z", 100.0, 110.0, 90.0, 105.0, 1000));
-    marketData.addCandle(Candle("2023-01-02T00:00:00Z", 105.0, 115.0, 95.0, 110.0, 1500));
-    std::cout << "Candle count: " << marketData.size() << "\n";
+    try
+    {
+        MarketData marketData = CSVParser::parse("data/sample.csv");
+        std::cout << "Candle count: " << marketData.size() << "\n";
+
+        const Candle &firstCandle = marketData.getCandle(0);
+        std::cout << "First Candle - Timestamp: " << firstCandle.getTimestamp()
+                  << ", Open: " << firstCandle.getOpen()
+                  << ", High: " << firstCandle.getHigh()
+                  << ", Low: " << firstCandle.getLow()
+                  << ", Close: " << firstCandle.getClose()
+                  << ", Volume: " << firstCandle.getVolume() << "\n";
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "Error: " << e.what() << "\n";
+        return 1;
+    }
+
     return 0;
 }
