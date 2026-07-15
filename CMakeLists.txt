@@ -13,6 +13,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(QuantFlow
     src/main.cpp
+    src/market/Candle.cpp
+    src/market/MarketData.cpp
+)
+
+target_include_directories(QuantFlow
+    PRIVATE
+        include
 )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
