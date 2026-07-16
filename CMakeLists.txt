@@ -16,6 +16,7 @@ add_executable(QuantFlow
     src/market/Candle.cpp
     src/market/MarketData.cpp
     src/io/CSVParser.cpp
+    src/engine/MarketIterator.cpp
 )
 
 target_include_directories(QuantFlow
