@@ -17,6 +17,8 @@ add_executable(QuantFlow
     src/market/MarketData.cpp
     src/io/CSVParser.cpp
     src/engine/MarketIterator.cpp
+    src/engine/BacktestEngine.cpp
+    src/strategy/AlwaysHoldStrategy.cpp
 )
 
 target_include_directories(QuantFlow
