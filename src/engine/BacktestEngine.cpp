@@ -1,9 +1,11 @@
 #include "engine/BacktestEngine.hpp"
 
-BacktestEngine::BacktestEngine(const MarketData& marketData,
-                               Strategy& strategy)
+#include <iostream>
+
+BacktestEngine::BacktestEngine(const MarketData &marketData, Strategy &strategy, Portfolio &portfolio)
     : iterator_(marketData),
-      strategy_(strategy)
+      strategy_(strategy),
+      portfolio_(portfolio)
 {
 }
 
@@ -11,12 +13,33 @@ void BacktestEngine::run()
 {
     while (iterator_.hasNext())
     {
-        const Candle& candle = iterator_.current();
+        const Candle &candle = iterator_.current();
 
-        Signal signal = strategy_.onCandle(candle);
+        const double price = candle.getClose();
 
-        (void)signal;
+        portfolio_.updateMarketPrice(price);
 
+        const Signal signal = strategy_.onCandle(candle);
+
+        try
+        {
+            switch (signal)
+            {
+            case Signal::Buy:
+                portfolio_.buy(1, price);
+                break;
+            case Signal::Sell:
+                portfolio_.sell(1, price);
+                break;
+            case Signal::Hold:
+                // Do nothing
+                break;
+            }
+        }
+        catch (const std::exception &e)
+        {
+            std::cout << e.what() << '\n';
+        }
         iterator_.next();
     }
 }
