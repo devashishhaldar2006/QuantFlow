@@ -24,7 +24,7 @@ double Portfolio::totalValue() const
     return cash_ + (position_ * lastPrice_);
 }
 
-void Portfolio::buy(int quantity, double price)
+void Portfolio::buy(int quantity, double price, const std::string &timestamp)
 {
     if (quantity <= 0)
     {
@@ -42,9 +42,16 @@ void Portfolio::buy(int quantity, double price)
     cash_ -= totalCost;
     position_ += quantity;
     lastPrice_ = price;
+
+    trades_.emplace_back(
+        TradeSide::Buy,
+        quantity,
+        price,
+        timestamp
+    );
 }
 
-void Portfolio::sell(int quantity, double price)
+void Portfolio::sell(int quantity, double price, const std::string &timestamp)
 {
     if (quantity <= 0)
     {
@@ -62,4 +69,16 @@ void Portfolio::sell(int quantity, double price)
     cash_ += totalRevenue;
     position_ -= quantity;
     lastPrice_ = price;
+
+    trades_.emplace_back(
+        TradeSide::Sell,
+        quantity,
+        price,
+        timestamp
+    );
+}
+
+const std::vector<Trade>& Portfolio::getTrades() const
+{
+    return trades_;
 }

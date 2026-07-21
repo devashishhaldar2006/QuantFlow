@@ -26,10 +26,10 @@ void BacktestEngine::run()
             switch (signal)
             {
             case Signal::Buy:
-                portfolio_.buy(1, price);
+                portfolio_.buy(1, price, candle.getTimestamp());
                 break;
             case Signal::Sell:
-                portfolio_.sell(1, price);
+                portfolio_.sell(1, price, candle.getTimestamp());
                 break;
             case Signal::Hold:
                 // Do nothing

@@ -20,6 +20,7 @@ add_executable(QuantFlow
     src/engine/BacktestEngine.cpp
     src/strategy/AlwaysHoldStrategy.cpp
     src/portfolio/Portfolio.cpp
+    src/trade/Trade.cpp
 )
 
 target_include_directories(QuantFlow
