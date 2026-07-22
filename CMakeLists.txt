@@ -21,6 +21,7 @@ add_executable(QuantFlow
     src/strategy/AlwaysHoldStrategy.cpp
     src/portfolio/Portfolio.cpp
     src/trade/Trade.cpp
+    src/analytics/PerformanceAnalyzer.cpp
 )
 
 target_include_directories(QuantFlow
