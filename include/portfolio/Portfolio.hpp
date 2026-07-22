@@ -5,6 +5,7 @@
 #include "trade/Trade.hpp"
 class Portfolio {
 private:
+    double initialCash_;
     double cash_;
     int position_;
     double lastPrice_;
@@ -24,6 +25,8 @@ public:
     int position() const;
 
     double totalValue() const;
+
+    double initialCash() const;
 
     const std::vector<Trade>& getTrades() const;
 };

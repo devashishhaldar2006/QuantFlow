@@ -3,7 +3,12 @@
 #include <stdexcept>
 
 Portfolio::Portfolio(double initialCash)
-    : cash_(initialCash), position_(0), lastPrice_(0.0) {}
+    : initialCash_(initialCash), cash_(initialCash), position_(0), lastPrice_(0.0) {}
+
+double Portfolio::initialCash() const
+{
+    return initialCash_;
+}
 
 void Portfolio::updateMarketPrice(double price)
 {
@@ -47,8 +52,7 @@ void Portfolio::buy(int quantity, double price, const std::string &timestamp)
         TradeSide::Buy,
         quantity,
         price,
-        timestamp
-    );
+        timestamp);
 }
 
 void Portfolio::sell(int quantity, double price, const std::string &timestamp)
@@ -74,11 +78,10 @@ void Portfolio::sell(int quantity, double price, const std::string &timestamp)
         TradeSide::Sell,
         quantity,
         price,
-        timestamp
-    );
+        timestamp);
 }
 
-const std::vector<Trade>& Portfolio::getTrades() const
+const std::vector<Trade> &Portfolio::getTrades() const
 {
     return trades_;
 }
