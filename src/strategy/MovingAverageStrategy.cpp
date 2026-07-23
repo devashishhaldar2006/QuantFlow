@@ -73,3 +73,13 @@ Signal MovingAverageStrategy::onCandle(const Candle &candle)
 
     return Signal::Hold;
 }
+
+double MovingAverageStrategy::fastMovingAverage() const
+{
+    return fastSum_ / static_cast<double>(fastPrices_.size());
+}
+
+double MovingAverageStrategy::slowMovingAverage() const
+{
+    return slowSum_ / static_cast<double>(slowPrices_.size());
+}

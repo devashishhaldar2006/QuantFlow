@@ -26,11 +26,25 @@ void BacktestEngine::run()
             switch (signal)
             {
             case Signal::Buy:
-                portfolio_.buy(1, price, candle.getTimestamp());
+            {
+                const int quantity = positionSizer_.calculatePositionSize(portfolio_, price);
+
+                if (quantity > 0)
+                {
+                    portfolio_.buy(quantity, price, candle.getTimestamp());
+                }
                 break;
+            }
             case Signal::Sell:
-                portfolio_.sell(1, price, candle.getTimestamp());
+            {
+                const int quantity = portfolio_.position();
+
+                if (quantity > 0)
+                {
+                    portfolio_.sell(quantity, price, candle.getTimestamp());
+                }
                 break;
+            }
             case Signal::Hold:
                 // Do nothing
                 break;
