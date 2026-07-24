@@ -4,6 +4,7 @@
 #include "engine/BacktestEngine.hpp"
 #include "portfolio/Portfolio.hpp"
 #include "strategy/MovingAverageStrategy.hpp"
+#include "analytics/PerformanceAnalyzer.hpp"
 
 int main()
 {
@@ -12,31 +13,29 @@ int main()
         // Load market data from CSV file
         MarketData marketData = CSVParser::parse("data/sample.csv");
 
-        // create strategy
+        // Create strategy
         MovingAverageStrategy strategy(5, 20);
 
-        // create portfolio with 100,000 cash
+        // Create portfolio with ₹100,000 initial cash
         Portfolio portfolio(100000.0);
 
-        // create backtest engine
+        // Create backtest engine
         BacktestEngine engine(
             marketData,
             strategy,
             portfolio);
 
+        // Run the backtest
         engine.run();
 
-        // Print summary
-        std::cout << "\n========== BACKTEST SUMMARY ==========\n";
-        std::cout << "Initial Cash : " << portfolio.initialCash() << '\n';
-        std::cout << "Cash         : " << portfolio.cash() << '\n';
-        std::cout << "Position     : " << portfolio.position() << '\n';
-        std::cout << "Total Value  : " << portfolio.totalValue() << '\n';
-        std::cout << "Trades       : " << portfolio.getTrades().size() << '\n';
+        // Analyze and print performance
+        PerformanceAnalyzer analyzer(portfolio);
+        analyzer.printReport();
 
-        std::cout << "\n========== TRADES ==========\n";
+        // Print trade history
+        std::cout << "\n========== TRADE HISTORY ==========\n";
 
-        for (const Trade &trade : portfolio.getTrades())
+        for (const Trade& trade : portfolio.getTrades())
         {
             std::cout
                 << trade.getTimestamp()
@@ -46,14 +45,12 @@ int main()
                 << " | Price: " << trade.getPrice()
                 << '\n';
         }
-        std::cout << "Profit/Loss  : "
-                  << portfolio.totalValue() - portfolio.initialCash()
-                  << '\n';
-        }
-    catch (const std::exception &e)
+    }
+    catch (const std::exception& e)
     {
         std::cerr << "Error: " << e.what() << '\n';
         return 1;
     }
+
     return 0;
 }
