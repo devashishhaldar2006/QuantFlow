@@ -85,3 +85,13 @@ const std::vector<Trade> &Portfolio::getTrades() const
 {
     return trades_;
 }
+
+void Portfolio::recordEquity()
+{
+    equityCurve_.push_back(totalValue());
+}
+
+const std::vector<double> &Portfolio::getEquityCurve() const
+{
+    return equityCurve_;
+}

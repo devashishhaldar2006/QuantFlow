@@ -11,18 +11,13 @@ public:
     explicit PerformanceAnalyzer(const Portfolio &portfolio);
 
     double finalPortfolioValue() const;
-
     double netProfit() const;
-
     int totalTrades() const;
-
     double totalReturnPercent() const;
-
     int winningTrades() const;
-
     int losingTrades() const;
-
     double winRate() const;
+    double maximumDrawdown() const;
 
     void printReport() const;
 };

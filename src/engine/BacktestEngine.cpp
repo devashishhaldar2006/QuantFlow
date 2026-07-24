@@ -54,6 +54,7 @@ void BacktestEngine::run()
         {
             std::cout << e.what() << '\n';
         }
+        portfolio_.recordEquity();
         iterator_.next();
     }
 }

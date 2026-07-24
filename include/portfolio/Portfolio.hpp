@@ -10,6 +10,7 @@ private:
     int position_;
     double lastPrice_;
     std::vector<Trade> trades_;
+    std::vector<double> equityCurve_;
 
 public:
     explicit Portfolio(double initialCash);
@@ -29,4 +30,8 @@ public:
     double initialCash() const;
 
     const std::vector<Trade>& getTrades() const;
+
+    void recordEquity();
+
+    const std::vector<double>& getEquityCurve() const;
 };

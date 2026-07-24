@@ -125,5 +125,42 @@ void PerformanceAnalyzer::printReport() const
     std::cout << "Winning Trades    : " << winningTrades() << '\n';
     std::cout << "Losing Trades     : " << losingTrades() << '\n';
     std::cout << "Win Rate (%)      : " << winRate() << "%\n";
+    std::cout << "Maximum Drawdown : "
+              << maximumDrawdown()
+              << "%\n";
     std::cout << "=====================================\n";
+}
+
+double PerformanceAnalyzer::maximumDrawdown() const
+{
+
+    const auto &equityCurve = portfolio_.getEquityCurve();
+
+    if (equityCurve.empty())
+    {
+        return 0.0;
+    }
+
+    double peak = equityCurve[0];
+    double maxDrawdown = 0.0;
+
+    for (const auto &value : equityCurve)
+    {
+        if (value > peak)
+        {
+            peak = value;
+        }
+
+        else
+        {
+            double drawdown = (peak - value) / peak;
+
+            if (drawdown > maxDrawdown)
+            {
+                maxDrawdown = drawdown;
+            }
+        }
+    }
+
+    return maxDrawdown * 100.0;
 }
