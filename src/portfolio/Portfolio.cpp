@@ -2,8 +2,8 @@
 
 #include <stdexcept>
 
-Portfolio::Portfolio(double initialCash)
-    : initialCash_(initialCash), cash_(initialCash), position_(0), lastPrice_(0.0) {}
+Portfolio::Portfolio(double initialCash, double commission)
+    : initialCash_(initialCash), cash_(initialCash), position_(0), lastPrice_(0.0), commission_(commission) {}
 
 double Portfolio::initialCash() const
 {
@@ -39,7 +39,7 @@ void Portfolio::buy(int quantity, double price, const std::string &timestamp)
     {
         throw std::runtime_error("Price must be positive.");
     }
-    const double totalCost = quantity * price;
+    const double totalCost = (quantity * price) + commission_;
     if (totalCost > cash_)
     {
         throw std::runtime_error("Insufficient funds.");
@@ -69,7 +69,7 @@ void Portfolio::sell(int quantity, double price, const std::string &timestamp)
     {
         throw std::runtime_error("Insufficient position to sell.");
     }
-    const double totalRevenue = quantity * price;
+    const double totalRevenue = (quantity * price) - commission_;
     cash_ += totalRevenue;
     position_ -= quantity;
     lastPrice_ = price;

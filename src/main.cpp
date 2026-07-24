@@ -17,7 +17,7 @@ int main()
         MovingAverageStrategy strategy(5, 20);
 
         // Create portfolio with ₹100,000 initial cash
-        Portfolio portfolio(100000.0);
+        Portfolio portfolio(100000.0, 20.0);
 
         // Create backtest engine
         BacktestEngine engine(
