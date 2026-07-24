@@ -23,8 +23,8 @@ int main()
         BacktestEngine engine(
             marketData,
             strategy,
-            portfolio);
-
+            portfolio,
+            0.001);
         // Run the backtest
         engine.run();
 

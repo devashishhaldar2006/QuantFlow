@@ -2,10 +2,11 @@
 
 #include <iostream>
 
-BacktestEngine::BacktestEngine(const MarketData &marketData, Strategy &strategy, Portfolio &portfolio)
+BacktestEngine::BacktestEngine(const MarketData &marketData, Strategy &strategy, Portfolio &portfolio, double slippage)
     : iterator_(marketData),
       strategy_(strategy),
-      portfolio_(portfolio)
+      portfolio_(portfolio),
+      slippage_(slippage)
 {
 }
 
@@ -27,12 +28,19 @@ void BacktestEngine::run()
             {
             case Signal::Buy:
             {
-                const int quantity = positionSizer_.calculatePositionSize(portfolio_, price);
+                const double executionPrice = calculateBuyPrice(price);
+
+                const int quantity =
+                    positionSizer_.calculatePositionSize(portfolio_, executionPrice);
 
                 if (quantity > 0)
                 {
-                    portfolio_.buy(quantity, price, candle.getTimestamp());
+                    portfolio_.buy(
+                        quantity,
+                        executionPrice,
+                        candle.getTimestamp());
                 }
+
                 break;
             }
             case Signal::Sell:
@@ -41,8 +49,14 @@ void BacktestEngine::run()
 
                 if (quantity > 0)
                 {
-                    portfolio_.sell(quantity, price, candle.getTimestamp());
+                    const double executionPrice = calculateSellPrice(price);
+
+                    portfolio_.sell(
+                        quantity,
+                        executionPrice,
+                        candle.getTimestamp());
                 }
+
                 break;
             }
             case Signal::Hold:
@@ -57,4 +71,14 @@ void BacktestEngine::run()
         portfolio_.recordEquity();
         iterator_.next();
     }
+}
+
+double BacktestEngine::calculateBuyPrice(double marketPrice) const
+{
+    return marketPrice * (1.0 + slippage_);
+}
+
+double BacktestEngine::calculateSellPrice(double marketPrice) const
+{
+    return marketPrice * (1.0 - slippage_);
 }
