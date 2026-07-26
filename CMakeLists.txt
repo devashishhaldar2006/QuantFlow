@@ -12,18 +12,39 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(QuantFlow
+
+    # Main
     src/main.cpp
+
+    # Market
     src/market/Candle.cpp
     src/market/MarketData.cpp
+
+    # IO
     src/io/CSVParser.cpp
+
+    # Engine
     src/engine/MarketIterator.cpp
     src/engine/BacktestEngine.cpp
-    src/strategy/AlwaysHoldStrategy.cpp
+
+    # Portfolio
     src/portfolio/Portfolio.cpp
+
+    # Trade
     src/trade/Trade.cpp
-    src/analytics/PerformanceAnalyzer.cpp
+
+    # Risk
     src/risk/PositionSizer.cpp
-    src/strategy/MovingAverageStrategy.cpp
+
+    # Analytics
+    src/analytics/PerformanceAnalyzer.cpp
+
+    # Indicators
+    src/indicators/SMA.cpp
+
+    # Strategies
+    src/strategy/AlwaysHoldStrategy.cpp
+    src/strategy/MovingAverageCrossStrategy.cpp
 )
 
 target_include_directories(QuantFlow
