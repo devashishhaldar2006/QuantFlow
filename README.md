@@ -23,3 +23,5 @@ A production-quality quantitative trading engine built with Modern C++20.
 - Commission simulation
 - Slippage simulation
 - Fixed stop-loss execution
+
+Intrabar execution: When both stop loss and take profit are reached within the same OHLC candle, QuantFlow v1 assumes the stop loss is executed first. This conservative assumption avoids overstating strategy performance

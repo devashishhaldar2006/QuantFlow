@@ -14,11 +14,14 @@ private:
     double stopLossPercent_;
     double stopLossPrice_;
 
+    double takeProfitPercent_;
+    double takeProfitPrice_;
+
     std::vector<Trade> trades_;
     std::vector<double> equityCurve_;
 
 public:
-    explicit Portfolio(double initialCash, double commission = 0.0,double stopLossPercent = 0.0);
+    explicit Portfolio(double initialCash, double commission = 0.0,double stopLossPercent = 0.0, double takeProfitPercent = 0.0);
 
     void buy(int quantity, double price, const std::string& timestamp);
 
@@ -35,6 +38,8 @@ public:
     double initialCash() const;
 
     double stopLossPrice() const;
+
+    double takeProfitPrice() const;
 
     const std::vector<Trade>& getTrades() const;
 

@@ -2,13 +2,18 @@
 
 #include <stdexcept>
 
-Portfolio::Portfolio(double initialCash, double commission, double stopLossPercent)
-    : initialCash_(initialCash), cash_(initialCash), position_(0), lastPrice_(0.0), commission_(commission), stopLossPercent_(stopLossPercent), stopLossPrice_(0.0)
+Portfolio::Portfolio(double initialCash, double commission, double stopLossPercent, double takeProfitPercent)
+    : initialCash_(initialCash), cash_(initialCash), position_(0), lastPrice_(0.0), commission_(commission), stopLossPercent_(stopLossPercent), stopLossPrice_(0.0), takeProfitPercent_(takeProfitPercent), takeProfitPrice_(0.0)
 {
     if (stopLossPercent < 0.0 || stopLossPercent >= 1.0)
     {
         throw std::invalid_argument(
             "Stop loss percentage must be between 0 and 1.");
+    }
+    if (takeProfitPercent < 0.0 || takeProfitPercent >= 1.0)
+    {
+        throw std::invalid_argument(
+            "Take profit percentage must be between 0 and 1.");
     }
 }
 
@@ -55,6 +60,7 @@ void Portfolio::buy(int quantity, double price, const std::string &timestamp)
     position_ += quantity;
     lastPrice_ = price;
     stopLossPrice_ = price * (1.0 - stopLossPercent_);
+    takeProfitPrice_ = price * (1.0 + takeProfitPercent_);
 
     trades_.emplace_back(
         TradeSide::Buy,
@@ -84,6 +90,7 @@ void Portfolio::sell(int quantity, double price, const std::string &timestamp)
     if (position_ == 0)
     {
         stopLossPrice_ = 0.0; // Reset stop loss price if no position
+        takeProfitPrice_ = 0.0; // Reset take profit price if no position
     }
 
     trades_.emplace_back(
@@ -111,4 +118,9 @@ const std::vector<double> &Portfolio::getEquityCurve() const
 double Portfolio::stopLossPrice() const
 {
     return stopLossPrice_;
+}
+
+double Portfolio::takeProfitPrice() const
+{
+    return takeProfitPrice_;
 }

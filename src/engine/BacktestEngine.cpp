@@ -26,13 +26,25 @@ void BacktestEngine::run()
             if (portfolio_.position() > 0)
             {
                 const double stopPrice = portfolio_.stopLossPrice();
+                const double takeProfitPrice = portfolio_.takeProfitPrice();
+
+                double exitPrice = 0.0;
 
                 if (candle.getLow() <= stopPrice)
+                {
+                    exitPrice = stopPrice;
+                }
+                else if (candle.getHigh() >= takeProfitPrice)
+                {
+                    exitPrice = takeProfitPrice;
+                }
+
+                if (exitPrice > 0.0)
                 {
                     const int quantity = portfolio_.position();
 
                     const double executionPrice =
-                        calculateSellPrice(stopPrice);
+                        calculateSellPrice(exitPrice);
 
                     portfolio_.sell(
                         quantity,
