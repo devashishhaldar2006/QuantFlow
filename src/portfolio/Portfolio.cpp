@@ -2,8 +2,15 @@
 
 #include <stdexcept>
 
-Portfolio::Portfolio(double initialCash, double commission)
-    : initialCash_(initialCash), cash_(initialCash), position_(0), lastPrice_(0.0), commission_(commission) {}
+Portfolio::Portfolio(double initialCash, double commission, double stopLossPercent)
+    : initialCash_(initialCash), cash_(initialCash), position_(0), lastPrice_(0.0), commission_(commission), stopLossPercent_(stopLossPercent), stopLossPrice_(0.0)
+{
+    if (stopLossPercent < 0.0 || stopLossPercent >= 1.0)
+    {
+        throw std::invalid_argument(
+            "Stop loss percentage must be between 0 and 1.");
+    }
+}
 
 double Portfolio::initialCash() const
 {
@@ -47,6 +54,7 @@ void Portfolio::buy(int quantity, double price, const std::string &timestamp)
     cash_ -= totalCost;
     position_ += quantity;
     lastPrice_ = price;
+    stopLossPrice_ = price * (1.0 - stopLossPercent_);
 
     trades_.emplace_back(
         TradeSide::Buy,
@@ -73,6 +81,10 @@ void Portfolio::sell(int quantity, double price, const std::string &timestamp)
     cash_ += totalRevenue;
     position_ -= quantity;
     lastPrice_ = price;
+    if (position_ == 0)
+    {
+        stopLossPrice_ = 0.0; // Reset stop loss price if no position
+    }
 
     trades_.emplace_back(
         TradeSide::Sell,
@@ -94,4 +106,9 @@ void Portfolio::recordEquity()
 const std::vector<double> &Portfolio::getEquityCurve() const
 {
     return equityCurve_;
+}
+
+double Portfolio::stopLossPrice() const
+{
+    return stopLossPrice_;
 }

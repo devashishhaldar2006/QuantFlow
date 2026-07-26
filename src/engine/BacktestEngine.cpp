@@ -14,24 +14,50 @@ void BacktestEngine::run()
 {
     while (iterator_.hasNext())
     {
-        const Candle &candle = iterator_.current();
-
-        const double price = candle.getClose();
-
-        portfolio_.updateMarketPrice(price);
-
-        const Signal signal = strategy_.onCandle(candle);
-
         try
         {
+            const Candle &candle = iterator_.current();
+
+            const double price = candle.getClose();
+
+            portfolio_.updateMarketPrice(price);
+
+            // Check stop loss before asking the strategy
+            if (portfolio_.position() > 0)
+            {
+                const double stopPrice = portfolio_.stopLossPrice();
+
+                if (candle.getLow() <= stopPrice)
+                {
+                    const int quantity = portfolio_.position();
+
+                    const double executionPrice =
+                        calculateSellPrice(stopPrice);
+
+                    portfolio_.sell(
+                        quantity,
+                        executionPrice,
+                        candle.getTimestamp());
+
+                    portfolio_.recordEquity();
+                    iterator_.next();
+                    continue;
+                }
+            }
+
+            const Signal signal = strategy_.onCandle(candle);
+
             switch (signal)
             {
             case Signal::Buy:
             {
-                const double executionPrice = calculateBuyPrice(price);
+                const double executionPrice =
+                    calculateBuyPrice(price);
 
                 const int quantity =
-                    positionSizer_.calculatePositionSize(portfolio_, executionPrice);
+                    positionSizer_.calculatePositionSize(
+                        portfolio_,
+                        executionPrice);
 
                 if (quantity > 0)
                 {
@@ -43,13 +69,16 @@ void BacktestEngine::run()
 
                 break;
             }
+
             case Signal::Sell:
             {
-                const int quantity = portfolio_.position();
+                const int quantity =
+                    portfolio_.position();
 
                 if (quantity > 0)
                 {
-                    const double executionPrice = calculateSellPrice(price);
+                    const double executionPrice =
+                        calculateSellPrice(price);
 
                     portfolio_.sell(
                         quantity,
@@ -59,16 +88,18 @@ void BacktestEngine::run()
 
                 break;
             }
+
             case Signal::Hold:
-                // Do nothing
                 break;
             }
+
+            portfolio_.recordEquity();
         }
         catch (const std::exception &e)
         {
             std::cout << e.what() << '\n';
         }
-        portfolio_.recordEquity();
+
         iterator_.next();
     }
 }
