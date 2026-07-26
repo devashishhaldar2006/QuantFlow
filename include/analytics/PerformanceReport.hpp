@@ -21,4 +21,7 @@ struct PerformanceReport
     double largestLoss = 0.0;
 
     double maximumDrawdown = 0.0;
+    double profitFactor = 0.0;
+
+    double expectancy = 0.0;
 };

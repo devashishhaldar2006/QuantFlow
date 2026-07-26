@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <iostream>
 
-void ConsoleReporter::print(const PerformanceReport& report)
+void ConsoleReporter::print(const PerformanceReport &report)
 {
     std::cout << std::fixed << std::setprecision(2);
 
@@ -20,6 +20,12 @@ void ConsoleReporter::print(const PerformanceReport& report)
     std::cout << "Winning Trades  : " << report.winningTrades << '\n';
     std::cout << "Losing Trades   : " << report.losingTrades << '\n';
     std::cout << "Win Rate (%)    : " << report.winRatePercent << "%\n";
+    std::cout << "Profit Factor   : "
+              << report.profitFactor
+              << '\n';
+    std::cout << "Expectancy      : "
+              << report.expectancy
+              << '\n';
 
     std::cout << '\n';
 
