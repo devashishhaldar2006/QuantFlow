@@ -10,3 +10,16 @@ A production-quality quantitative trading engine built with Modern C++20.
 - Learn testing
 - Learn performance optimization
 - Learn multithreading
+
+
+## Features
+
+- CSV market data loader
+- Strategy interface
+- Portfolio management
+- Position sizing
+- Trade history
+- Equity curve
+- Commission simulation
+- Slippage simulation
+- Fixed stop-loss execution
