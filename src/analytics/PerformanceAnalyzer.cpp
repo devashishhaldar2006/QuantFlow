@@ -1,164 +1,132 @@
-#include <iostream>
-
-#include <iomanip>
-
 #include "analytics/PerformanceAnalyzer.hpp"
 
-PerformanceAnalyzer::PerformanceAnalyzer(const Portfolio &portfolio) : portfolio_(portfolio)
+PerformanceAnalyzer::PerformanceAnalyzer(
+    const Portfolio& portfolio)
+    : portfolio_(portfolio)
 {
 }
 
-double PerformanceAnalyzer::finalPortfolioValue() const
+PerformanceReport PerformanceAnalyzer::analyze() const
 {
-    return portfolio_.totalValue();
-}
+    PerformanceReport report;
 
-double PerformanceAnalyzer::netProfit() const
-{
-    return finalPortfolioValue() - portfolio_.initialCash();
-}
+    report.initialCapital = portfolio_.initialCash();
+    report.finalEquity = portfolio_.totalValue();
 
-int PerformanceAnalyzer::totalTrades() const
-{
-    return static_cast<int>(portfolio_.getTrades().size());
-}
+    report.netProfit =
+        report.finalEquity - report.initialCapital;
 
-int PerformanceAnalyzer::winningTrades() const
-{
-    const auto &trades = portfolio_.getTrades();
+    if (report.initialCapital > 0.0)
+    {
+        report.totalReturnPercent =
+            (report.netProfit / report.initialCapital) * 100.0;
+    }
 
-    int winners = 0;
-    const Trade *buyTrade = nullptr;
+    const auto& trades = portfolio_.getTrades();
 
-    for (const auto &trade : trades)
+    report.totalTrades =
+        static_cast<int>(trades.size());
+
+    const Trade* buyTrade = nullptr;
+
+    double totalWins = 0.0;
+    double totalLosses = 0.0;
+
+    for (const auto& trade : trades)
     {
         if (trade.getSide() == TradeSide::Buy)
         {
             buyTrade = &trade;
         }
-        else if (trade.getSide() == TradeSide::Sell && buyTrade != nullptr)
+        else if (buyTrade != nullptr)
         {
-            double profit =
+            double pnl =
                 (trade.getPrice() - buyTrade->getPrice()) *
                 buyTrade->getQuantity();
 
-            if (profit > 0)
+            if (pnl > 0.0)
             {
-                winners++;
+                report.winningTrades++;
+
+                totalWins += pnl;
+
+                if (pnl > report.largestWin)
+                {
+                    report.largestWin = pnl;
+                }
+            }
+            else
+            {
+                report.losingTrades++;
+
+                totalLosses += pnl;
+
+                if (pnl < report.largestLoss)
+                {
+                    report.largestLoss = pnl;
+                }
             }
 
             buyTrade = nullptr;
         }
     }
 
-    return winners;
-}
+    const int completedTrades =
+        report.winningTrades +
+        report.losingTrades;
 
-int PerformanceAnalyzer::losingTrades() const
-{
-    const auto &trades = portfolio_.getTrades();
-
-    int losers = 0;
-    const Trade *buyTrade = nullptr;
-
-    for (const auto &trade : trades)
+    if (completedTrades > 0)
     {
-        if (trade.getSide() == TradeSide::Buy)
-        {
-            buyTrade = &trade;
-        }
-        else if (trade.getSide() == TradeSide::Sell && buyTrade != nullptr)
-        {
-            double profit =
-                (trade.getPrice() - buyTrade->getPrice()) *
-                buyTrade->getQuantity();
-
-            if (profit < 0)
-            {
-                losers++;
-            }
-
-            buyTrade = nullptr;
-        }
+        report.winRatePercent =
+            static_cast<double>(report.winningTrades)
+            / completedTrades * 100.0;
     }
 
-    return losers;
-}
-
-double PerformanceAnalyzer::winRate() const
-{
-    int winners = winningTrades();
-    int losers = losingTrades();
-
-    int completedTrades = winners + losers;
-
-    if (completedTrades == 0)
+    if (report.winningTrades > 0)
     {
-        return 0.0;
+        report.averageWin =
+            totalWins / report.winningTrades;
     }
 
-    return (static_cast<double>(winners) / completedTrades) * 100.0;
-}
-
-double PerformanceAnalyzer::totalReturnPercent() const
-{
-    double initialCash = portfolio_.initialCash();
-    double finalValue = finalPortfolioValue();
-
-    if (initialCash == 0.0)
+    if (report.losingTrades > 0)
     {
-        return 0.0;
+        report.averageLoss =
+            totalLosses / report.losingTrades;
     }
 
-    return ((finalValue - initialCash) / initialCash) * 100.0;
-}
+    report.maximumDrawdown =
+        maximumDrawdown();
 
-void PerformanceAnalyzer::printReport() const
-{
-
-    std::cout << std::fixed << std::setprecision(2);
-    std::cout << "========== BACKTEST REPORT ==========\n";
-    std::cout << "Initial Cash      : " << portfolio_.initialCash() << '\n';
-    std::cout << "Final Value       : " << finalPortfolioValue() << '\n';
-    std::cout << "Net Profit        : " << netProfit() << '\n';
-    std::cout << "Return (%)        : " << totalReturnPercent() << "%\n";
-    std::cout << "Winning Trades    : " << winningTrades() << '\n';
-    std::cout << "Losing Trades     : " << losingTrades() << '\n';
-    std::cout << "Win Rate (%)      : " << winRate() << "%\n";
-    std::cout << "Maximum Drawdown : "
-              << maximumDrawdown()
-              << "%\n";
-    std::cout << "=====================================\n";
+    return report;
 }
 
 double PerformanceAnalyzer::maximumDrawdown() const
 {
-
-    const auto &equityCurve = portfolio_.getEquityCurve();
+    const auto& equityCurve =
+        portfolio_.getEquityCurve();
 
     if (equityCurve.empty())
     {
         return 0.0;
     }
 
-    double peak = equityCurve[0];
+    double peak = equityCurve.front();
+
     double maxDrawdown = 0.0;
 
-    for (const auto &value : equityCurve)
+    for (double equity : equityCurve)
     {
-        if (value > peak)
+        if (equity > peak)
         {
-            peak = value;
+            peak = equity;
         }
 
-        else
-        {
-            double drawdown = (peak - value) / peak;
+        double drawdown =
+            (peak - equity) / peak;
 
-            if (drawdown > maxDrawdown)
-            {
-                maxDrawdown = drawdown;
-            }
+        if (drawdown > maxDrawdown)
+        {
+            maxDrawdown = drawdown;
         }
     }
 

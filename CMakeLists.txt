@@ -45,6 +45,9 @@ add_executable(QuantFlow
     # Strategies
     src/strategy/AlwaysHoldStrategy.cpp
     src/strategy/MovingAverageCrossStrategy.cpp
+
+    # Reporting
+    src/reporting/ConsoleReporter.cpp
 )
 
 target_include_directories(QuantFlow
