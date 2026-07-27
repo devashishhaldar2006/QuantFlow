@@ -14,6 +14,7 @@ Candle CSVParser::parseRow(const std::string& line)
     std::string lowStr;
     std::string closeStr;
     std::string volumeStr;
+    std::string extra;
 
     if (!std::getline(ss, timestamp, ',') ||
         !std::getline(ss, openStr, ',') ||
@@ -22,30 +23,43 @@ Candle CSVParser::parseRow(const std::string& line)
         !std::getline(ss, closeStr, ',') ||
         !std::getline(ss, volumeStr, ','))
     {
-        throw std::runtime_error("Malformed CSV row.");
+        throw std::runtime_error("Malformed CSV row: " + line);
     }
 
-    return Candle(
-        timestamp,
-        std::stod(openStr),
-        std::stod(highStr),
-        std::stod(lowStr),
-        std::stod(closeStr),
-        std::stoll(volumeStr));
+    // Ensure there are exactly 6 columns
+    if (std::getline(ss, extra, ','))
+    {
+        throw std::runtime_error("Too many columns in CSV row: " + line);
+    }
+
+    try
+    {
+        return Candle(
+            timestamp,
+            std::stod(openStr),
+            std::stod(highStr),
+            std::stod(lowStr),
+            std::stod(closeStr),
+            std::stoll(volumeStr));
+    }
+    catch (const std::exception&)
+    {
+        throw std::runtime_error("Failed to parse CSV row: " + line);
+    }
 }
 
 MarketData CSVParser::parse(const std::string& filePath)
 {
     std::ifstream file(filePath);
 
-    if (!file)
+    if (!file.is_open())
     {
         throw std::runtime_error("Could not open file: " + filePath);
     }
 
     std::string line;
 
-    // Read and discard the CSV header row.
+    // Read and discard header
     if (!std::getline(file, line))
     {
         throw std::runtime_error("CSV file is empty.");
@@ -55,6 +69,11 @@ MarketData CSVParser::parse(const std::string& filePath)
 
     while (std::getline(file, line))
     {
+        if (line.empty())
+        {
+            continue;
+        }
+
         marketData.addCandle(parseRow(line));
     }
 
