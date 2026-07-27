@@ -67,8 +67,7 @@ TEST(PortfolioTests, BuyThrowsWhenQuantityIsZero)
 
     EXPECT_THROW(
         portfolio.buy(0, 100.0, "2026-07-27"),
-        std::runtime_error
-    );
+        std::runtime_error);
 }
 
 TEST(PortfolioTests, BuyThrowsWhenQuantityIsNegative)
@@ -77,8 +76,7 @@ TEST(PortfolioTests, BuyThrowsWhenQuantityIsNegative)
 
     EXPECT_THROW(
         portfolio.buy(-5, 100.0, "2026-07-27"),
-        std::runtime_error
-    );
+        std::runtime_error);
 }
 
 TEST(PortfolioTests, BuyThrowsWhenPriceIsZero)
@@ -87,8 +85,7 @@ TEST(PortfolioTests, BuyThrowsWhenPriceIsZero)
 
     EXPECT_THROW(
         portfolio.buy(5, 0.0, "2026-07-27"),
-        std::runtime_error
-    );
+        std::runtime_error);
 }
 
 TEST(PortfolioTests, BuyThrowsWhenPriceIsNegative)
@@ -97,8 +94,7 @@ TEST(PortfolioTests, BuyThrowsWhenPriceIsNegative)
 
     EXPECT_THROW(
         portfolio.buy(5, -100.0, "2026-07-27"),
-        std::runtime_error
-    );
+        std::runtime_error);
 }
 
 TEST(PortfolioTests, BuyThrowsWhenInsufficientFunds)
@@ -107,8 +103,7 @@ TEST(PortfolioTests, BuyThrowsWhenInsufficientFunds)
 
     EXPECT_THROW(
         portfolio.buy(20, 100.0, "2026-07-27"),
-        std::runtime_error
-    );
+        std::runtime_error);
 }
 
 // ============================================================
@@ -167,4 +162,156 @@ TEST(PortfolioTests, BuyCalculatesTakeProfitPrice)
     portfolio.buy(5, 100.0, "2026-07-27");
 
     EXPECT_DOUBLE_EQ(portfolio.takeProfitPrice(), 110.0);
+}
+
+// sell
+
+TEST(PortfolioTests, SellThrowsWhenQuantityIsZero)
+{
+    Portfolio portfolio(1000.0);
+    portfolio.buy(5, 100.0, "2026-07-27");
+
+    EXPECT_THROW(
+        portfolio.sell(0, 100.0, "2026-07-28"),
+        std::runtime_error);
+}
+
+TEST(PortfolioTests, SellThrowsWhenQuantityIsNegative)
+{
+    Portfolio portfolio(1000.0);
+    portfolio.buy(5, 100.0, "2026-07-27");
+
+    EXPECT_THROW(
+        portfolio.sell(-5, 100.0, "2026-07-28"),
+        std::runtime_error);
+}
+
+TEST(PortfolioTests, SellThrowsWhenPriceIsZero)
+{
+    Portfolio portfolio(1000.0);
+    portfolio.buy(5, 100.0, "2026-07-27");
+
+    EXPECT_THROW(
+        portfolio.sell(5, 0.0, "2026-07-28"),
+        std::runtime_error);
+}
+
+TEST(PortfolioTests, SellThrowsWhenPriceIsNegative)
+{
+    Portfolio portfolio(1000.0);
+    portfolio.buy(5, 100.0, "2026-07-27");
+
+    EXPECT_THROW(
+        portfolio.sell(5, -100.0, "2026-07-28"),
+        std::runtime_error);
+}
+
+TEST(PortfolioTests, SellThrowsWhenInsufficientPosition)
+{
+    Portfolio portfolio(1000.0);
+    portfolio.buy(5, 100.0, "2026-07-27");
+
+    EXPECT_THROW(
+        portfolio.sell(10, 100.0, "2026-07-28"),
+        std::runtime_error);
+}
+
+TEST(PortfolioTests, SellReducesPosition)
+{
+    Portfolio portfolio(1000.0);
+    portfolio.buy(5, 100.0, "2026-07-27");
+
+    portfolio.sell(3, 110.0, "2026-07-28");
+
+    EXPECT_EQ(portfolio.position(), 2);
+}
+
+TEST(PortfolioTests, SellIncreasesCash)
+{
+    Portfolio portfolio(1000.0);
+    portfolio.buy(5, 100.0, "2026-07-27");
+
+    portfolio.sell(3, 110.0, "2026-07-28");
+
+    EXPECT_DOUBLE_EQ(portfolio.cash(), 830.0);
+}
+
+TEST(PortfolioTests, SellRecordsTrade)
+{
+    Portfolio portfolio(1000.0);
+    portfolio.buy(5, 100.0, "2026-07-27");
+
+    portfolio.sell(3, 110.0, "2026-07-28");
+
+    EXPECT_EQ(portfolio.getTrades().size(), 2u);
+}
+
+TEST(PortfolioTests, SellResetsStopLossWhenPositionBecomesZero)
+{
+    Portfolio portfolio(1000.0, 0.0, 0.05);
+
+    portfolio.buy(5, 100.0, "2026-07-27");
+
+    portfolio.sell(5, 110.0, "2026-07-28");
+
+    EXPECT_DOUBLE_EQ(portfolio.stopLossPrice(), 0.0);
+}
+
+TEST(PortfolioTests, SellResetsTakeProfitWhenPositionBecomesZero)
+{
+    Portfolio portfolio(1000.0, 0.0, 0.05, 0.10);
+
+    portfolio.buy(5, 100.0, "2026-07-27");
+
+    portfolio.sell(5, 110.0, "2026-07-28");
+
+    EXPECT_DOUBLE_EQ(portfolio.takeProfitPrice(), 0.0);
+}
+
+TEST(PortfolioTests, ConstructorThrowsForNegativeStopLoss)
+{
+    EXPECT_THROW(
+        Portfolio(1000.0, 0.0, -0.05),
+        std::invalid_argument);
+}
+
+TEST(PortfolioTests, ConstructorThrowsForStopLossGreaterThanOrEqualToOne)
+{
+    EXPECT_THROW(
+        Portfolio(1000.0, 0.0, 1.0),
+        std::invalid_argument);
+}
+
+TEST(PortfolioTests, RecordEquityAddsOneEntry)
+{
+    Portfolio portfolio(1000.0);
+
+    portfolio.recordEquity();
+
+    EXPECT_EQ(portfolio.getEquityCurve().size(), 1u);
+}
+
+TEST(PortfolioTests, RecordEquityStoresCurrentPortfolioValue)
+{
+    Portfolio portfolio(1000.0);
+
+    portfolio.recordEquity();
+
+    EXPECT_DOUBLE_EQ(
+        portfolio.getEquityCurve().front(),
+        portfolio.totalValue());
+}
+
+TEST(PortfolioTests, ConstructorThrowsForNegativeTakeProfit)
+{
+    EXPECT_THROW(
+        Portfolio(1000.0, 0.0, 0.0, -0.10),
+        std::invalid_argument);
+}
+
+TEST(PortfolioTests, ConstructorThrowsForTakeProfitGreaterThanOrEqualToOne)
+{
+    EXPECT_THROW(
+        Portfolio(1000.0, 0.0, 0.0, 1.0),
+        std::invalid_argument);
 }
