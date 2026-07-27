@@ -7,7 +7,7 @@
 class SMA : public Indicator
 {
 private:
-    int period_;
+    std::size_t period_;
     
     std::deque<double> prices_;
 
@@ -15,7 +15,7 @@ private:
     double currentValue_;
 
 public:
-    explicit SMA(int period);
+    explicit SMA(std::size_t period);
 
     void update(const Candle &candle) override;
 

@@ -7,14 +7,27 @@ project(
     LANGUAGES CXX
 )
 
+include(CTest)
+enable_testing()
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(QuantFlow
+include(FetchContent)
 
-    # Main
-    src/main.cpp
+FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/refs/tags/v1.17.0.zip
+)
+
+FetchContent_MakeAvailable(googletest)
+
+# ==========================================================
+# QuantFlow Library
+# ==========================================================
+
+add_library(QuantFlowLib
 
     # Market
     src/market/Candle.cpp
@@ -50,35 +63,86 @@ add_executable(QuantFlow
     src/reporting/ConsoleReporter.cpp
 )
 
-target_include_directories(QuantFlow
-    PRIVATE
+target_include_directories(QuantFlowLib
+    PUBLIC
         include
 )
 
+# ==========================================================
+# Main Executable
+# ==========================================================
+
+add_executable(QuantFlow
+    src/main.cpp
+)
+
+target_link_libraries(QuantFlow
+    PRIVATE
+        QuantFlowLib
+)
+
+# ==========================================================
+# Compiler Warnings
+# ==========================================================
+
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    add_compile_options(
+
+    target_compile_options(QuantFlowLib PRIVATE
         -Wall
         -Wextra
         -Wpedantic
         -Wshadow
         -Wconversion
     )
+
+    target_compile_options(QuantFlow PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
+        -Wshadow
+        -Wconversion
+    )
+
 endif()
+
+# ==========================================================
+# Build Type
+# ==========================================================
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
 endif()
 
+# ==========================================================
+# Sanitizers (Debug Builds)
+# ==========================================================
+
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-        add_compile_options(
+
+        target_compile_options(QuantFlowLib PRIVATE
             -fsanitize=address
             -fsanitize=undefined
         )
 
-        add_link_options(
+        target_link_options(QuantFlowLib PRIVATE
             -fsanitize=address
             -fsanitize=undefined
         )
+
+        target_compile_options(QuantFlow PRIVATE
+            -fsanitize=address
+            -fsanitize=undefined
+        )
+
+        target_link_options(QuantFlow PRIVATE
+            -fsanitize=address
+            -fsanitize=undefined
+        )
+
     endif()
+
 endif()
+
+add_subdirectory(tests)

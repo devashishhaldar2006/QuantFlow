@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-SMA::SMA(int period) : period_(period), runningSum_(0.0), currentValue_(0.0)
+SMA::SMA(std::size_t period) : period_(period), runningSum_(0.0), currentValue_(0.0)
 {
     if (period <= 0)
     {
@@ -25,7 +25,7 @@ void SMA::update(const Candle &candle)
 
     if (isReady())
     {
-        currentValue_ = runningSum_ / period_;
+        currentValue_ = runningSum_ / static_cast<double>(period_);
     }
 }
 
