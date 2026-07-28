@@ -6,6 +6,8 @@ struct Config
 {
     std::string csvFile;
 
+    std::string strategy;
+
     double initialCash;
 
     double commission;

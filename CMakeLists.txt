@@ -59,6 +59,7 @@ add_library(QuantFlowLib
     # Strategies
     src/strategy/AlwaysHoldStrategy.cpp
     src/strategy/MovingAverageCrossStrategy.cpp
+    src/strategy/StrategyFactory.cpp
 
     # Reporting
     src/reporting/ConsoleReporter.cpp

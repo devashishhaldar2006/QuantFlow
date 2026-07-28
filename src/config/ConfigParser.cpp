@@ -37,5 +37,8 @@ Config ConfigParser::parse(const std::string &filePath)
 
     config.longMAPeriod = j.at("longMAPeriod").get<int>();
 
+    config.strategy =
+    j.at("strategy").get<std::string>();
+
     return config;
 }

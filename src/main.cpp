@@ -17,6 +17,8 @@
 
 #include "reporting/ConsoleReporter.hpp"
 
+#include "strategy/StrategyFactory.hpp"
+
 int main()
 {
     try
@@ -33,13 +35,12 @@ int main()
             config.stopLossPercent,
             config.takeProfitPercent);
 
-        MovingAverageCrossStrategy strategy(
-            config.shortMAPeriod,
-            config.longMAPeriod);
+        auto strategy =
+            StrategyFactory::create(config);
 
         BacktestEngine engine(
             marketData,
-            strategy,
+            *strategy,
             portfolio);
 
         engine.run();
@@ -50,7 +51,7 @@ int main()
 
         ConsoleReporter::print(report);
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         std::cerr << "Error: " << e.what() << '\n';
         return 1;
