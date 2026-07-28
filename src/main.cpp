@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "config/ConfigParser.hpp"
+
 #include "io/CSVParser.hpp"
 
 #include "market/MarketData.hpp"
@@ -19,12 +21,21 @@ int main()
 {
     try
     {
+        Config config =
+            ConfigParser::parse("config/config.json");
+
         MarketData marketData =
-            CSVParser::parse("data/sample.csv");
+            CSVParser::parse(config.csvFile);
 
-        Portfolio portfolio(10000.0);
+        Portfolio portfolio(
+            config.initialCash,
+            config.commission,
+            config.stopLossPercent,
+            config.takeProfitPercent);
 
-        MovingAverageCrossStrategy strategy(10, 20);
+        MovingAverageCrossStrategy strategy(
+            config.shortMAPeriod,
+            config.longMAPeriod);
 
         BacktestEngine engine(
             marketData,

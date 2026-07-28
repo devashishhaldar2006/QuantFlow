@@ -6,6 +6,7 @@ project(
     DESCRIPTION "A production-quality quantitative trading engine"
     LANGUAGES CXX
 )
+find_package(nlohmann_json REQUIRED)
 
 include(CTest)
 enable_testing()
@@ -61,6 +62,9 @@ add_library(QuantFlowLib
 
     # Reporting
     src/reporting/ConsoleReporter.cpp
+
+    # Config
+    src/config/ConfigParser.cpp
 )
 
 target_include_directories(QuantFlowLib
@@ -76,11 +80,15 @@ add_executable(QuantFlow
     src/main.cpp
 )
 
+target_link_libraries(QuantFlowLib
+    PUBLIC
+        nlohmann_json::nlohmann_json
+)
+
 target_link_libraries(QuantFlow
     PRIVATE
         QuantFlowLib
 )
-
 # ==========================================================
 # Compiler Warnings
 # ==========================================================

@@ -1,0 +1,9 @@
+{
+    "csvFile": "data/sample.csv",
+    "initialCash": 10000,
+    "commission": 0.0,
+    "stopLossPercent": 0.02,
+    "takeProfitPercent": 0.05,
+    "shortMAPeriod": 10,
+    "longMAPeriod": 20
+}
