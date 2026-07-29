@@ -63,3 +63,28 @@ double ExecutionEngine::calculateSellPrice(double marketPrice) const
 {
     return marketPrice * (1.0 - slippage_);
 }
+
+void ExecutionEngine::execute(
+    const ExitDecision& decision,
+    const Candle& candle)
+{
+    if (!decision.shouldExit)
+    {
+        return;
+    }
+
+    int quantity = portfolio_.position();
+
+    if (quantity == 0)
+    {
+        return;
+    }
+
+    double executionPrice =
+        calculateSellPrice(decision.exitPrice);
+
+    portfolio_.sell(
+        quantity,
+        executionPrice,
+        candle.getTimestamp());
+}

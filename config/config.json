@@ -1,15 +1,17 @@
 {
-    "csvFile": "data/sample.csv",
+    "strategy": "MovingAverageCross",
 
-    "strategy": "AlwaysHold",
+    "csvFile": "data/sample.csv",
 
     "initialCash": 10000,
 
-    "commission": 0.0,
+    "commission": 0.001,
 
-    "stopLossPercent": 0.02,
+    "stopLossPercent": 0.05,
 
-    "takeProfitPercent": 0.05,
+    "takeProfitPercent": 0.10,
+
+    "slippage": 0.001,
 
     "shortMAPeriod": 10,
 

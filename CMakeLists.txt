@@ -40,6 +40,7 @@ add_library(QuantFlowLib
     # Engine
     src/engine/MarketIterator.cpp
     src/engine/BacktestEngine.cpp
+    src/execution/ExecutionEngine.cpp
 
     # Portfolio
     src/portfolio/Portfolio.cpp
@@ -49,6 +50,7 @@ add_library(QuantFlowLib
 
     # Risk
     src/risk/PositionSizer.cpp
+    src/risk/RiskManager.cpp
 
     # Analytics
     src/analytics/PerformanceAnalyzer.cpp

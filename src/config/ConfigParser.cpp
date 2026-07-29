@@ -40,5 +40,8 @@ Config ConfigParser::parse(const std::string &filePath)
     config.strategy =
     j.at("strategy").get<std::string>();
 
+    config.slippage =
+    j.at("slippage").get<double>();
+    
     return config;
 }

@@ -16,6 +16,8 @@ struct Config
 
     double takeProfitPercent;
 
+    double slippage;
+
     int shortMAPeriod;
 
     int longMAPeriod;
