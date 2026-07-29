@@ -1,8 +1,8 @@
 #include "execution/ExecutionEngine.hpp"
 
 ExecutionEngine::ExecutionEngine(
-    Portfolio& portfolio,
-    PositionSizer& positionSizer,
+    Portfolio &portfolio,
+    PositionSizer &positionSizer,
     double slippage)
     : portfolio_(portfolio),
       positionSizer_(positionSizer),
@@ -12,45 +12,56 @@ ExecutionEngine::ExecutionEngine(
 
 void ExecutionEngine::execute(
     Signal signal,
-    const Candle& candle)
+    const Candle &candle)
 {
     double marketPrice = candle.getClose();
     std::string timestamp = candle.getTimestamp();
 
     switch (signal)
     {
-        case Signal::Buy:
+    case Signal::Buy:
+    {
+        if (portfolio_.position() > 0)
         {
-            int quantity =
-                positionSizer_.calculatePositionSize(portfolio_, marketPrice);
-
-            if (quantity > 0)
-            {
-                portfolio_.buy(
-                    quantity,
-                    calculateBuyPrice(marketPrice),
-                    timestamp);
-            }
             break;
         }
 
-        case Signal::Sell:
-        {
-            int quantity =
-                positionSizer_.calculatePositionSize(portfolio_, marketPrice);
+        double executionPrice =
+            calculateBuyPrice(marketPrice);
 
-            if (quantity > 0)
-            {
-                portfolio_.sell(
-                    quantity,
-                    calculateSellPrice(marketPrice),
-                    timestamp);
-            }
-            break;
+        int quantity =
+            positionSizer_.calculatePositionSize(
+                portfolio_,
+                executionPrice);
+
+        if (quantity > 0)
+        {
+            portfolio_.buy(
+                quantity,
+                executionPrice,
+                timestamp);
         }
 
-        case Signal::Hold:
-            break;
+        break;
+    }
+
+    case Signal::Sell:
+    {
+        int quantity = portfolio_.position();
+
+        if (quantity > 0)
+        {
+            portfolio_.sell(
+                quantity,
+                calculateSellPrice(marketPrice),
+                timestamp);
+        }
+
+        break;
+    }
+
+    case Signal::Hold:
+        break;
     }
 }
 
@@ -65,8 +76,8 @@ double ExecutionEngine::calculateSellPrice(double marketPrice) const
 }
 
 void ExecutionEngine::execute(
-    const ExitDecision& decision,
-    const Candle& candle)
+    const ExitDecision &decision,
+    const Candle &candle)
 {
     if (!decision.shouldExit)
     {

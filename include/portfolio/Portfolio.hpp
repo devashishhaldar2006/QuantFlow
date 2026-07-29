@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
 #include "trade/Trade.hpp"
 class Portfolio {
@@ -40,6 +41,8 @@ public:
     double stopLossPrice() const;
 
     double takeProfitPrice() const;
+
+    double commission() const;
 
     const std::vector<Trade>& getTrades() const;
 

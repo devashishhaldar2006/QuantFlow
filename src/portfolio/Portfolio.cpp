@@ -15,6 +15,11 @@ Portfolio::Portfolio(double initialCash, double commission, double stopLossPerce
         throw std::invalid_argument(
             "Take profit percentage must be between 0 and 1.");
     }
+    if (commission < 0.0 || commission > 0.1)
+    {
+        throw std::invalid_argument(
+            "Commission must be between 0 and 0.1.");
+    }
 }
 
 double Portfolio::initialCash() const
@@ -41,26 +46,49 @@ double Portfolio::totalValue() const
     return cash_ + (position_ * lastPrice_);
 }
 
-void Portfolio::buy(int quantity, double price, const std::string &timestamp)
+void Portfolio::buy(
+    int quantity,
+    double price,
+    const std::string &timestamp)
 {
     if (quantity <= 0)
     {
-        throw std::runtime_error("Quantity must be positive.");
+        throw std::runtime_error(
+            "Quantity must be positive.");
     }
+
     if (price <= 0.0)
     {
-        throw std::runtime_error("Price must be positive.");
+        throw std::runtime_error(
+            "Price must be positive.");
     }
-    const double totalCost = (quantity * price) + commission_;
+
+    const double tradeValue =
+        quantity * price;
+
+    const double commission =
+        tradeValue * commission_;
+
+    const double totalCost =
+        tradeValue + commission;
+
     if (totalCost > cash_)
     {
-        throw std::runtime_error("Insufficient funds.");
+        throw std::runtime_error(
+            "Insufficient funds.");
     }
+
     cash_ -= totalCost;
+
     position_ += quantity;
+
     lastPrice_ = price;
-    stopLossPrice_ = price * (1.0 - stopLossPercent_);
-    takeProfitPrice_ = price * (1.0 + takeProfitPercent_);
+
+    stopLossPrice_ =
+        price * (1.0 - stopLossPercent_);
+
+    takeProfitPrice_ =
+        price * (1.0 + takeProfitPercent_);
 
     trades_.emplace_back(
         TradeSide::Buy,
@@ -83,13 +111,20 @@ void Portfolio::sell(int quantity, double price, const std::string &timestamp)
     {
         throw std::runtime_error("Insufficient position to sell.");
     }
-    const double totalRevenue = (quantity * price) - commission_;
+    const double tradeValue =
+        quantity * price;
+
+    const double commission =
+        tradeValue * commission_;
+
+    const double totalRevenue =
+        tradeValue - commission;
     cash_ += totalRevenue;
     position_ -= quantity;
     lastPrice_ = price;
     if (position_ == 0)
     {
-        stopLossPrice_ = 0.0; // Reset stop loss price if no position
+        stopLossPrice_ = 0.0;   // Reset stop loss price if no position
         takeProfitPrice_ = 0.0; // Reset take profit price if no position
     }
 
@@ -123,4 +158,9 @@ double Portfolio::stopLossPrice() const
 double Portfolio::takeProfitPrice() const
 {
     return takeProfitPrice_;
+}
+
+double Portfolio::commission() const
+{
+    return commission_;
 }
