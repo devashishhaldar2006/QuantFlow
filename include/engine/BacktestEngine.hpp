@@ -1,26 +1,24 @@
 #pragma once
 
-#include "engine/MarketIterator.hpp"
-#include "strategy/Strategy.hpp"
+#include "execution/ExecutionEngine.hpp"
+#include "market/MarketData.hpp"
 #include "portfolio/Portfolio.hpp"
-#include "risk/PositionSizer.hpp"
+#include "strategy/Strategy.hpp"
+#include "engine/MarketIterator.hpp"
 class BacktestEngine
 {
+public:
+    BacktestEngine(
+        const MarketData& marketData,
+        Strategy& strategy,
+        ExecutionEngine& executionEngine,
+        Portfolio& portfolio);
+
+    void run();
+
 private:
     MarketIterator iterator_;
     Strategy& strategy_;
+    ExecutionEngine& executionEngine_;
     Portfolio& portfolio_;
-    PositionSizer positionSizer_;
-    double slippage_;
-    
-    double calculateBuyPrice(double marketPrice) const;
-    double calculateSellPrice(double marketPrice) const;
-
-public:
-    BacktestEngine(const MarketData& marketData,
-                   Strategy& strategy,
-                   Portfolio& portfolio,
-                   double slippage = 0.0);
-
-    void run();
 };
