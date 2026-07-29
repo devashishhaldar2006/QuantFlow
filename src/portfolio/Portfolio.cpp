@@ -94,6 +94,8 @@ void Portfolio::buy(
         TradeSide::Buy,
         quantity,
         price,
+        commission,
+        -totalCost,
         timestamp);
 }
 
@@ -132,6 +134,8 @@ void Portfolio::sell(int quantity, double price, const std::string &timestamp)
         TradeSide::Sell,
         quantity,
         price,
+        commission,
+        totalRevenue,
         timestamp);
 }
 

@@ -40,8 +40,8 @@ PerformanceReport PerformanceAnalyzer::analyze() const
         else if (buyTrade != nullptr)
         {
             double pnl =
-                (trade.getPrice() - buyTrade->getPrice()) *
-                buyTrade->getQuantity();
+                buyTrade->getCashFlow() +
+                trade.getCashFlow();
 
             if (pnl > 0.0)
             {
