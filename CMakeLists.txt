@@ -54,6 +54,7 @@ add_library(QuantFlowLib
 
     # Analytics
     src/analytics/PerformanceAnalyzer.cpp
+    src/analytics/Statistics.cpp
 
     # Indicators
     src/indicators/SMA.cpp

@@ -1,4 +1,5 @@
 #include "analytics/PerformanceAnalyzer.hpp"
+#include "analytics/Statistics.hpp"
 
 #include <cmath>
 
@@ -119,6 +120,23 @@ PerformanceReport PerformanceAnalyzer::analyze() const
     report.maximumDrawdown =
         maximumDrawdown();
 
+    const auto &equityCurve = portfolio_.getEquityCurve();
+
+    const auto returns =
+        Statistics::calculateReturns(equityCurve);
+
+    if (returns.size() >= 2)
+    {
+        report.annualizedReturn =
+            Statistics::annualizedReturn(returns);
+
+        report.annualizedVolatility =
+            Statistics::annualizedVolatility(returns);
+
+        report.sharpeRatio =
+            Statistics::sharpeRatio(returns);
+    }
+
     return report;
 }
 
@@ -142,7 +160,7 @@ double PerformanceAnalyzer::maximumDrawdown() const
             peak = equity;
         }
 
-        double drawdown =
+        const double drawdown =
             (peak - equity) / peak;
 
         if (drawdown > maxDrawdown)

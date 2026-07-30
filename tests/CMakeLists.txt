@@ -1,5 +1,6 @@
 add_executable(QuantFlowTests
     PortfolioTests.cpp
+    StatisticsTests.cpp
 )
 
 target_link_libraries(QuantFlowTests

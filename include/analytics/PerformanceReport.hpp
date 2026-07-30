@@ -24,4 +24,8 @@ struct PerformanceReport
     double profitFactor = 0.0;
 
     double expectancy = 0.0;
+
+    double annualizedReturn = 0.0;
+    double annualizedVolatility = 0.0;
+    double sharpeRatio = 0.0;
 };
