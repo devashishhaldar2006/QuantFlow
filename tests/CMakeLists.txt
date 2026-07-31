@@ -2,6 +2,7 @@ add_executable(QuantFlowTests
     PortfolioTests.cpp
     StatisticsTests.cpp
     RSITests.cpp
+    BollingerBandsTests.cpp
 )
 
 target_link_libraries(QuantFlowTests
