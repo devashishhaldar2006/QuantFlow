@@ -84,11 +84,25 @@ void Portfolio::buy(
 
     lastPrice_ = price;
 
-    stopLossPrice_ =
-        price * (1.0 - stopLossPercent_);
+    if (stopLossPercent_ > 0.0)
+    {
+        stopLossPrice_ =
+            price * (1.0 - stopLossPercent_);
+    }
+    else
+    {
+        stopLossPrice_ = 0.0;
+    }
 
-    takeProfitPrice_ =
-        price * (1.0 + takeProfitPercent_);
+    if (takeProfitPercent_ > 0.0)
+    {
+        takeProfitPrice_ =
+            price * (1.0 + takeProfitPercent_);
+    }
+    else
+    {
+        takeProfitPrice_ = 0.0;
+    }
 
     trades_.emplace_back(
         TradeSide::Buy,
