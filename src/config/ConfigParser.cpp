@@ -16,10 +16,21 @@ Config ConfigParser::parse(const std::string &filePath)
         throw std::runtime_error(
             "Could not open config file: " + filePath);
     }
-
     json j;
 
-    file >> j;
+    try
+    {
+        file >> j;
+    }
+    catch (const json::exception &e)
+    {
+        throw std::runtime_error(
+            "Invalid JSON in config file: " +
+            filePath +
+            " (" +
+            std::string(e.what()) +
+            ")");
+    }
 
     Config config;
 
@@ -38,46 +49,46 @@ Config ConfigParser::parse(const std::string &filePath)
     config.longMAPeriod = j.at("longMAPeriod").get<int>();
 
     config.strategy =
-    j.at("strategy").get<std::string>();
+        j.at("strategy").get<std::string>();
 
     config.slippage =
-    j.at("slippage").get<double>();
+        j.at("slippage").get<double>();
 
     config.rsiPeriod =
-    j.value("rsiPeriod", 14);
+        j.value("rsiPeriod", 14);
 
-config.oversold =
-    j.value("oversold", 30.0);
+    config.oversold =
+        j.value("oversold", 30.0);
 
-config.overbought =
-    j.value("overbought", 70.0);
+    config.overbought =
+        j.value("overbought", 70.0);
 
-config.fastEMAPeriod =
-    j.value("fastEMAPeriod", 10);
+    config.fastEMAPeriod =
+        j.value("fastEMAPeriod", 10);
 
-config.slowEMAPeriod =
-    j.value("slowEMAPeriod", 20);
+    config.slowEMAPeriod =
+        j.value("slowEMAPeriod", 20);
 
-config.macdFastPeriod =
-    j.value("macdFastPeriod", 12);
+    config.macdFastPeriod =
+        j.value("macdFastPeriod", 12);
 
-config.macdSlowPeriod =
-    j.value("macdSlowPeriod", 26);
+    config.macdSlowPeriod =
+        j.value("macdSlowPeriod", 26);
 
-config.macdSignalPeriod =
-    j.value("macdSignalPeriod", 9);
+    config.macdSignalPeriod =
+        j.value("macdSignalPeriod", 9);
 
-config.bollingerPeriod =
-    j.value("bollingerPeriod", 20);
+    config.bollingerPeriod =
+        j.value("bollingerPeriod", 20);
 
-config.bollingerMultiplier =
-    j.value("bollingerMultiplier", 2.0);
+    config.bollingerMultiplier =
+        j.value("bollingerMultiplier", 2.0);
 
-config.atrPeriod =
-    j.value("atrPeriod", 14);
+    config.atrPeriod =
+        j.value("atrPeriod", 14);
 
-config.minimumATR =
-    j.value("minimumATR", 1.0);
-    
+    config.minimumATR =
+        j.value("minimumATR", 1.0);
+
     return config;
 }
