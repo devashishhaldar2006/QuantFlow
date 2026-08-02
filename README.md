@@ -228,15 +228,15 @@ ctest --test-dir build --output-on-failure
 
 - ✅ SMA
 - ✅ RSI
-- ⏳ Bollinger Bands
-- ⏳ MACD
-- ⏳ ATR
+- ✅ Bollinger Bands
+- ✅ MACD
+- ✅ ATR
 
 ### Strategies
 
-- ⏳ RSI Strategy
-- ⏳ Bollinger Bands Strategy
-- ⏳ MACD Strategy
+- ✅ RSI Strategy
+- ✅ Bollinger Bands Strategy
+- ✅ MACD Strategy
 - ⏳ Multi-Indicator Strategy
 
 ### Performance

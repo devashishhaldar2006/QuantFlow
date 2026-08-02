@@ -19,11 +19,18 @@ std::vector<double> Statistics::calculateReturns(
 
     for (size_t i = 1; i < equityCurve.size(); ++i)
     {
-        double returnValue =
-            (equityCurve[i] - equityCurve[i - 1]) /
-            equityCurve[i - 1];
+        if (equityCurve[i - 1] == 0.0)
+        {
+            returns.push_back(0.0);
+        }
+        else
+        {
+            double returnValue =
+                (equityCurve[i] - equityCurve[i - 1]) /
+                equityCurve[i - 1];
 
-        returns.push_back(returnValue);
+            returns.push_back(returnValue);
+        }
     }
 
     return returns;
