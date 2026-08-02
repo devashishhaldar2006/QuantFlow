@@ -1,25 +1,16 @@
 #pragma once
 
-#include "indicators/Indicator.hpp"
+#include <cstddef>
+#include <vector>
 
-#include <deque>
-
-class SMA : public Indicator
+class SMA
 {
+public:
+    explicit SMA(std::size_t period = 20);
+
+    std::vector<double> calculate(
+        const std::vector<double>& prices) const;
+
 private:
     std::size_t period_;
-    
-    std::deque<double> prices_;
-
-    double runningSum_;
-    double currentValue_;
-
-public:
-    explicit SMA(std::size_t period);
-
-    void update(const Candle &candle) override;
-
-    double value() const override;
-
-    bool isReady() const override;
 };

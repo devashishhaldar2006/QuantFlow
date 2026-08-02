@@ -1,40 +1,51 @@
 #include "indicators/SMA.hpp"
 
+#include <limits>
 #include <stdexcept>
 
-SMA::SMA(std::size_t period) : period_(period), runningSum_(0.0), currentValue_(0.0)
+SMA::SMA(std::size_t period)
+    : period_(period)
 {
-    if (period <= 0)
+    if (period_ == 0)
     {
-        throw std::invalid_argument("SMA period must be greater than zero.");
+        throw std::invalid_argument(
+            "SMA period must be greater than zero.");
     }
 }
 
-void SMA::update(const Candle &candle)
+std::vector<double> SMA::calculate(
+    const std::vector<double>& prices) const
 {
-    double price = candle.getClose();
+    const double NaN =
+        std::numeric_limits<double>::quiet_NaN();
 
-    prices_.push_back(price);
-    runningSum_ += price;
+    std::vector<double> sma(
+        prices.size(),
+        NaN);
 
-    if (prices_.size() > period_)
+    if (prices.size() < period_)
     {
-        runningSum_ -= prices_.front();
-        prices_.pop_front();
+        return sma;
     }
 
-    if (isReady())
+    double sum = 0.0;
+
+    for (std::size_t i = 0; i < period_; ++i)
     {
-        currentValue_ = runningSum_ / static_cast<double>(period_);
+        sum += prices[i];
     }
-}
 
-double SMA::value() const
-{
-    return currentValue_;
-}
+    sma[period_ - 1] =
+        sum / static_cast<double>(period_);
 
-bool SMA::isReady() const
-{
-    return prices_.size() == period_;
+    for (std::size_t i = period_; i < prices.size(); ++i)
+    {
+        sum += prices[i];
+        sum -= prices[i - period_];
+
+        sma[i] =
+            sum / static_cast<double>(period_);
+    }
+
+    return sma;
 }

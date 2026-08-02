@@ -40,6 +40,8 @@ add_library(QuantFlowLib
     # Engine
     src/engine/MarketIterator.cpp
     src/engine/BacktestEngine.cpp
+
+    # Execution
     src/execution/ExecutionEngine.cpp
 
     # Portfolio
@@ -71,6 +73,8 @@ add_library(QuantFlowLib
     src/strategy/BollingerStrategy.cpp
     src/strategy/RSIStrategy.cpp
     src/strategy/MACDStrategy.cpp
+    src/strategy/ATRFilterStrategy.cpp
+    src/strategy/EMACrossStrategy.cpp  
 
     # Reporting
     src/reporting/ConsoleReporter.cpp
