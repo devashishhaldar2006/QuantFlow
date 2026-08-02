@@ -7,6 +7,13 @@ add_executable(QuantFlowTests
     EMATests.cpp
     MACDTests.cpp
     ATRTests.cpp
+    AlwaysHoldStrategyTests.cpp
+    MovingAverageCrossStrategyTests.cpp
+    EMACrossStrategyTests.cpp
+    RSIStrategyTests.cpp
+    MACDStrategyTests.cpp
+    BollingerStrategyTests.cpp
+    ATRFilterStrategyTests.cpp
 )
 
 target_link_libraries(QuantFlowTests

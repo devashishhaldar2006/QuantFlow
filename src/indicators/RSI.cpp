@@ -32,16 +32,24 @@ std::vector<double> RSI::calculate(
     {
         constexpr double EPS = 1e-12;
 
+        // No gains and no losses -> neutral market.
+        if (averageGain < EPS &&
+            averageLoss < EPS)
+        {
+            return 50.0;
+        }
+
         if (averageLoss < EPS)
         {
             return 100.0;
         }
 
-        const double rs = averageGain / averageLoss;
+        const double rs =
+            averageGain / averageLoss;
 
-        return 100.0 - (100.0 / (1.0 + rs));
+        return 100.0 -
+               (100.0 / (1.0 + rs));
     };
-
     std::vector<double> gains;
     std::vector<double> losses;
 
