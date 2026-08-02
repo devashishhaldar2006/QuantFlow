@@ -14,6 +14,7 @@ add_executable(QuantFlowTests
     MACDStrategyTests.cpp
     BollingerStrategyTests.cpp
     ATRFilterStrategyTests.cpp
+    StrategyFactoryTests.cpp
 )
 
 target_link_libraries(QuantFlowTests
