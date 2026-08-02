@@ -16,6 +16,11 @@ add_executable(QuantFlowTests
     ATRFilterStrategyTests.cpp
     StrategyFactoryTests.cpp
     ConfigParserTests.cpp
+    PositionSizerTests.cpp
+    IntegrationTests.cpp
+    MarketIteratorTests.cpp
+    ExecutionEngineTests.cpp
+    RiskManagerTests.cpp
 )
 
 target_link_libraries(QuantFlowTests
