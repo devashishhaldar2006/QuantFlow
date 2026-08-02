@@ -60,6 +60,8 @@ add_library(QuantFlowLib
     src/indicators/SMA.cpp
     src/indicators/RSI.cpp
     src/indicators/BollingerBands.cpp
+    src/indicators/EMA.cpp
+    src/indicators/MACD.cpp
 
     # Strategies
     src/strategy/AlwaysHoldStrategy.cpp
