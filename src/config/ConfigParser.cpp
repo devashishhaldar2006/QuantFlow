@@ -42,6 +42,42 @@ Config ConfigParser::parse(const std::string &filePath)
 
     config.slippage =
     j.at("slippage").get<double>();
+
+    config.rsiPeriod =
+    j.value("rsiPeriod", 14);
+
+config.oversold =
+    j.value("oversold", 30.0);
+
+config.overbought =
+    j.value("overbought", 70.0);
+
+config.fastEMAPeriod =
+    j.value("fastEMAPeriod", 10);
+
+config.slowEMAPeriod =
+    j.value("slowEMAPeriod", 20);
+
+config.macdFastPeriod =
+    j.value("macdFastPeriod", 12);
+
+config.macdSlowPeriod =
+    j.value("macdSlowPeriod", 26);
+
+config.macdSignalPeriod =
+    j.value("macdSignalPeriod", 9);
+
+config.bollingerPeriod =
+    j.value("bollingerPeriod", 20);
+
+config.bollingerMultiplier =
+    j.value("bollingerMultiplier", 2.0);
+
+config.atrPeriod =
+    j.value("atrPeriod", 14);
+
+config.minimumATR =
+    j.value("minimumATR", 1.0);
     
     return config;
 }
