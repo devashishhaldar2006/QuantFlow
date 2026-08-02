@@ -3,6 +3,10 @@ add_executable(QuantFlowTests
     StatisticsTests.cpp
     RSITests.cpp
     BollingerBandsTests.cpp
+    SMATests.cpp
+    EMATests.cpp
+    MACDTests.cpp
+    ATRTests.cpp
 )
 
 target_link_libraries(QuantFlowTests
