@@ -6,6 +6,7 @@ project(
     DESCRIPTION "A production-quality quantitative trading engine"
     LANGUAGES CXX
 )
+
 find_package(nlohmann_json REQUIRED)
 
 include(CTest)
@@ -60,21 +61,21 @@ add_library(QuantFlowLib
 
     # Indicators
     src/indicators/SMA.cpp
-    src/indicators/RSI.cpp
-    src/indicators/BollingerBands.cpp
     src/indicators/EMA.cpp
+    src/indicators/RSI.cpp
     src/indicators/MACD.cpp
     src/indicators/ATR.cpp
+    src/indicators/BollingerBands.cpp
 
     # Strategies
     src/strategy/AlwaysHoldStrategy.cpp
     src/strategy/MovingAverageCrossStrategy.cpp
-    src/strategy/StrategyFactory.cpp
-    src/strategy/BollingerStrategy.cpp
+    src/strategy/EMACrossStrategy.cpp
     src/strategy/RSIStrategy.cpp
     src/strategy/MACDStrategy.cpp
+    src/strategy/BollingerStrategy.cpp
     src/strategy/ATRFilterStrategy.cpp
-    src/strategy/EMACrossStrategy.cpp  
+    src/strategy/StrategyFactory.cpp
 
     # Reporting
     src/reporting/ConsoleReporter.cpp
@@ -88,6 +89,11 @@ target_include_directories(QuantFlowLib
         include
 )
 
+target_link_libraries(QuantFlowLib
+    PUBLIC
+        nlohmann_json::nlohmann_json
+)
+
 # ==========================================================
 # Main Executable
 # ==========================================================
@@ -96,15 +102,32 @@ add_executable(QuantFlow
     src/main.cpp
 )
 
-target_link_libraries(QuantFlowLib
-    PUBLIC
-        nlohmann_json::nlohmann_json
-)
-
 target_link_libraries(QuantFlow
     PRIVATE
         QuantFlowLib
 )
+
+# ==========================================================
+# REST API Server
+# ==========================================================
+
+add_executable(QuantFlowServer
+    src/server_main.cpp
+    src/api/Server.cpp
+    src/api/controllers/HealthController.cpp
+    src/api/controllers/BacktestController.cpp
+)
+
+target_link_libraries(QuantFlowServer
+    PRIVATE
+        QuantFlowLib
+)
+
+target_include_directories(QuantFlowServer
+    PRIVATE
+        ${PROJECT_SOURCE_DIR}/third_party/httplib
+)
+
 # ==========================================================
 # Compiler Warnings
 # ==========================================================
@@ -120,6 +143,14 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     )
 
     target_compile_options(QuantFlow PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
+        -Wshadow
+        -Wconversion
+    )
+
+    target_compile_options(QuantFlowServer PRIVATE
         -Wall
         -Wextra
         -Wpedantic
@@ -165,8 +196,22 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
             -fsanitize=undefined
         )
 
+        target_compile_options(QuantFlowServer PRIVATE
+            -fsanitize=address
+            -fsanitize=undefined
+        )
+
+        target_link_options(QuantFlowServer PRIVATE
+            -fsanitize=address
+            -fsanitize=undefined
+        )
+
     endif()
 
 endif()
+
+# ==========================================================
+# Tests
+# ==========================================================
 
 add_subdirectory(tests)
