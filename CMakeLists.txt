@@ -123,6 +123,7 @@ add_executable(QuantFlowServer
     src/api/controllers/BacktestController.cpp
     src/api/dto/BacktestRequest.cpp
     src/api/services/BacktestService.cpp
+    src/api/validation/RequestValidator.cpp
 )
 
 target_link_libraries(QuantFlowServer

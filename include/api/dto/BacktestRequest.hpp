@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <nlohmann/json.hpp>
 
 struct BacktestRequest
 {
@@ -14,4 +15,8 @@ struct BacktestRequest
 
     int shortMAPeriod = 10;
     int longMAPeriod = 20;
+
+
+    static BacktestRequest fromJson(
+        const nlohmann::json& body);
 };

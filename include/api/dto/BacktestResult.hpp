@@ -1,5 +1,6 @@
 #pragma once
 
+#include <nlohmann/json.hpp>
 struct BacktestResult
 {
     double initialCapital = 0.0;
@@ -28,4 +29,6 @@ struct BacktestResult
     double annualizedReturn = 0.0;
     double annualizedVolatility = 0.0;
     double sharpeRatio = 0.0;
+
+    nlohmann::json toJson() const;
 };
