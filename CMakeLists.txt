@@ -23,7 +23,12 @@ FetchContent_Declare(
     URL https://github.com/google/googletest/archive/refs/tags/v1.17.0.zip
 )
 
-FetchContent_MakeAvailable(googletest)
+FetchContent_Declare(
+    cpp_httplib
+    URL https://github.com/yhirose/cpp-httplib/archive/refs/tags/v0.18.3.zip
+)
+
+FetchContent_MakeAvailable(googletest cpp_httplib)
 
 # ==========================================================
 # QuantFlow Library
@@ -123,11 +128,7 @@ add_executable(QuantFlowServer
 target_link_libraries(QuantFlowServer
     PRIVATE
         QuantFlowLib
-)
-
-target_include_directories(QuantFlowServer
-    PRIVATE
-        ${PROJECT_SOURCE_DIR}/third_party/httplib
+        httplib::httplib
 )
 
 # ==========================================================
