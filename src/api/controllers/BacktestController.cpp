@@ -1,6 +1,7 @@
 #include "api/controllers/BacktestController.hpp"
 
 #include "api/dto/BacktestRequest.hpp"
+#include "api/services/BacktestService.hpp"
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -48,7 +49,20 @@ void BacktestController::handleBacktest(
     response["stopLossPercent"] = request.stopLossPercent;
     response["takeProfitPercent"] = request.takeProfitPercent;
 
-    res.set_content(
-        response.dump(4),
-        "application/json");
+    try
+    {
+        BacktestService service;
+        service.run(request);
+
+        res.set_content(
+            response.dump(4),
+            "application/json");
+    }
+    catch (const std::exception &e)
+    {
+        std::cout << "Exception: " << e.what() << '\n';
+
+        res.status = 500;
+        res.set_content(e.what(), "text/plain");
+    }
 }
