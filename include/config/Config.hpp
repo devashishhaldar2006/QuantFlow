@@ -7,11 +7,11 @@ struct Config
     std::string csvFile;
     std::string strategy;
 
-    double initialCash;
-    double commission;
-    double stopLossPercent;
-    double takeProfitPercent;
-    double slippage;
+    double initialCash     = 0.0;
+    double commission       = 0.0;
+    double stopLossPercent  = 0.0;
+    double takeProfitPercent = 0.0;
+    double slippage         = 0.0;
 
     // SMA Strategy
     int shortMAPeriod;

@@ -122,6 +122,7 @@ add_executable(QuantFlowServer
     src/api/controllers/HealthController.cpp
     src/api/controllers/BacktestController.cpp
     src/api/dto/BacktestRequest.cpp
+    src/api/dto/BacktestResult.cpp
     src/api/services/BacktestService.cpp
     src/api/validation/RequestValidator.cpp
 )

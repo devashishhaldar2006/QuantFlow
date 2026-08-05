@@ -1,6 +1,9 @@
 #pragma once
 
-#include <nlohmann/json.hpp>
+// Use nlohmann's own forward-declaration header to avoid pulling the
+// entire json.hpp into every TU that only stores a BacktestResult.
+#include <nlohmann/json_fwd.hpp>
+
 struct BacktestResult
 {
     double initialCapital = 0.0;

@@ -3,10 +3,19 @@
 #include "api/controllers/BacktestController.hpp"
 
 #include <iostream>
+#include <stdexcept>
 
 void Server::registerRoutes(
     httplib::Server& server)
 {
+    // CORS — allow browser frontends to reach this API
+    server.set_default_headers(
+    {
+        {"Access-Control-Allow-Origin",  "*"},
+        {"Access-Control-Allow-Methods", "GET, POST, OPTIONS"},
+        {"Access-Control-Allow-Headers", "Content-Type"}
+    });
+
     HealthController::registerRoutes(server);
     BacktestController::registerRoutes(server);
 }
@@ -22,5 +31,11 @@ void Server::start(int port)
         << port
         << '\n';
 
-    server.listen("0.0.0.0", port);
+    if (!server.listen("0.0.0.0", port))
+    {
+        throw std::runtime_error(
+            "Failed to bind to port " +
+            std::to_string(port) +
+            " — port may already be in use");
+    }
 }
