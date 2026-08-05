@@ -3,6 +3,8 @@
 #include "api/dto/BacktestRequest.hpp"
 #include "api/services/BacktestService.hpp"
 #include <nlohmann/json.hpp>
+#include "api/dto/BacktestResult.hpp"
+#include <iostream>
 
 using json = nlohmann::json;
 
@@ -29,17 +31,29 @@ void BacktestController::handleBacktest(
         request.commission = body.at("commission");
         request.stopLossPercent = body.at("stopLossPercent");
         request.takeProfitPercent = body.at("takeProfitPercent");
-
-        json response;
-        response["strategy"] = request.strategy;
-        response["csvFile"] = request.csvFile;
-        response["initialCash"] = request.initialCash;
-        response["commission"] = request.commission;
-        response["stopLossPercent"] = request.stopLossPercent;
-        response["takeProfitPercent"] = request.takeProfitPercent;
+        request.shortMAPeriod =
+        body.value("shortMAPeriod", 10);
+        request.longMAPeriod =
+        body.value("longMAPeriod", 20);
 
         BacktestService service;
-        service.run(request);
+
+        std::cout << "Starting backtest\n";
+
+        BacktestResult result =
+            service.run(request);
+
+        std::cout << "Backtest completed\n";
+
+        json response;
+        response["initialCash"] =
+            result.initialCash;
+
+        response["finalValue"] =
+            result.finalValue;
+
+        response["trades"] =
+            result.trades;
 
         res.set_content(
             response.dump(4),

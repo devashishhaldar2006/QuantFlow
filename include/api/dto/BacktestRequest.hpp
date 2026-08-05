@@ -5,14 +5,13 @@
 struct BacktestRequest
 {
     std::string strategy;
-
     std::string csvFile;
 
     double initialCash;
-
     double commission;
-
     double stopLossPercent;
-
     double takeProfitPercent;
+
+    int shortMAPeriod = 10;
+    int longMAPeriod = 20;
 };
