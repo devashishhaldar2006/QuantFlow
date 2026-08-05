@@ -32,9 +32,9 @@ void BacktestController::handleBacktest(
         request.stopLossPercent = body.at("stopLossPercent");
         request.takeProfitPercent = body.at("takeProfitPercent");
         request.shortMAPeriod =
-        body.value("shortMAPeriod", 10);
+            body.value("shortMAPeriod", 10);
         request.longMAPeriod =
-        body.value("longMAPeriod", 20);
+            body.value("longMAPeriod", 20);
 
         BacktestService service;
 
@@ -46,15 +46,23 @@ void BacktestController::handleBacktest(
         std::cout << "Backtest completed\n";
 
         json response;
-        response["initialCash"] =
-            result.initialCash;
+        response["initialCapital"] = result.initialCapital;
+        response["finalEquity"] = result.finalEquity;
+        response["netProfit"] = result.netProfit;
+        response["totalReturnPercent"] = result.totalReturnPercent;
 
-        response["finalValue"] =
-            result.finalValue;
+        response["totalTrades"] = result.totalTrades;
+        response["winningTrades"] = result.winningTrades;
+        response["losingTrades"] = result.losingTrades;
+        response["winRatePercent"] = result.winRatePercent;
 
-        response["trades"] =
-            result.trades;
+        response["maximumDrawdown"] = result.maximumDrawdown;
+        response["profitFactor"] = result.profitFactor;
+        response["expectancy"] = result.expectancy;
 
+        response["annualizedReturn"] = result.annualizedReturn;
+        response["annualizedVolatility"] = result.annualizedVolatility;
+        response["sharpeRatio"] = result.sharpeRatio;
         res.set_content(
             response.dump(4),
             "application/json");

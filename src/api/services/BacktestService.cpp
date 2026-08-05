@@ -10,6 +10,8 @@
 #include "risk/PositionSizer.hpp"
 #include "risk/RiskManager.hpp"
 #include "engine/BacktestEngine.hpp"
+#include "analytics/PerformanceAnalyzer.hpp"
+#include "analytics/PerformanceReport.hpp"
 
 #include <iostream>
 
@@ -25,9 +27,9 @@ BacktestResult BacktestService::run(
     config.stopLossPercent = request.stopLossPercent;
     config.takeProfitPercent = request.takeProfitPercent;
     config.shortMAPeriod =
-    request.shortMAPeriod;
+        request.shortMAPeriod;
     config.longMAPeriod =
-    request.longMAPeriod;
+        request.longMAPeriod;
 
     MarketData marketData =
         CSVParser::parse(config.csvFile);
@@ -58,17 +60,66 @@ BacktestResult BacktestService::run(
         riskManager);
     engine.run();
 
+    PerformanceAnalyzer analyzer(portfolio);
+
+    PerformanceReport report =
+        analyzer.analyze();
+
     BacktestResult result;
 
-    result.initialCash =
-        config.initialCash;
+    result.initialCapital =
+        report.initialCapital;
 
-    result.finalValue =
-        portfolio.totalValue();
+    result.finalEquity =
+        report.finalEquity;
 
-    result.trades =
-        static_cast<int>(
-            portfolio.getTrades().size());
+    result.netProfit =
+        report.netProfit;
+
+    result.totalReturnPercent =
+        report.totalReturnPercent;
+
+    result.totalTrades =
+        report.totalTrades;
+
+    result.winningTrades =
+        report.winningTrades;
+
+    result.losingTrades =
+        report.losingTrades;
+
+    result.winRatePercent =
+        report.winRatePercent;
+
+    result.averageWin =
+        report.averageWin;
+
+    result.averageLoss =
+        report.averageLoss;
+
+    result.largestWin =
+        report.largestWin;
+
+    result.largestLoss =
+        report.largestLoss;
+
+    result.maximumDrawdown =
+        report.maximumDrawdown;
+
+    result.profitFactor =
+        report.profitFactor;
+
+    result.expectancy =
+        report.expectancy;
+
+    result.annualizedReturn =
+        report.annualizedReturn;
+
+    result.annualizedVolatility =
+        report.annualizedVolatility;
+
+    result.sharpeRatio =
+        report.sharpeRatio;
 
     return result;
 }
