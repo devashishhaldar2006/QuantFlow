@@ -45,88 +45,57 @@ void BacktestController::handleBacktest(
         return;
     }
 
+    // ── Phase 1: parse + validate (client errors → 400) ──────────────────
+    json body;
+    BacktestRequest request;
+
     try
     {
-        json body =
-            json::parse(req.body);
-
+        body = json::parse(req.body);
         RequestValidator::validateBacktestRequest(body);
+        request = BacktestRequest::fromJson(body);
+    }
+    catch (const json::exception &ex)
+    {
+        std::cerr << "JSON parse error: " << ex.what() << '\n';
 
-        BacktestRequest request =
-            BacktestRequest::fromJson(body);
+        res.status = 400;
 
+        json error;
+        error["error"]  = "Invalid JSON: check syntax and field types";
+        error["detail"] = ex.what();
+
+        res.set_content(error.dump(), "application/json");
+        return;
+    }
+    catch (const std::exception &ex)
+    {
+        // Covers runtime_error from RequestValidator and any other
+        // std::exception subclass thrown during parsing/validation.
+        std::cerr << "Validation error: " << ex.what() << '\n';
+
+        res.status = 400;
+
+        json error;
+        error["error"] = ex.what();
+
+        res.set_content(error.dump(), "application/json");
+        return;
+    }
+
+    // ── Phase 2: run backtest (server errors → 500) ───────────────────────
+    try
+    {
         BacktestService service;
-
-        BacktestResult result =
-            service.run(request);
+        BacktestResult result = service.run(request);
 
         res.set_content(
             result.toJson().dump(4),
             "application/json");
     }
-    catch (const json::exception &ex)
-    {
-        // Malformed JSON — client error
-        std::cerr
-            << "JSON parse error: "
-            << ex.what()
-            << '\n';
-
-        res.status = 400;
-
-        json error;
-        error["error"] = "Invalid JSON: check syntax and field types";
-        error["detail"] = ex.what();
-
-        res.set_content(
-            error.dump(),
-            "application/json");
-    }
-    catch (const std::invalid_argument &ex)
-    {
-        // Validation failures thrown as invalid_argument — client error
-        std::cerr
-            << "Validation error: "
-            << ex.what()
-            << '\n';
-
-        res.status = 400;
-
-        json error;
-        error["error"] = ex.what();
-
-        res.set_content(
-            error.dump(),
-            "application/json");
-    }
-    catch (const std::runtime_error &ex)
-    {
-        // runtime_error can come from validation OR internals.
-        // Re-use 400 for validation messages (thrown by RequestValidator),
-        // but internal infra errors (CSVParser, engine) also surface here.
-        // A cleaner split would use a custom ValidationError type; for now
-        // we keep 400 for runtime_error as it's always request-driven.
-        std::cerr
-            << "Request error: "
-            << ex.what()
-            << '\n';
-
-        res.status = 400;
-
-        json error;
-        error["error"] = ex.what();
-
-        res.set_content(
-            error.dump(),
-            "application/json");
-    }
     catch (const std::exception &ex)
     {
-        // Unexpected server-side failure (bad_alloc, etc.) — 500
-        std::cerr
-            << "Internal server error: "
-            << ex.what()
-            << '\n';
+        std::cerr << "Internal server error: " << ex.what() << '\n';
 
         res.status = 500;
 

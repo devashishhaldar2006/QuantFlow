@@ -14,8 +14,8 @@ struct Config
     double slippage         = 0.0;
 
     // SMA Strategy
-    int shortMAPeriod;
-    int longMAPeriod;
+    int shortMAPeriod = 10;
+    int longMAPeriod  = 20;
 
     // RSI Strategy
     int rsiPeriod = 14;

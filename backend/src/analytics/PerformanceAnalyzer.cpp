@@ -130,11 +130,19 @@ PerformanceReport PerformanceAnalyzer::analyze() const
         report.annualizedReturn =
             Statistics::annualizedReturn(returns);
 
-        report.annualizedVolatility =
+        const double vol =
             Statistics::annualizedVolatility(returns);
 
-        report.sharpeRatio =
-            Statistics::sharpeRatio(returns);
+        report.annualizedVolatility = vol;
+
+        constexpr double EPS = 1e-12;
+
+        if (vol > EPS)
+        {
+            report.sharpeRatio =
+                Statistics::sharpeRatio(returns);
+        }
+        // else: sharpeRatio stays at its default 0.0
     }
 
     return report;

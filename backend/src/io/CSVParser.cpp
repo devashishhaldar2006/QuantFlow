@@ -54,7 +54,8 @@ MarketData CSVParser::parse(const std::string& filePath)
 
     if (!file.is_open())
     {
-        throw std::runtime_error("Could not open file: " + filePath);
+        throw std::runtime_error(
+            "Could not open the specified CSV file");
     }
 
     std::string line;

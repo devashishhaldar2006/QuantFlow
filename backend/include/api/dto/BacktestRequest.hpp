@@ -8,10 +8,10 @@ struct BacktestRequest
     std::string strategy;
     std::string csvFile;
 
-    double initialCash;
-    double commission;
-    double stopLossPercent;
-    double takeProfitPercent;
+    double initialCash      = 0.0;
+    double commission       = 0.0;
+    double stopLossPercent  = 0.0;
+    double takeProfitPercent = 0.0;
 
     int shortMAPeriod = 10;
     int longMAPeriod = 20;

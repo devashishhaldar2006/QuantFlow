@@ -116,6 +116,12 @@ void RequestValidator::validateBacktestRequest(
     }
 
     // ── Security: reject path traversal in csvFile ───────────────────────
+    if (!body.at("csvFile").is_string())
+    {
+        throw std::runtime_error(
+            "Field 'csvFile' must be a string");
+    }
+
     const std::string csvFile =
         body.at("csvFile").get<std::string>();
 
@@ -123,6 +129,12 @@ void RequestValidator::validateBacktestRequest(
     {
         throw std::runtime_error(
             "csvFile path cannot be empty");
+    }
+
+    if (csvFile.size() > 256)
+    {
+        throw std::runtime_error(
+            "csvFile path is too long (max 256 characters)");
     }
 
     if (csvFile.find("..") != std::string::npos)
@@ -138,6 +150,12 @@ void RequestValidator::validateBacktestRequest(
     }
 
     // ── Strategy name must be a non-empty string ─────────────────────────
+    if (!body.at("strategy").is_string())
+    {
+        throw std::runtime_error(
+            "Field 'strategy' must be a string");
+    }
+
     const std::string strategy =
         body.at("strategy").get<std::string>();
 
