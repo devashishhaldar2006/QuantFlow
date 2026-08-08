@@ -1,0 +1,120 @@
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import type { BacktestStatus } from "../types";
+
+type BacktestToolbarProps = {
+  search: string;
+  status: BacktestStatus | "all";
+  strategy: string;
+  onSearchChange: (value: string) => void;
+  onStatusChange: (value: BacktestStatus | "all") => void;
+  onStrategyChange: (value: string) => void;
+};
+
+export default function BacktestToolbar({
+  search,
+  status,
+  strategy,
+  onSearchChange,
+  onStatusChange,
+  onStrategyChange,
+}: BacktestToolbarProps) {
+  return (
+    <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-1 items-center gap-2">
+        <Input
+          placeholder="Search backtests..."
+          className="max-w-sm"
+          value={search}
+          onChange={(event) =>
+            onSearchChange(event.target.value)
+          }
+        />
+
+        <Select
+          value={status}
+          onValueChange={(value) => {
+            if (
+              value === "all" ||
+              value === "completed" ||
+              value === "running" ||
+              value === "failed"
+            ) {
+              onStatusChange(value);
+            }
+          }}
+        >
+          <SelectTrigger className="w-[160px]">
+            <SelectValue placeholder="Status" />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectItem value="all">
+              All Statuses
+            </SelectItem>
+
+            <SelectItem value="completed">
+              Completed
+            </SelectItem>
+
+            <SelectItem value="running">
+              Running
+            </SelectItem>
+
+            <SelectItem value="failed">
+              Failed
+            </SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={strategy}
+          onValueChange={(value) => {
+            if (value) {
+              onStrategyChange(value);
+            }
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Strategy" />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectItem value="all">
+              All Strategies
+            </SelectItem>
+
+            <SelectItem value="EMA Crossover">
+              EMA Crossover
+            </SelectItem>
+
+            <SelectItem value="RSI Mean Reversion">
+              RSI Mean Reversion
+            </SelectItem>
+
+            <SelectItem value="Bollinger Bands">
+              Bollinger Bands
+            </SelectItem>
+
+            <SelectItem value="MACD Strategy">
+              MACD Strategy
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <Button>
+        New Backtest
+      </Button>
+    </div>
+  );
+}

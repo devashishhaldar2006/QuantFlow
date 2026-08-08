@@ -1,3 +1,5 @@
+import Backtests from "@/features/backtest/components/Backtest";
+
 export default function BacktestsPage() {
-  return <h1>Backtests</h1>;
+  return <Backtests />;
 }

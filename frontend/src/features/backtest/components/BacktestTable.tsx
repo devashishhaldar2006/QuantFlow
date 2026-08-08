@@ -6,48 +6,35 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
 
-import { backtests } from "@/features/backtest/mockData";
+import type { Backtest } from "../types";
 
-const recentBacktests = backtests.slice(0, 4);
+type BacktestTableProps = {
+  backtests: Backtest[];
+};
 
-export default function RecentBacktests() {
+export default function BacktestTable({
+  backtests,
+}: BacktestTableProps) {
   return (
     <div className="rounded-lg border bg-card">
-      <div className="flex items-center justify-between p-6">
-        <div>
-          <h2 className="text-base font-semibold">
-            Recent Backtests
-          </h2>
-
-          <p className="text-sm text-muted-foreground">
-            Your latest strategy performance results.
-          </p>
-        </div>
-
-        <Link
-          href="/backtests"
-          className="inline-flex h-8 items-center justify-center rounded-md px-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-        >
-          View all
-        </Link>
-      </div>
-
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Strategy</TableHead>
             <TableHead>Symbol</TableHead>
+            <TableHead>Timeframe</TableHead>
             <TableHead>Return</TableHead>
             <TableHead>Sharpe</TableHead>
+            <TableHead>Drawdown</TableHead>
             <TableHead>Status</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
-          {recentBacktests.map((backtest) => (
+          {backtests.map((backtest) => (
             <TableRow key={backtest.id}>
               <TableCell className="font-medium">
                 {backtest.strategy}
@@ -55,6 +42,10 @@ export default function RecentBacktests() {
 
               <TableCell>
                 {backtest.symbol}
+              </TableCell>
+
+              <TableCell>
+                {backtest.timeframe}
               </TableCell>
 
               <TableCell
@@ -70,6 +61,10 @@ export default function RecentBacktests() {
 
               <TableCell>
                 {backtest.sharpeRatio.toFixed(2)}
+              </TableCell>
+
+              <TableCell>
+                {backtest.maxDrawdown.toFixed(2)}%
               </TableCell>
 
               <TableCell>
