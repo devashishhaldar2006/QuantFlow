@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 
 import type { BacktestStatus } from "../types";
+import Link from "next/link";
 
 type BacktestToolbarProps = {
   search: string;
@@ -35,9 +36,7 @@ export default function BacktestToolbar({
           placeholder="Search backtests..."
           className="max-w-sm"
           value={search}
-          onChange={(event) =>
-            onSearchChange(event.target.value)
-          }
+          onChange={(event) => onSearchChange(event.target.value)}
         />
 
         <Select
@@ -58,21 +57,13 @@ export default function BacktestToolbar({
           </SelectTrigger>
 
           <SelectContent>
-            <SelectItem value="all">
-              All Statuses
-            </SelectItem>
+            <SelectItem value="all">All Statuses</SelectItem>
 
-            <SelectItem value="completed">
-              Completed
-            </SelectItem>
+            <SelectItem value="completed">Completed</SelectItem>
 
-            <SelectItem value="running">
-              Running
-            </SelectItem>
+            <SelectItem value="running">Running</SelectItem>
 
-            <SelectItem value="failed">
-              Failed
-            </SelectItem>
+            <SelectItem value="failed">Failed</SelectItem>
           </SelectContent>
         </Select>
 
@@ -89,32 +80,27 @@ export default function BacktestToolbar({
           </SelectTrigger>
 
           <SelectContent>
-            <SelectItem value="all">
-              All Strategies
-            </SelectItem>
+            <SelectItem value="all">All Strategies</SelectItem>
 
-            <SelectItem value="EMA Crossover">
-              EMA Crossover
-            </SelectItem>
+            <SelectItem value="EMA Crossover">EMA Crossover</SelectItem>
 
             <SelectItem value="RSI Mean Reversion">
               RSI Mean Reversion
             </SelectItem>
 
-            <SelectItem value="Bollinger Bands">
-              Bollinger Bands
-            </SelectItem>
+            <SelectItem value="Bollinger Bands">Bollinger Bands</SelectItem>
 
-            <SelectItem value="MACD Strategy">
-              MACD Strategy
-            </SelectItem>
+            <SelectItem value="MACD Strategy">MACD Strategy</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      <Button>
+      <Link
+        href="/backtests/new"
+        className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+      >
         New Backtest
-      </Button>
+      </Link>
     </div>
   );
 }

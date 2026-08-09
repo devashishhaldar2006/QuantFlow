@@ -15,9 +15,7 @@ type BacktestTableProps = {
   backtests: Backtest[];
 };
 
-export default function BacktestTable({
-  backtests,
-}: BacktestTableProps) {
+export default function BacktestTable({ backtests }: BacktestTableProps) {
   return (
     <div className="rounded-lg border bg-card">
       <Table>
@@ -32,48 +30,48 @@ export default function BacktestTable({
             <TableHead>Status</TableHead>
           </TableRow>
         </TableHeader>
-
         <TableBody>
-          {backtests.map((backtest) => (
-            <TableRow key={backtest.id}>
-              <TableCell className="font-medium">
-                {backtest.strategy}
-              </TableCell>
-
-              <TableCell>
-                {backtest.symbol}
-              </TableCell>
-
-              <TableCell>
-                {backtest.timeframe}
-              </TableCell>
-
+          {backtests.length === 0 ? (
+            <TableRow>
               <TableCell
-                className={
-                  backtest.returnPercentage >= 0
-                    ? "font-medium text-emerald-600"
-                    : "font-medium text-red-600"
-                }
+                colSpan={7}
+                className="h-24 text-center text-muted-foreground"
               >
-                {backtest.returnPercentage >= 0 ? "+" : ""}
-                {backtest.returnPercentage.toFixed(2)}%
-              </TableCell>
-
-              <TableCell>
-                {backtest.sharpeRatio.toFixed(2)}
-              </TableCell>
-
-              <TableCell>
-                {backtest.maxDrawdown.toFixed(2)}%
-              </TableCell>
-
-              <TableCell>
-                <Badge variant="secondary">
-                  {backtest.status}
-                </Badge>
+                No backtests found.
               </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            backtests.map((backtest) => (
+              <TableRow key={backtest.id}>
+                <TableCell className="font-medium">
+                  {backtest.strategy}
+                </TableCell>
+
+                <TableCell>{backtest.symbol}</TableCell>
+
+                <TableCell>{backtest.timeframe}</TableCell>
+
+                <TableCell
+                  className={
+                    backtest.returnPercentage >= 0
+                      ? "font-medium text-emerald-600"
+                      : "font-medium text-red-600"
+                  }
+                >
+                  {backtest.returnPercentage >= 0 ? "+" : ""}
+                  {backtest.returnPercentage.toFixed(2)}%
+                </TableCell>
+
+                <TableCell>{backtest.sharpeRatio.toFixed(2)}</TableCell>
+
+                <TableCell>{backtest.maxDrawdown.toFixed(2)}%</TableCell>
+
+                <TableCell>
+                  <Badge variant="secondary">{backtest.status}</Badge>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </div>
