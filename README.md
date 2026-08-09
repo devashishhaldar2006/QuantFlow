@@ -12,10 +12,15 @@ QuantFlow is designed for anyone who wants to validate a trading idea before ris
 Core capabilities:
 
 Historical strategy backtesting with realistic execution modeling
+
 Slippage & commission simulation
+
 Risk management via stop-loss / take-profit rules
+
 A library of built-in technical indicators
+
 A pluggable, factory-based strategy engine
+
 Both CLI and REST API workflows
 
 Use it as a local CLI tool for one-off research, or run the REST API server to integrate backtesting into a larger pipeline, dashboard, or automated research workflow.
