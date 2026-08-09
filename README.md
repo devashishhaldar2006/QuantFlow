@@ -1,6 +1,7 @@
 # QuantFlow
 
-A production-quality quantitative trading backtesting engine written in modern C++20, with a REST API server for programmatic access.
+A production-grade quantitative trading backtesting engine, built with modern C++20.
+QuantFlow lets traders and developers backtest trading strategies against historical market data, analyze performance with institutional-grade metrics, and simulate realistic trading conditions — via a CLI tool or a REST API for automated, programmatic strategy evaluation.
 
 ---
 
