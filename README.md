@@ -57,6 +57,20 @@ QuantFlow/
 
 ---
 
+## Features
+Category  |  Details
+|--------|--------|
+|Execution modeling	|  Commission and slippage applied per trade for realistic P&L|
+|Risk management  |  Configurable stop-loss and take-profit thresholds|
+|Indicators	|  SMA, EMA, RSI, MACD, ATR, Bollinger Bands|
+|Strategies	 |  7 built-in strategies, extensible via factory pattern|
+|Interfaces  |	CLI binary + REST API server|
+|Performance analytics |  Return %, win rate, Sharpe ratio, and more|
+|Validation & security  |  Input validation, path traversal protection, error sanitization|
+|Testing |  197 unit and integration tests|
+
+----
+
 ## Prerequisites
 
 | Tool | Minimum Version |
