@@ -5,6 +5,23 @@ QuantFlow lets traders and developers backtest trading strategies against histor
 
 ---
 
+📌 Overview
+
+QuantFlow is designed for anyone who wants to validate a trading idea before risking real capital. It replays historical price data through a configurable strategy engine and reports back exactly how that strategy would have performed — including realistic frictions like slippage and commissions.
+
+Core capabilities:
+
+Historical strategy backtesting with realistic execution modeling
+Slippage & commission simulation
+Risk management via stop-loss / take-profit rules
+A library of built-in technical indicators
+A pluggable, factory-based strategy engine
+Both CLI and REST API workflows
+
+Use it as a local CLI tool for one-off research, or run the REST API server to integrate backtesting into a larger pipeline, dashboard, or automated research workflow.
+
+---
+
 ## Project Structure
 
 ```
