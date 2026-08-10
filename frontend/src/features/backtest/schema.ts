@@ -2,33 +2,56 @@ import { z } from "zod";
 
 export const backtestConfigSchema = z
   .object({
-    strategy: z.string().min(1, "Strategy is required"),
+    strategy: z
+      .string()
+      .min(1, "Strategy is required"),
 
-    symbol: z
+    csvFile: z
       .string()
       .trim()
-      .min(1, "Symbol is required"),
+      .min(1, "CSV file is required")
+      .max(256, "CSV file path is too long")
+      .refine((val) => !val.includes(".."), {
+        message: "CSV file path must not contain '..'",
+      })
+      .refine((val) => !val.startsWith("/"), {
+        message: "CSV file must be a relative path",
+      }),
 
-    timeframe: z.string().min(1, "Timeframe is required"),
-
-    startDate: z
-      .string()
-      .min(1, "Start date is required"),
-
-    endDate: z
-      .string()
-      .min(1, "End date is required"),
-
-    initialCapital: z
+    initialCash: z
       .number()
       .positive("Initial capital must be greater than zero"),
+
+    commission: z
+      .number()
+      .min(0, "Commission cannot be negative"),
+
+    stopLossPercent: z
+      .number()
+      .min(0, "Stop loss cannot be negative"),
+
+    takeProfitPercent: z
+      .number()
+      .min(0, "Take profit cannot be negative"),
+
+    shortMAPeriod: z
+      .number()
+      .int()
+      .positive("Short MA period must be greater than zero"),
+
+    longMAPeriod: z
+      .number()
+      .int()
+      .positive("Long MA period must be greater than zero"),
   })
   .refine(
-    (data) => data.endDate > data.startDate,
+    (data) => data.shortMAPeriod < data.longMAPeriod,
     {
-      message: "End date must be after start date",
-      path: ["endDate"],
+      message:
+        "Short MA period must be less than long MA period",
+      path: ["longMAPeriod"],
     }
   );
 
-  export type BacktestConfig = z.infer<typeof backtestConfigSchema>;
+export type BacktestConfig =
+  z.infer<typeof backtestConfigSchema>;

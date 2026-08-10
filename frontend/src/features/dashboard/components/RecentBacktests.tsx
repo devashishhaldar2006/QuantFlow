@@ -35,35 +35,36 @@ export default function RecentBacktests() {
         </Link>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Strategy</TableHead>
-            <TableHead>Symbol</TableHead>
-            <TableHead>Return</TableHead>
-            <TableHead>Sharpe</TableHead>
-            <TableHead>Status</TableHead>
-          </TableRow>
-        </TableHeader>
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Strategy</TableHead>
+              <TableHead>Symbol</TableHead>
+              <TableHead>Return</TableHead>
+              <TableHead>Sharpe</TableHead>
+              <TableHead>Status</TableHead>
+            </TableRow>
+          </TableHeader>
 
-        <TableBody>
-          {recentBacktests.map((backtest) => (
-            <TableRow key={backtest.id}>
-              <TableCell className="font-medium">
-                {backtest.strategy}
-              </TableCell>
+          <TableBody>
+            {recentBacktests.map((backtest) => (
+              <TableRow key={backtest.id}>
+                <TableCell className="font-medium">
+                  {backtest.strategy}
+                </TableCell>
 
-              <TableCell>
-                {backtest.symbol}
-              </TableCell>
+                <TableCell>
+                  {backtest.symbol}
+                </TableCell>
 
-              <TableCell
-                className={
-                  backtest.returnPercentage >= 0
-                    ? "font-medium text-emerald-600"
-                    : "font-medium text-red-600"
-                }
-              >
+                <TableCell
+                  className={
+                    backtest.returnPercentage >= 0
+                      ? "font-medium text-emerald-500"
+                      : "font-medium text-red-500"
+                  }
+                >
                 {backtest.returnPercentage >= 0 ? "+" : ""}
                 {backtest.returnPercentage.toFixed(2)}%
               </TableCell>
@@ -81,6 +82,7 @@ export default function RecentBacktests() {
           ))}
         </TableBody>
       </Table>
+      </div>
     </div>
   );
 }

@@ -18,7 +18,7 @@ export default function Sidebar() {
   );
 
   return (
-    <aside className="min-h-screen w-64 border-r bg-background">
+    <aside className="hidden md:flex md:w-64 md:flex-col border-r bg-background shrink-0">
       <div className="flex h-16 items-center border-b px-5">
         <span className="text-lg font-semibold tracking-tight">QuantFlow</span>
       </div>

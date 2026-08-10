@@ -1,14 +1,14 @@
+import axios from "axios";
 import type { BacktestConfig } from "@/features/backtest/schema";
 
 export async function createBacktest(config: BacktestConfig) {
-  console.log("Creating backtest:", config);
-
-  await new Promise((resolve) => {
-    setTimeout(resolve, 1000);
-  });
-
-  return {
-    id: `bt-${Date.now()}`,
-    status: "running" as const,
-  };
+  try {
+    const response = await axios.post("/api/backtests", config);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error || "Failed to create backtest");
+    }
+    throw error;
+  }
 }

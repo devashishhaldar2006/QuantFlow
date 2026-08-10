@@ -17,7 +17,7 @@ type BacktestTableProps = {
 
 export default function BacktestTable({ backtests }: BacktestTableProps) {
   return (
-    <div className="rounded-lg border bg-card">
+    <div className="rounded-lg border bg-card overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>
@@ -54,8 +54,8 @@ export default function BacktestTable({ backtests }: BacktestTableProps) {
                 <TableCell
                   className={
                     backtest.returnPercentage >= 0
-                      ? "font-medium text-emerald-600"
-                      : "font-medium text-red-600"
+                      ? "font-medium text-emerald-500"
+                      : "font-medium text-red-500"
                   }
                 >
                   {backtest.returnPercentage >= 0 ? "+" : ""}

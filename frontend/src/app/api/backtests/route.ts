@@ -1,19 +1,33 @@
-import type { BacktestConfig } from "@/features/backtest/schema";
+import { backtestConfigSchema } from "@/features/backtest/schema";
+import { createBacktest } from "@/services/backtest/backtestService";
 
-export async function createBacktest(config: BacktestConfig) {
-  const response = await fetch("/api/backtests", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(config),
-  });
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
 
-  const data = await response.json();
+    const result = backtestConfigSchema.safeParse(body);
 
-  if (!response.ok) {
-    throw new Error(data.error ?? "Failed to create backtest");
+    if (!result.success) {
+      return Response.json(
+        {
+          error: result.error.issues[0].message,
+        },
+        { status: 400 }
+      );
+    }
+
+    const backtest = await createBacktest(result.data);
+
+    return Response.json(backtest, {
+      status: 201,
+    });
+  } catch (error) {
+    console.error("Backtest creation failed:", error);
+    return Response.json(
+      {
+        error: error instanceof Error ? error.message : "Internal server error",
+      },
+      { status: error instanceof Error && error.message.includes("Invalid") ? 400 : 500 }
+    );
   }
-
-  return data;
 }
