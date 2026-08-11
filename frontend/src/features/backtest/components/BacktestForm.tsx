@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { createBacktest } from "@/lib/api/backtests";
+import { setLatestBacktestResult } from "../store";
+import { useRouter } from "next/navigation";
 
 import {
   Select,
@@ -15,10 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import {
-  backtestConfigSchema,
-  type BacktestConfig,
-} from "../schema";
+import { backtestConfigSchema, type BacktestConfig } from "../schema";
 
 const initialForm: BacktestConfig = {
   strategy: "",
@@ -34,13 +33,13 @@ const initialForm: BacktestConfig = {
 export default function BacktestForm() {
   const [form, setForm] = useState<BacktestConfig>(initialForm);
 
+  const router = useRouter();
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setError("");
@@ -58,15 +57,13 @@ export default function BacktestForm() {
     try {
       const backtest = await createBacktest(result.data);
 
-      console.log("Backtest created:", backtest);
+      setLatestBacktestResult(backtest);
 
-      setSuccess("Backtest completed successfully.");
+      router.push("/backtests/results");
     } catch (error) {
       console.error(error);
       setError(
-        error instanceof Error
-          ? error.message
-          : "Failed to create backtest."
+        error instanceof Error ? error.message : "Failed to create backtest.",
       );
     } finally {
       setIsSubmitting(false);
@@ -98,25 +95,15 @@ export default function BacktestForm() {
           </SelectTrigger>
 
           <SelectContent>
-            <SelectItem value="MovingAverageCross">
-              SMA Crossover
-            </SelectItem>
+            <SelectItem value="MovingAverageCross">SMA Crossover</SelectItem>
 
-            <SelectItem value="EMACross">
-              EMA Crossover
-            </SelectItem>
+            <SelectItem value="EMACross">EMA Crossover</SelectItem>
 
-            <SelectItem value="RSI">
-              RSI Mean Reversion
-            </SelectItem>
+            <SelectItem value="RSI">RSI Mean Reversion</SelectItem>
 
-            <SelectItem value="Bollinger">
-              Bollinger Bands
-            </SelectItem>
+            <SelectItem value="Bollinger">Bollinger Bands</SelectItem>
 
-            <SelectItem value="MACD">
-              MACD Strategy
-            </SelectItem>
+            <SelectItem value="MACD">MACD Strategy</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -140,9 +127,7 @@ export default function BacktestForm() {
 
       {/* Initial Capital */}
       <div className="space-y-2">
-        <Label htmlFor="initialCash">
-          Initial Capital
-        </Label>
+        <Label htmlFor="initialCash">Initial Capital</Label>
 
         <Input
           id="initialCash"
@@ -160,9 +145,7 @@ export default function BacktestForm() {
 
       {/* Commission */}
       <div className="space-y-2">
-        <Label htmlFor="commission">
-          Commission
-        </Label>
+        <Label htmlFor="commission">Commission</Label>
 
         <Input
           id="commission"
@@ -182,9 +165,7 @@ export default function BacktestForm() {
       {/* Stop Loss / Take Profit */}
       <div className="grid gap-6 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="stopLossPercent">
-            Stop Loss (%)
-          </Label>
+          <Label htmlFor="stopLossPercent">Stop Loss (%)</Label>
 
           <Input
             id="stopLossPercent"
@@ -195,18 +176,14 @@ export default function BacktestForm() {
             onChange={(event) =>
               setForm((current) => ({
                 ...current,
-                stopLossPercent: Number(
-                  event.target.value
-                ),
+                stopLossPercent: Number(event.target.value),
               }))
             }
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="takeProfitPercent">
-            Take Profit (%)
-          </Label>
+          <Label htmlFor="takeProfitPercent">Take Profit (%)</Label>
 
           <Input
             id="takeProfitPercent"
@@ -217,9 +194,7 @@ export default function BacktestForm() {
             onChange={(event) =>
               setForm((current) => ({
                 ...current,
-                takeProfitPercent: Number(
-                  event.target.value
-                ),
+                takeProfitPercent: Number(event.target.value),
               }))
             }
           />
@@ -229,9 +204,7 @@ export default function BacktestForm() {
       {/* Moving Average Periods */}
       <div className="grid gap-6 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="shortMAPeriod">
-            Short MA Period
-          </Label>
+          <Label htmlFor="shortMAPeriod">Short MA Period</Label>
 
           <Input
             id="shortMAPeriod"
@@ -242,18 +215,14 @@ export default function BacktestForm() {
             onChange={(event) =>
               setForm((current) => ({
                 ...current,
-                shortMAPeriod: Number(
-                  event.target.value
-                ),
+                shortMAPeriod: Number(event.target.value),
               }))
             }
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="longMAPeriod">
-            Long MA Period
-          </Label>
+          <Label htmlFor="longMAPeriod">Long MA Period</Label>
 
           <Input
             id="longMAPeriod"
@@ -264,9 +233,7 @@ export default function BacktestForm() {
             onChange={(event) =>
               setForm((current) => ({
                 ...current,
-                longMAPeriod: Number(
-                  event.target.value
-                ),
+                longMAPeriod: Number(event.target.value),
               }))
             }
           />
@@ -274,27 +241,14 @@ export default function BacktestForm() {
       </div>
 
       {/* Feedback */}
-      {error && (
-        <p className="text-sm text-destructive">
-          {error}
-        </p>
-      )}
+      {error && <p className="text-sm text-destructive">{error}</p>}
 
-      {success && (
-        <p className="text-sm text-emerald-600">
-          {success}
-        </p>
-      )}
+      {success && <p className="text-sm text-emerald-600">{success}</p>}
 
       {/* Submit */}
       <div className="flex justify-end">
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-        >
-          {isSubmitting
-            ? "Running..."
-            : "Run Backtest"}
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Running..." : "Run Backtest"}
         </Button>
       </div>
     </form>

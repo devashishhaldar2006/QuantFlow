@@ -15,3 +15,29 @@ export type Backtest = {
   maxDrawdown: number;
   status: BacktestStatus;
 };
+
+export type BacktestResult = {
+  initialCapital: number;
+  finalEquity: number;
+  netProfit: number;
+  totalReturnPercent: number;
+
+  totalTrades: number;
+  winningTrades: number;
+  losingTrades: number;
+  winRatePercent: number;
+
+  averageWin: number;
+  averageLoss: number;
+
+  largestWin: number;
+  largestLoss: number;
+
+  maximumDrawdown: number;
+  profitFactor: number;
+  expectancy: number;
+
+  annualizedReturn: number;
+  annualizedVolatility: number;
+  sharpeRatio: number;
+};
