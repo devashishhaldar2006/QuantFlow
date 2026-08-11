@@ -6,60 +6,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 
-type Backtest = {
-  strategy: string;
-  symbol: string;
-  return: string;
-  returnPositive: boolean;
-  sharpe: string;
-  status: "Completed" | "Running" | "Failed";
-};
+import { backtests } from "@/features/backtest/mockData";
 
-const recentBacktests: Backtest[] = [
-  {
-    strategy: "EMA Crossover",
-    symbol: "NIFTY 50",
-    return: "+14.82%",
-    returnPositive: true,
-    sharpe: "1.62",
-    status: "Completed",
-  },
-  {
-    strategy: "RSI Mean Reversion",
-    symbol: "BANKNIFTY",
-    return: "+9.41%",
-    returnPositive: true,
-    sharpe: "1.38",
-    status: "Completed",
-  },
-  {
-    strategy: "Bollinger Bands",
-    symbol: "RELIANCE",
-    return: "-2.17%",
-    returnPositive: false,
-    sharpe: "0.72",
-    status: "Completed",
-  },
-  {
-    strategy: "MACD Strategy",
-    symbol: "TCS",
-    return: "+11.63%",
-    returnPositive: true,
-    sharpe: "1.44",
-    status: "Completed",
-  },
-];
+const recentBacktests = backtests.slice(0, 4);
 
 export default function RecentBacktests() {
   return (
     <div className="rounded-lg border bg-card">
       <div className="flex items-center justify-between p-6">
         <div>
-          <h2 className="text-base font-semibold">Recent Backtests</h2>
+          <h2 className="text-base font-semibold">
+            Recent Backtests
+          </h2>
 
           <p className="text-sm text-muted-foreground">
             Your latest strategy performance results.
@@ -74,43 +35,54 @@ export default function RecentBacktests() {
         </Link>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Strategy</TableHead>
-            <TableHead>Symbol</TableHead>
-            <TableHead>Return</TableHead>
-            <TableHead>Sharpe</TableHead>
-            <TableHead>Status</TableHead>
-          </TableRow>
-        </TableHeader>
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Strategy</TableHead>
+              <TableHead>Symbol</TableHead>
+              <TableHead>Return</TableHead>
+              <TableHead>Sharpe</TableHead>
+              <TableHead>Status</TableHead>
+            </TableRow>
+          </TableHeader>
 
-        <TableBody>
-          {recentBacktests.map((backtest) => (
-            <TableRow key={`${backtest.strategy}-${backtest.symbol}`}>
-              <TableCell className="font-medium">{backtest.strategy}</TableCell>
+          <TableBody>
+            {recentBacktests.map((backtest) => (
+              <TableRow key={backtest.id}>
+                <TableCell className="font-medium">
+                  {backtest.strategy}
+                </TableCell>
 
-              <TableCell>{backtest.symbol}</TableCell>
+                <TableCell>
+                  {backtest.symbol}
+                </TableCell>
 
-              <TableCell
-                className={
-                  backtest.returnPositive
-                    ? "font-medium text-emerald-600"
-                    : "font-medium text-red-600"
-                }
-              >
-                {backtest.return}
+                <TableCell
+                  className={
+                    backtest.returnPercentage >= 0
+                      ? "font-medium text-emerald-500"
+                      : "font-medium text-red-500"
+                  }
+                >
+                {backtest.returnPercentage >= 0 ? "+" : ""}
+                {backtest.returnPercentage.toFixed(2)}%
               </TableCell>
 
-              <TableCell>{backtest.sharpe}</TableCell>
+              <TableCell>
+                {backtest.sharpeRatio.toFixed(2)}
+              </TableCell>
 
               <TableCell>
-                <Badge variant="secondary">{backtest.status}</Badge>
+                <Badge variant="secondary">
+                  {backtest.status}
+                </Badge>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      </div>
     </div>
   );
 }

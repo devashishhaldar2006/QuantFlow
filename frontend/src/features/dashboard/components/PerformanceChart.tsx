@@ -43,7 +43,7 @@ export default function PerformanceChart() {
 
             <Tooltip />
 
-            <Line type="monotone" dataKey="value" strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="value" stroke="#e4e4e7" strokeWidth={2} dot={false} />
           </LineChart>
         </ResponsiveContainer>
       </div>
