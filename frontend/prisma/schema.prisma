@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+model Backtest{
+  id String @id @default(cuid())
+  strategy String
+  initialCapital Float
+  finalEquity Float
+  netProfit Float
+  totalReturnPercent Float
+
+  totalTrades Int
+  winningTrades Int
+  losingTrades Int
+  winRatePercent Float
+
+  averageWin Float
+  averageLoss Float
+  largestWin Float
+  largestLoss Float
+
+  maximumDrawdown Float
+  profitFactor Float
+  expectancy Float
+  annualizedReturn Float
+  annualizedVolatility Float
+  sharpeRatio Float
+
+  status String
+
+  trades Trade[]
+  equityCurve EquityPoint[]
+}
+model Trade {
+  id             String   @id @default(cuid())
+  timestamp      DateTime
+  side           String
+  quantity       Int
+  executionPrice Float
+  commission     Float
+  cashFlow       Float
+
+  backtestId     String
+  backtest       Backtest @relation(fields: [backtestId], references: [id])
+}
+model EquityPoint {
+  id        String   @id @default(cuid())
+  timestamp DateTime
+  equity    Float
+
+  backtestId String
+  backtest   Backtest @relation(fields: [backtestId], references: [id])
+}

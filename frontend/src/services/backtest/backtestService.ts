@@ -1,5 +1,6 @@
 import type { BacktestConfig } from "@/features/backtest/schema";
 import { HttpQuantEngineClient } from "../quantEngine/HttpQuantEngineClient";
+import { prisma } from "@/lib/prisma";
 
 const quantEngine = new HttpQuantEngineClient(
   process.env.QUANT_ENGINE_URL ?? "http://localhost:8080"
