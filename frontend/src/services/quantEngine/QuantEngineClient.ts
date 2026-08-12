@@ -1,8 +1,8 @@
 import type { BacktestConfig } from "@/features/backtest/schema";
-import type { QuantEngineBacktestResult } from "./types";
+import type { BacktestResult } from "@/features/backtest/types";
 
 export interface QuantEngineClient {
   runBacktest(
     config: BacktestConfig
-  ): Promise<QuantEngineBacktestResult>;
+  ): Promise<BacktestResult>;
 }

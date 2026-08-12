@@ -42,7 +42,8 @@ void BacktestEngine::run()
                 candle);
         }
 
-        portfolio_.recordEquity();
+        portfolio_.recordEquity(
+            candle.getTimestamp());
 
         iterator_.next();
     }

@@ -121,5 +121,44 @@ BacktestResult BacktestService::run(
     result.sharpeRatio =
         report.sharpeRatio;
 
+    const auto &equityCurve = portfolio.getEquityCurve();
+
+    result.equityCurve.reserve(equityCurve.size());
+
+    for (const auto &point : equityCurve)
+    {
+        result.equityCurve.push_back(point);
+    }
+
+    const auto &trades = portfolio.getTrades();
+
+    result.trades.reserve(trades.size());
+
+    for (const Trade &trade : trades)
+    {
+        TradeResult tradeResult;
+
+        tradeResult.timestamp = trade.getTimestamp();
+
+        tradeResult.side =
+            trade.getSide() == TradeSide::Buy
+                ? "BUY"
+                : "SELL";
+
+        tradeResult.quantity =
+            trade.getQuantity();
+
+        tradeResult.executionPrice =
+            trade.getExecutionPrice();
+
+        tradeResult.commission =
+            trade.getCommission();
+
+        tradeResult.cashFlow =
+            trade.getCashFlow();
+
+        result.trades.push_back(tradeResult);
+    }
+
     return result;
 }

@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { BacktestConfig } from "@/features/backtest/schema";
 import type { QuantEngineClient } from "./QuantEngineClient";
-import type { QuantEngineBacktestResult } from "./types";
+import type { BacktestResult } from "@/features/backtest/types";
 
 export class HttpQuantEngineClient
   implements QuantEngineClient
@@ -14,9 +14,9 @@ export class HttpQuantEngineClient
 
   async runBacktest(
     config: BacktestConfig
-  ): Promise<QuantEngineBacktestResult> {
+  ): Promise<BacktestResult> {
     try {
-      const response = await axios.post<QuantEngineBacktestResult>(
+      const response = await axios.post<BacktestResult>(
         `${this.baseUrl}/backtest`,
         config
       );
@@ -25,9 +25,11 @@ export class HttpQuantEngineClient
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         throw new Error(
-          error.response.data.error ?? "QuantFlow engine failed to run backtest."
+          error.response.data.error ??
+            "QuantFlow engine failed to run backtest."
         );
       }
+
       throw error;
     }
   }
