@@ -1,6 +1,6 @@
 "use client";
 
-import type { PerformancePoint } from "../types";
+import type { EquityPoint } from "@/features/backtest/types";
 
 import {
   LineChart,
@@ -13,7 +13,7 @@ import {
 } from "recharts";
 
 type PerformanceChartProps = {
-  data: PerformancePoint[];
+  data: EquityPoint[];
 };
 
 export default function PerformanceChart({
@@ -36,15 +36,27 @@ export default function PerformanceChart({
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
 
-            <XAxis dataKey="date" />
+            <XAxis
+              dataKey="timestamp"
+              tickFormatter={(value: string) =>
+                value.slice(11, 16)
+              }
+            />
 
             <YAxis />
 
-            <Tooltip />
+            <Tooltip
+              formatter={(value) =>
+                `₹${Number(value).toFixed(2)}`
+              }
+              labelFormatter={(label) =>
+                `Time: ${label}`
+              }
+            />
 
             <Line
               type="monotone"
-              dataKey="value"
+              dataKey="equity"
               stroke="#e4e4e7"
               strokeWidth={2}
               dot={false}

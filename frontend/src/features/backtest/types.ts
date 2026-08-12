@@ -17,6 +17,7 @@ export type Backtest = {
 };
 
 export type EquityPoint = {
+  timestamp: string;
   equity: number;
 };
 
