@@ -1,8 +1,21 @@
 #pragma once
 
-// Use nlohmann's own forward-declaration header to avoid pulling the
-// entire json.hpp into every TU that only stores a BacktestResult.
+#include <string>
+#include <vector>
+
 #include <nlohmann/json_fwd.hpp>
+#include "portfolio/EquityPoint.hpp"
+struct TradeResult
+{
+    std::string timestamp;
+    std::string side;
+
+    int quantity = 0;
+
+    double executionPrice = 0.0;
+    double commission = 0.0;
+    double cashFlow = 0.0;
+};
 
 struct BacktestResult
 {
@@ -32,6 +45,9 @@ struct BacktestResult
     double annualizedReturn = 0.0;
     double annualizedVolatility = 0.0;
     double sharpeRatio = 0.0;
+
+    std::vector<EquityPoint> equityCurve;
+    std::vector<TradeResult> trades;
 
     nlohmann::json toJson() const;
 };

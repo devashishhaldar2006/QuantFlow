@@ -1,6 +1,23 @@
 "use client";
 
 import { getLatestBacktestResult } from "@/features/backtest/store";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import PerformanceChart from "@/features/dashboard/components/PerformanceChart";
+
+function formatNumber(value: number, decimals = 2) {
+  return value.toFixed(decimals);
+}
+
+function formatDecimalPercent(value: number) {
+  return `${(value * 100).toFixed(2)}%`;
+}
 
 function Metric({
   title,
@@ -11,19 +28,17 @@ function Metric({
 }) {
   return (
     <div className="rounded-lg border bg-card p-4">
-      <p className="text-sm text-muted-foreground">
-        {title}
-      </p>
+      <p className="text-sm text-muted-foreground">{title}</p>
 
-      <p className="mt-2 text-xl font-semibold">
-        {value}
-      </p>
+      <p className="mt-2 text-xl font-semibold">{value}</p>
     </div>
   );
 }
 
 export default function BacktestResultsPage() {
   const result = getLatestBacktestResult();
+
+  const performanceData = result?.equityCurve ?? [];
 
   if (!result) {
     return (
@@ -39,10 +54,9 @@ export default function BacktestResultsPage() {
     );
   }
 
-
   return (
     <div className="space-y-8 p-6">
-
+      {/* Header */}
       <div>
         <h1 className="text-2xl font-semibold">
           Backtest Results
@@ -53,55 +67,57 @@ export default function BacktestResultsPage() {
         </p>
       </div>
 
-
+      {/* Performance Summary */}
       <section>
         <h2 className="mb-4 text-lg font-semibold">
           Performance Summary
         </h2>
 
         <div className="grid gap-4 md:grid-cols-3">
-
           <Metric
             title="Initial Capital"
-            value={`₹${result.initialCapital}`}
+            value={`₹${formatNumber(result.initialCapital)}`}
           />
 
           <Metric
             title="Final Equity"
-            value={`₹${result.finalEquity}`}
+            value={`₹${formatNumber(result.finalEquity)}`}
           />
 
           <Metric
             title="Net Profit"
-            value={`₹${result.netProfit}`}
+            value={`₹${formatNumber(result.netProfit)}`}
           />
 
           <Metric
             title="Total Return"
-            value={`${result.totalReturnPercent}%`}
+            value={`${formatNumber(result.totalReturnPercent)}%`}
           />
 
           <Metric
             title="Sharpe Ratio"
-            value={result.sharpeRatio}
+            value={formatNumber(result.sharpeRatio)}
           />
 
           <Metric
             title="Maximum Drawdown"
-            value={`${result.maximumDrawdown}%`}
+            value={`${formatNumber(result.maximumDrawdown)}%`}
           />
-
         </div>
       </section>
 
+      {/* Equity Curve */}
+      <section>
+        <PerformanceChart data={performanceData} />
+      </section>
 
+      {/* Trade Statistics */}
       <section>
         <h2 className="mb-4 text-lg font-semibold">
           Trade Statistics
         </h2>
 
         <div className="grid gap-4 md:grid-cols-4">
-
           <Metric
             title="Total Trades"
             value={result.totalTrades}
@@ -119,74 +135,147 @@ export default function BacktestResultsPage() {
 
           <Metric
             title="Win Rate"
-            value={`${result.winRatePercent}%`}
+            value={`${formatNumber(result.winRatePercent)}%`}
           />
-
         </div>
       </section>
 
-
+      {/* Risk & Statistics */}
       <section>
         <h2 className="mb-4 text-lg font-semibold">
           Risk & Statistics
         </h2>
 
         <div className="grid gap-4 md:grid-cols-4">
-
           <Metric
             title="Profit Factor"
-            value={result.profitFactor}
+            value={formatNumber(result.profitFactor)}
           />
 
           <Metric
             title="Expectancy"
-            value={result.expectancy}
+            value={formatNumber(result.expectancy)}
           />
 
           <Metric
             title="Annualized Return"
-            value={`${result.annualizedReturn}%`}
+            value={formatDecimalPercent(result.annualizedReturn)}
           />
 
           <Metric
             title="Volatility"
-            value={`${result.annualizedVolatility}%`}
+            value={formatDecimalPercent(
+              result.annualizedVolatility
+            )}
           />
-
         </div>
       </section>
 
-
+      {/* Trade Quality */}
       <section>
         <h2 className="mb-4 text-lg font-semibold">
           Trade Quality
         </h2>
 
         <div className="grid gap-4 md:grid-cols-4">
-
           <Metric
             title="Average Win"
-            value={result.averageWin}
+            value={formatNumber(result.averageWin)}
           />
 
           <Metric
             title="Average Loss"
-            value={result.averageLoss}
+            value={formatNumber(result.averageLoss)}
           />
 
           <Metric
             title="Largest Win"
-            value={result.largestWin}
+            value={formatNumber(result.largestWin)}
           />
 
           <Metric
             title="Largest Loss"
-            value={result.largestLoss}
+            value={formatNumber(result.largestLoss)}
           />
-
         </div>
       </section>
 
+      {/* Trade History */}
+      <section>
+        <h2 className="mb-4 text-lg font-semibold">
+          Trade History
+        </h2>
+
+        <div className="overflow-x-auto rounded-lg border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Time</TableHead>
+                <TableHead>Side</TableHead>
+                <TableHead>Quantity</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>Commission</TableHead>
+                <TableHead>Cash Flow</TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+              {result.trades.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={6}
+                    className="text-center text-muted-foreground"
+                  >
+                    No trades recorded.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                result.trades.map((trade, index) => (
+                  <TableRow
+                    key={`${trade.timestamp}-${index}`}
+                  >
+                    <TableCell>
+                      {trade.timestamp}
+                    </TableCell>
+
+                    <TableCell
+                      className={
+                        trade.side === "BUY"
+                          ? "font-medium text-emerald-500"
+                          : "font-medium text-red-500"
+                      }
+                    >
+                      {trade.side}
+                    </TableCell>
+
+                    <TableCell>
+                      {trade.quantity}
+                    </TableCell>
+
+                    <TableCell>
+                      {formatNumber(trade.executionPrice)}
+                    </TableCell>
+
+                    <TableCell>
+                      {formatNumber(trade.commission)}
+                    </TableCell>
+
+                    <TableCell
+                      className={
+                        trade.cashFlow >= 0
+                          ? "text-emerald-500"
+                          : "text-red-500"
+                      }
+                    >
+                      {formatNumber(trade.cashFlow)}
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </section>
     </div>
   );
 }

@@ -16,6 +16,20 @@ export type Backtest = {
   status: BacktestStatus;
 };
 
+export type EquityPoint = {
+  timestamp: string;
+  equity: number;
+};
+
+export type TradeResult = {
+  timestamp: string;
+  side: "BUY" | "SELL";
+  quantity: number;
+  executionPrice: number;
+  commission: number;
+  cashFlow: number;
+};
+
 export type BacktestResult = {
   initialCapital: number;
   finalEquity: number;
@@ -40,4 +54,7 @@ export type BacktestResult = {
   annualizedReturn: number;
   annualizedVolatility: number;
   sharpeRatio: number;
+
+  equityCurve: EquityPoint[];
+  trades: TradeResult[];
 };

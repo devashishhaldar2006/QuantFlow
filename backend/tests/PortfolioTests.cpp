@@ -286,20 +286,26 @@ TEST(PortfolioTests, RecordEquityAddsOneEntry)
 {
     Portfolio portfolio(1000.0);
 
-    portfolio.recordEquity();
+    portfolio.recordEquity("2026-07-27 09:15");
 
-    EXPECT_EQ(portfolio.getEquityCurve().size(), 1u);
+    EXPECT_EQ(
+        portfolio.getEquityCurve().size(),
+        1u);
 }
 
 TEST(PortfolioTests, RecordEquityStoresCurrentPortfolioValue)
 {
     Portfolio portfolio(1000.0);
 
-    portfolio.recordEquity();
+    portfolio.recordEquity("2026-07-27 09:15");
 
     EXPECT_DOUBLE_EQ(
-        portfolio.getEquityCurve().front(),
+        portfolio.getEquityCurve().front().equity,
         portfolio.totalValue());
+
+    EXPECT_EQ(
+        portfolio.getEquityCurve().front().timestamp,
+        "2026-07-27 09:15");
 }
 
 TEST(PortfolioTests, ConstructorThrowsForNegativeTakeProfit)

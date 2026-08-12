@@ -2,9 +2,7 @@ import { z } from "zod";
 
 export const backtestConfigSchema = z
   .object({
-    strategy: z
-      .string()
-      .min(1, "Strategy is required"),
+    strategy: z.string().min(1, "Strategy is required"),
 
     csvFile: z
       .string()
@@ -22,17 +20,17 @@ export const backtestConfigSchema = z
       .number()
       .positive("Initial capital must be greater than zero"),
 
-    commission: z
-      .number()
-      .min(0, "Commission cannot be negative"),
+    commission: z.number().min(0, "Commission cannot be negative"),
 
     stopLossPercent: z
       .number()
-      .min(0, "Stop loss cannot be negative"),
+      .min(0, "Stop loss cannot be negative")
+      .max(1, "Stop loss must be between 0 and 1"),
 
     takeProfitPercent: z
       .number()
-      .min(0, "Take profit cannot be negative"),
+      .min(0, "Take profit cannot be negative")
+      .max(1, "Take profit must be between 0 and 1"),
 
     shortMAPeriod: z
       .number()
@@ -44,14 +42,9 @@ export const backtestConfigSchema = z
       .int()
       .positive("Long MA period must be greater than zero"),
   })
-  .refine(
-    (data) => data.shortMAPeriod < data.longMAPeriod,
-    {
-      message:
-        "Short MA period must be less than long MA period",
-      path: ["longMAPeriod"],
-    }
-  );
+  .refine((data) => data.shortMAPeriod < data.longMAPeriod, {
+    message: "Short MA period must be less than long MA period",
+    path: ["longMAPeriod"],
+  });
 
-export type BacktestConfig =
-  z.infer<typeof backtestConfigSchema>;
+export type BacktestConfig = z.infer<typeof backtestConfigSchema>;

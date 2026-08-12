@@ -4,7 +4,9 @@
 #include <string>
 
 #include "trade/Trade.hpp"
-class Portfolio {
+#include "portfolio/EquityPoint.hpp"
+class Portfolio
+{
 private:
     double initialCash_;
     double cash_;
@@ -19,17 +21,17 @@ private:
     double takeProfitPrice_;
 
     std::vector<Trade> trades_;
-    std::vector<double> equityCurve_;
+    std::vector<EquityPoint> equityCurve_;
 
 public:
-    explicit Portfolio(double initialCash, double commission = 0.0,double stopLossPercent = 0.0, double takeProfitPercent = 0.0);
+    explicit Portfolio(double initialCash, double commission = 0.0, double stopLossPercent = 0.0, double takeProfitPercent = 0.0);
 
-    void buy(int quantity, double price, const std::string& timestamp);
+    void buy(int quantity, double price, const std::string &timestamp);
 
-    void sell(int quantity, double price, const std::string& timestamp);
+    void sell(int quantity, double price, const std::string &timestamp);
 
     void updateMarketPrice(double price);
-    
+
     double cash() const;
 
     int position() const;
@@ -44,9 +46,9 @@ public:
 
     double commission() const;
 
-    const std::vector<Trade>& getTrades() const;
+    const std::vector<Trade> &getTrades() const;
 
-    void recordEquity();
+    void recordEquity(const std::string &timestamp);
 
-    const std::vector<double>& getEquityCurve() const;
+    const std::vector<EquityPoint> &getEquityCurve() const;
 };
