@@ -5,34 +5,65 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import type { BacktestResult } from "@/features/backtest/types";
+
+type MetricsGridProps = {
+  result: BacktestResult | null;
+};
+
 type Metric = {
   label: string;
   value: string;
   change?: string;
 };
 
-const metrics: Metric[] = [
-  {
-    label: "Portfolio Value",
-    value: "$124,680",
-    change: "+8.42%",
-  },
-  {
-    label: "Total Return",
-    value: "+$18,420",
-    change: "+17.32%",
-  },
-  {
-    label: "Sharpe Ratio",
-    value: "1.84",
-  },
-  {
-    label: "Max Drawdown",
-    value: "-7.21%",
-  },
-];
+function formatNumber(value: number, decimals = 2) {
+  return value.toFixed(decimals);
+}
 
-export default function MetricsGrid() {
+export default function MetricsGrid({
+  result,
+}: MetricsGridProps) {
+  const metrics: Metric[] = result
+    ? [
+        {
+          label: "Portfolio Value",
+          value: `₹${formatNumber(result.finalEquity)}`,
+          change: `${formatNumber(result.totalReturnPercent)}%`,
+        },
+        {
+          label: "Net Profit",
+          value: `₹${formatNumber(result.netProfit)}`,
+          change: `${formatNumber(result.totalReturnPercent)}%`,
+        },
+        {
+          label: "Sharpe Ratio",
+          value: formatNumber(result.sharpeRatio),
+        },
+        {
+          label: "Max Drawdown",
+          value: `-${formatNumber(result.maximumDrawdown)}%`,
+        },
+      ]
+    : [
+        {
+          label: "Portfolio Value",
+          value: "—",
+        },
+        {
+          label: "Net Profit",
+          value: "—",
+        },
+        {
+          label: "Sharpe Ratio",
+          value: "—",
+        },
+        {
+          label: "Max Drawdown",
+          value: "—",
+        },
+      ];
+
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
       {metrics.map((metric) => (

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -9,11 +11,19 @@ import {
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 
-import { backtests } from "@/features/backtest/mockData";
+import type { BacktestResult } from "@/features/backtest/types";
 
-const recentBacktests = backtests.slice(0, 4);
+type RecentBacktestsProps = {
+  result: BacktestResult | null;
+};
 
-export default function RecentBacktests() {
+function formatNumber(value: number, decimals = 2) {
+  return value.toFixed(decimals);
+}
+
+export default function RecentBacktests({
+  result,
+}: RecentBacktestsProps) {
   return (
     <div className="rounded-lg border bg-card">
       <div className="flex items-center justify-between p-6">
@@ -39,8 +49,8 @@ export default function RecentBacktests() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Strategy</TableHead>
-              <TableHead>Symbol</TableHead>
+              <TableHead>Result</TableHead>
+              <TableHead>Initial Capital</TableHead>
               <TableHead>Return</TableHead>
               <TableHead>Sharpe</TableHead>
               <TableHead>Status</TableHead>
@@ -48,40 +58,49 @@ export default function RecentBacktests() {
           </TableHeader>
 
           <TableBody>
-            {recentBacktests.map((backtest) => (
-              <TableRow key={backtest.id}>
+            {!result ? (
+              <TableRow>
+                <TableCell
+                  colSpan={5}
+                  className="text-center text-muted-foreground"
+                >
+                  No backtests run yet.
+                </TableCell>
+              </TableRow>
+            ) : (
+              <TableRow>
                 <TableCell className="font-medium">
-                  {backtest.strategy}
+                  Latest Backtest
                 </TableCell>
 
                 <TableCell>
-                  {backtest.symbol}
+                  ₹{formatNumber(result.initialCapital)}
                 </TableCell>
 
                 <TableCell
                   className={
-                    backtest.returnPercentage >= 0
+                    result.totalReturnPercent >= 0
                       ? "font-medium text-emerald-500"
                       : "font-medium text-red-500"
                   }
                 >
-                {backtest.returnPercentage >= 0 ? "+" : ""}
-                {backtest.returnPercentage.toFixed(2)}%
-              </TableCell>
+                  {result.totalReturnPercent >= 0 ? "+" : ""}
+                  {formatNumber(result.totalReturnPercent)}%
+                </TableCell>
 
-              <TableCell>
-                {backtest.sharpeRatio.toFixed(2)}
-              </TableCell>
+                <TableCell>
+                  {formatNumber(result.sharpeRatio)}
+                </TableCell>
 
-              <TableCell>
-                <Badge variant="secondary">
-                  {backtest.status}
-                </Badge>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                <TableCell>
+                  <Badge variant="secondary">
+                    completed
+                  </Badge>
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );
