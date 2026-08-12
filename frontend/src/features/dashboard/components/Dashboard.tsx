@@ -18,11 +18,11 @@ export default function Dashboard() {
         description="Overview of your trading performance."
       />
 
-      <MetricsGrid />
+      <MetricsGrid result={result} />
 
       <PerformanceChart data={performanceData} />
 
-      <RecentBacktests />
+      <RecentBacktests result={result} />
     </div>
   );
 }
