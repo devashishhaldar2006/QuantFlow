@@ -5,10 +5,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import type { BacktestResult } from "@/features/backtest/types";
+import type { PersistedBacktest } from "@/features/backtest/types";
 
 type MetricsGridProps = {
-  result: BacktestResult | null;
+  result: PersistedBacktest | null;
 };
 
 type Metric = {

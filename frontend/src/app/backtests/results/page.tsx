@@ -1,6 +1,4 @@
-"use client";
-
-import { getLatestBacktestResult } from "@/features/backtest/store";
+import { getBacktests } from "@/services/backtest/backtestService";
 import {
   Table,
   TableBody,
@@ -35,8 +33,9 @@ function Metric({
   );
 }
 
-export default function BacktestResultsPage() {
-  const result = getLatestBacktestResult();
+export default async function BacktestResultsPage() {
+  const backtests = await getBacktests();
+  const result = backtests[0] ?? null;
 
   const performanceData = result?.equityCurve ?? [];
 

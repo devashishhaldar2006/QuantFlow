@@ -40,6 +40,7 @@ model Backtest{
 
   trades Trade[]
   equityCurve EquityPoint[]
+  createdAt DateTime @default(now())
 }
 model Trade {
   id             String   @id @default(cuid())

@@ -1,15 +1,17 @@
-"use client";
 
 import PageHeader from "@/components/common/PageHeader";
 import MetricsGrid from "./MetricsGrid";
 import PerformanceChart from "./PerformanceChart";
 import RecentBacktests from "./RecentBacktests";
-import { getLatestBacktestResult } from "@/features/backtest/store";
+import { getBacktests } from "@/services/backtest/backtestService";
 
-export default function Dashboard() {
-  const result = getLatestBacktestResult();
+export default async function Dashboard() {
+  const backtests = await getBacktests();
 
-  const performanceData = result?.equityCurve ?? [];
+  const latestBacktest = backtests[0] ?? null;
+
+  const performanceData =
+    latestBacktest?.equityCurve ?? [];
 
   return (
     <div className="space-y-6 p-6">
@@ -18,11 +20,13 @@ export default function Dashboard() {
         description="Overview of your trading performance."
       />
 
-      <MetricsGrid result={result} />
+      <MetricsGrid result={latestBacktest} />
 
       <PerformanceChart data={performanceData} />
 
-      <RecentBacktests result={result} />
+      <RecentBacktests
+        backtests={backtests.slice(0, 5)}
+      />
     </div>
   );
 }
