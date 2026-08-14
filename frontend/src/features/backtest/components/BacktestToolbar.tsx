@@ -1,6 +1,4 @@
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-
 import {
   Select,
   SelectContent,
@@ -36,7 +34,9 @@ export default function BacktestToolbar({
           placeholder="Search backtests..."
           className="max-w-sm"
           value={search}
-          onChange={(event) => onSearchChange(event.target.value)}
+          onChange={(event) =>
+            onSearchChange(event.target.value)
+          }
         />
 
         <Select
@@ -57,13 +57,21 @@ export default function BacktestToolbar({
           </SelectTrigger>
 
           <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="all">
+              All Statuses
+            </SelectItem>
 
-            <SelectItem value="completed">Completed</SelectItem>
+            <SelectItem value="completed">
+              Completed
+            </SelectItem>
 
-            <SelectItem value="running">Running</SelectItem>
+            <SelectItem value="running">
+              Running
+            </SelectItem>
 
-            <SelectItem value="failed">Failed</SelectItem>
+            <SelectItem value="failed">
+              Failed
+            </SelectItem>
           </SelectContent>
         </Select>
 
@@ -75,22 +83,34 @@ export default function BacktestToolbar({
             }
           }}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[200px]">
             <SelectValue placeholder="Strategy" />
           </SelectTrigger>
 
           <SelectContent>
-            <SelectItem value="all">All Strategies</SelectItem>
+            <SelectItem value="all">
+              All Strategies
+            </SelectItem>
 
-            <SelectItem value="EMA Crossover">EMA Crossover</SelectItem>
+            <SelectItem value="MovingAverageCross">
+              SMA Crossover
+            </SelectItem>
 
-            <SelectItem value="RSI Mean Reversion">
+            <SelectItem value="EMACross">
+              EMA Crossover
+            </SelectItem>
+
+            <SelectItem value="RSI">
               RSI Mean Reversion
             </SelectItem>
 
-            <SelectItem value="Bollinger Bands">Bollinger Bands</SelectItem>
+            <SelectItem value="Bollinger">
+              Bollinger Bands
+            </SelectItem>
 
-            <SelectItem value="MACD Strategy">MACD Strategy</SelectItem>
+            <SelectItem value="MACD">
+              MACD Strategy
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>

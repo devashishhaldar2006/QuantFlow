@@ -1,16 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import PageHeader from "@/components/common/PageHeader";
 
 import BacktestToolbar from "./BacktestToolbar";
 import BacktestTable from "./BacktestTable";
 
-import { backtests } from "../mockData";
-import type { BacktestStatus } from "../types";
+import type { BacktestStatus, PersistedBacktest } from "../types";
 
-export default function Backtests() {
+type BacktestsProps = {
+  backtests: PersistedBacktest[];
+};
+
+export default function Backtests({
+  backtests,
+}: BacktestsProps) {
   const [search, setSearch] = useState("");
 
   const [status, setStatus] =
@@ -18,27 +23,28 @@ export default function Backtests() {
 
   const [strategy, setStrategy] = useState("all");
 
-  const filteredBacktests = backtests.filter((backtest) => {
-    const matchesSearch =
-      backtest.strategy
-        .toLowerCase()
-        .includes(search.toLowerCase()) ||
-      backtest.symbol
-        .toLowerCase()
-        .includes(search.toLowerCase());
+  const filteredBacktests = useMemo(() => {
+    return backtests.filter((backtest) => {
+      const matchesSearch =
+        backtest.strategy
+          .toLowerCase()
+          .includes(search.toLowerCase());
 
-    const matchesStatus =
-      status === "all" || backtest.status === status;
+      const matchesStatus =
+        status === "all" ||
+        backtest.status === status;
 
-    const matchesStrategy =
-      strategy === "all" || backtest.strategy === strategy;
+      const matchesStrategy =
+        strategy === "all" ||
+        backtest.strategy === strategy;
 
-    return (
-      matchesSearch &&
-      matchesStatus &&
-      matchesStrategy
-    );
-  });
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesStrategy
+      );
+    });
+  }, [backtests, search, status, strategy]);
 
   return (
     <div className="space-y-6 p-6">

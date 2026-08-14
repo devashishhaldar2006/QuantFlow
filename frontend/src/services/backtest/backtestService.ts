@@ -101,3 +101,43 @@ export async function getBacktests(): Promise<PersistedBacktest[]> {
     })),
   }));
 }
+
+export async function getBacktestById(
+  id: string,
+): Promise<PersistedBacktest | null> {
+  const backtest = await prisma.backtest.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      trades: true,
+      equityCurve: true,
+    },
+  });
+
+  if (!backtest) {
+    return null;
+  }
+
+  return {
+    ...backtest,
+
+    status: backtest.status as PersistedBacktest["status"],
+
+    createdAt: backtest.createdAt.toISOString(),
+
+    trades: backtest.trades.map((trade) => ({
+      timestamp: trade.timestamp.toISOString(),
+      side: trade.side as "BUY" | "SELL",
+      quantity: trade.quantity,
+      executionPrice: trade.executionPrice,
+      commission: trade.commission,
+      cashFlow: trade.cashFlow,
+    })),
+
+    equityCurve: backtest.equityCurve.map((point) => ({
+      timestamp: point.timestamp.toISOString(),
+      equity: point.equity,
+    })),
+  };
+}

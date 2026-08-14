@@ -3,19 +3,6 @@ export type BacktestStatus =
   | "running"
   | "failed";
 
-export type Backtest = {
-  id: string;
-  strategy: string;
-  symbol: string;
-  timeframe: string;
-  startDate: string;
-  endDate: string;
-  returnPercentage: number;
-  sharpeRatio: number;
-  maxDrawdown: number;
-  status: BacktestStatus;
-};
-
 export type EquityPoint = {
   timestamp: string;
   equity: number;
