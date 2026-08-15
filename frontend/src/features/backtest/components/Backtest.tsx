@@ -1,50 +1,45 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import PageHeader from "@/components/common/PageHeader";
 
 import BacktestToolbar from "./BacktestToolbar";
 import BacktestTable from "./BacktestTable";
 
-import type { BacktestStatus, PersistedBacktest } from "../types";
+import type {
+  BacktestStatus,
+  BacktestSummary,
+} from "../types";
 
 type BacktestsProps = {
-  backtests: PersistedBacktest[];
+  backtests: BacktestSummary[];
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+  search?: string;
+  status?: BacktestStatus | "all";
+  strategy?: string;
 };
 
 export default function Backtests({
   backtests,
+  page,
+  pageSize,
+  total,
+  totalPages,
+  search = "",
+  status = "all",
+  strategy = "all",
 }: BacktestsProps) {
-  const [search, setSearch] = useState("");
-
-  const [status, setStatus] =
-    useState<BacktestStatus | "all">("all");
-
-  const [strategy, setStrategy] = useState("all");
-
-  const filteredBacktests = useMemo(() => {
-    return backtests.filter((backtest) => {
-      const matchesSearch =
-        backtest.strategy
-          .toLowerCase()
-          .includes(search.toLowerCase());
-
-      const matchesStatus =
-        status === "all" ||
-        backtest.status === status;
-
-      const matchesStrategy =
-        strategy === "all" ||
-        backtest.strategy === strategy;
-
-      return (
-        matchesSearch &&
-        matchesStatus &&
-        matchesStrategy
-      );
-    });
-  }, [backtests, search, status, strategy]);
+  const strategies = useMemo(() => {
+    return Array.from(
+      new Set(
+        backtests.map((backtest) => backtest.strategy),
+      ),
+    );
+  }, [backtests]);
 
   return (
     <div className="space-y-6 p-6">
@@ -57,13 +52,15 @@ export default function Backtests({
         search={search}
         status={status}
         strategy={strategy}
-        onSearchChange={setSearch}
-        onStatusChange={setStatus}
-        onStrategyChange={setStrategy}
+        strategies={strategies}
       />
 
       <BacktestTable
-        backtests={filteredBacktests}
+        backtests={backtests}
+        page={page}
+        pageSize={pageSize}
+        total={total}
+        totalPages={totalPages}
       />
     </div>
   );

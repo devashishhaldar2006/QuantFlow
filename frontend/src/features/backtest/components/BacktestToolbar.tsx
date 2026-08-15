@@ -1,3 +1,5 @@
+"use client";
+
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -7,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { BacktestStatus } from "../types";
 import Link from "next/link";
 
@@ -14,19 +17,43 @@ type BacktestToolbarProps = {
   search: string;
   status: BacktestStatus | "all";
   strategy: string;
-  onSearchChange: (value: string) => void;
-  onStatusChange: (value: BacktestStatus | "all") => void;
-  onStrategyChange: (value: string) => void;
+  strategies: string[];
 };
 
 export default function BacktestToolbar({
   search,
   status,
   strategy,
-  onSearchChange,
-  onStatusChange,
-  onStrategyChange,
+  strategies,
 }: BacktestToolbarProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  function updateFilter(
+    key: string,
+    value: string,
+  ) {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (!value || value === "all") {
+      params.delete(key);
+    } else {
+      params.set(key, value);
+    }
+
+    // Changing a filter should always return to page 1.
+    params.delete("page");
+
+    const query = params.toString();
+
+    router.push(
+      query
+        ? `${pathname}?${query}`
+        : pathname,
+    );
+  }
+
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="flex flex-1 items-center gap-2">
@@ -35,7 +62,10 @@ export default function BacktestToolbar({
           className="max-w-sm"
           value={search}
           onChange={(event) =>
-            onSearchChange(event.target.value)
+            updateFilter(
+              "search",
+              event.target.value,
+            )
           }
         />
 
@@ -48,7 +78,7 @@ export default function BacktestToolbar({
               value === "running" ||
               value === "failed"
             ) {
-              onStatusChange(value);
+              updateFilter("status", value);
             }
           }}
         >
@@ -79,7 +109,10 @@ export default function BacktestToolbar({
           value={strategy}
           onValueChange={(value) => {
             if (value) {
-              onStrategyChange(value);
+              updateFilter(
+                "strategy",
+                value,
+              );
             }
           }}
         >
@@ -92,25 +125,14 @@ export default function BacktestToolbar({
               All Strategies
             </SelectItem>
 
-            <SelectItem value="MovingAverageCross">
-              SMA Crossover
-            </SelectItem>
-
-            <SelectItem value="EMACross">
-              EMA Crossover
-            </SelectItem>
-
-            <SelectItem value="RSI">
-              RSI Mean Reversion
-            </SelectItem>
-
-            <SelectItem value="Bollinger">
-              Bollinger Bands
-            </SelectItem>
-
-            <SelectItem value="MACD">
-              MACD Strategy
-            </SelectItem>
+            {strategies.map((strategy) => (
+              <SelectItem
+                key={strategy}
+                value={strategy}
+              >
+                {strategy}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>

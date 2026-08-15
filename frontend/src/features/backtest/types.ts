@@ -78,3 +78,21 @@ export type PersistedBacktest = {
   equityCurve: EquityPoint[];
   trades: TradeResult[];
 };
+
+export type BacktestSummary = {
+  id: string;
+  strategy: string;
+  initialCapital: number;
+  totalReturnPercent: number;
+  sharpeRatio: number;
+  maximumDrawdown: number;
+  status: BacktestStatus;
+  createdAt: string;
+};
+export type BacktestSummaryPage = {
+  data: BacktestSummary[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+};
