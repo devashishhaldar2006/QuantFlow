@@ -1,5 +1,13 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import {
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
+
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -9,9 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { BacktestStatus } from "../types";
-import Link from "next/link";
 
 type BacktestToolbarProps = {
   search: string;
@@ -30,11 +36,57 @@ export default function BacktestToolbar({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const [searchInput, setSearchInput] = useState(search);
+
+  useEffect(() => {
+    setSearchInput(search);
+  }, [search]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const currentSearch =
+        searchParams.get("search") ?? "";
+
+      if (searchInput === currentSearch) {
+        return;
+      }
+
+      const params = new URLSearchParams(
+        searchParams.toString(),
+      );
+
+      if (searchInput.trim()) {
+        params.set("search", searchInput.trim());
+      } else {
+        params.delete("search");
+      }
+
+      params.delete("page");
+
+      const query = params.toString();
+
+      router.push(
+        query
+          ? `${pathname}?${query}`
+          : pathname,
+      );
+    }, 400);
+
+    return () => clearTimeout(timeout);
+  }, [
+    searchInput,
+    searchParams,
+    pathname,
+    router,
+  ]);
+
   function updateFilter(
     key: string,
     value: string,
   ) {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(
+      searchParams.toString(),
+    );
 
     if (!value || value === "all") {
       params.delete(key);
@@ -42,7 +94,6 @@ export default function BacktestToolbar({
       params.set(key, value);
     }
 
-    // Changing a filter should always return to page 1.
     params.delete("page");
 
     const query = params.toString();
@@ -60,12 +111,9 @@ export default function BacktestToolbar({
         <Input
           placeholder="Search backtests..."
           className="max-w-sm"
-          value={search}
+          value={searchInput}
           onChange={(event) =>
-            updateFilter(
-              "search",
-              event.target.value,
-            )
+            setSearchInput(event.target.value)
           }
         />
 
@@ -109,10 +157,7 @@ export default function BacktestToolbar({
           value={strategy}
           onValueChange={(value) => {
             if (value) {
-              updateFilter(
-                "strategy",
-                value,
-              );
+              updateFilter("strategy", value);
             }
           }}
         >
