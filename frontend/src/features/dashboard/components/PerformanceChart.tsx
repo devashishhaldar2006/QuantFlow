@@ -43,7 +43,10 @@ export default function PerformanceChart({
               }
             />
 
-            <YAxis />
+            <YAxis 
+              domain={['dataMin - (dataMin * 0.01)', 'dataMax + (dataMax * 0.01)']}
+              tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
+            />
 
             <Tooltip
               formatter={(value) =>

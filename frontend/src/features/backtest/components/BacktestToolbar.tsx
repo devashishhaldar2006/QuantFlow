@@ -39,6 +39,7 @@ export default function BacktestToolbar({
   const [searchInput, setSearchInput] = useState(search);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSearchInput(search);
   }, [search]);
 

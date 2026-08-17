@@ -16,7 +16,7 @@ export async function createBacktest(config: BacktestConfig) {
   const result = await quantEngine.runBacktest(config);
 
   const backtest = await prisma.$transaction(async (tx) => {
-    const backtest = await tx.backtest.create({
+    const createdBacktest = await tx.backtest.create({
       data: {
         strategy: config.strategy,
 
@@ -55,7 +55,7 @@ export async function createBacktest(config: BacktestConfig) {
         executionPrice: trade.executionPrice,
         commission: trade.commission,
         cashFlow: trade.cashFlow,
-        backtestId: backtest.id,
+        backtestId: createdBacktest.id,
       })),
     });
 
@@ -63,14 +63,14 @@ export async function createBacktest(config: BacktestConfig) {
       data: result.equityCurve.map((point) => ({
         timestamp: new Date(point.timestamp),
         equity: point.equity,
-        backtestId: backtest.id,
+        backtestId: createdBacktest.id,
       })),
     });
 
-    return backtest;
+    return createdBacktest;
   });
 
-  return result;
+  return { ...result, id: backtest.id };
 }
 
 export async function getBacktests(): Promise<PersistedBacktest[]> {

@@ -54,9 +54,9 @@ export default function BacktestForm() {
     }
 
     try {
-      await createBacktest(result.data);
+      const backtest = await createBacktest(result.data);
 
-      router.push("/backtests/results");
+      router.push(`/backtests/${backtest.id}`);
     } catch (error) {
       console.error(error);
 
