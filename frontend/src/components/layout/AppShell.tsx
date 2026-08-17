@@ -7,13 +7,13 @@ type AppShellProps = {
 
 export default function AppShell({ children }: AppShellProps) {
   return (
-    <div className="flex min-h-screen">
+    <div className="min-h-screen bg-background text-foreground">
       <Sidebar />
 
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="min-w-0 md:pl-[240px]">
         <TopNavbar />
 
-        <main className="flex-1">
+        <main className="min-h-[calc(100vh-64px)]">
           {children}
         </main>
       </div>
