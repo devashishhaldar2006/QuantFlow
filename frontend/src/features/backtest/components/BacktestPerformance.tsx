@@ -1,4 +1,4 @@
-import PerformanceChart from "@/features/dashboard/components/PerformanceChart";
+import PerformanceChart from "@/components/charts/PerformanceChart";
 
 import type { PersistedBacktest } from "../types";
 import BacktestMetricCard from "./BacktestMetricCard";

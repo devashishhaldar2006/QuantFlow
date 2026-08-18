@@ -1,6 +1,6 @@
 import PageHeader from "@/components/common/PageHeader";
 import MetricsGrid from "./MetricsGrid";
-import PerformanceChart from "./PerformanceChart";
+import PerformanceChart from "../../../components/charts/PerformanceChart";
 import RecentBacktests from "./RecentBacktests";
 import { getBacktests } from "@/services/backtest/backtestService";
 import type { PersistedBacktest, EquityPoint } from "@/features/backtest/types";
@@ -50,7 +50,8 @@ export default async function Dashboard() {
 
   const displayBacktest = useMock ? mockBacktest : realLatest;
   const performanceData = displayBacktest.equityCurve;
-  const displayRecent = backtests.length > 0 ? backtests.slice(0, 5) : [mockBacktest];
+  const displayRecent =
+    backtests.length > 0 ? backtests.slice(0, 5) : [mockBacktest];
 
   return (
     <div className="space-y-6 p-6">
@@ -63,9 +64,7 @@ export default async function Dashboard() {
 
       <PerformanceChart data={performanceData} />
 
-      <RecentBacktests
-        backtests={displayRecent}
-      />
+      <RecentBacktests backtests={displayRecent} />
     </div>
   );
 }
