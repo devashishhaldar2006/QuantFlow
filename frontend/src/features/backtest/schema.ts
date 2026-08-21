@@ -9,10 +9,10 @@ export const backtestConfigSchema = z
       .trim()
       .min(1, "CSV file is required")
       .max(256, "CSV file path is too long")
-      .refine((val) => !val.includes(".."), {
+      .refine((value) => !value.includes(".."), {
         message: "CSV file path must not contain '..'",
       })
-      .refine((val) => !val.startsWith("/"), {
+      .refine((value) => !value.startsWith("/"), {
         message: "CSV file must be a relative path",
       }),
 
@@ -20,7 +20,9 @@ export const backtestConfigSchema = z
       .number()
       .positive("Initial capital must be greater than zero"),
 
-    commission: z.number().min(0, "Commission cannot be negative"),
+    commission: z
+      .number()
+      .min(0, "Commission cannot be negative"),
 
     stopLossPercent: z
       .number()
@@ -35,16 +37,104 @@ export const backtestConfigSchema = z
     shortMAPeriod: z
       .number()
       .int()
-      .positive("Short MA period must be greater than zero"),
+      .positive(),
 
     longMAPeriod: z
       .number()
       .int()
-      .positive("Long MA period must be greater than zero"),
-  })
-  .refine((data) => data.shortMAPeriod < data.longMAPeriod, {
-    message: "Short MA period must be less than long MA period",
-    path: ["longMAPeriod"],
-  });
+      .positive(),
 
-export type BacktestConfig = z.infer<typeof backtestConfigSchema>;
+    rsiPeriod: z
+      .number()
+      .int()
+      .positive(),
+
+    oversold: z
+      .number()
+      .min(0)
+      .max(100),
+
+    overbought: z
+      .number()
+      .min(0)
+      .max(100),
+
+    fastEMAPeriod: z
+      .number()
+      .int()
+      .positive(),
+
+    slowEMAPeriod: z
+      .number()
+      .int()
+      .positive(),
+
+    macdFastPeriod: z
+      .number()
+      .int()
+      .positive(),
+
+    macdSlowPeriod: z
+      .number()
+      .int()
+      .positive(),
+
+    macdSignalPeriod: z
+      .number()
+      .int()
+      .positive(),
+
+    bollingerPeriod: z
+      .number()
+      .int()
+      .positive(),
+
+    bollingerMultiplier: z
+      .number()
+      .positive(),
+
+    atrPeriod: z
+      .number()
+      .int()
+      .positive(),
+
+    minimumATR: z
+      .number()
+      .min(0),
+  })
+  .refine(
+    (data) => data.shortMAPeriod < data.longMAPeriod,
+    {
+      message:
+        "Short MA period must be less than long MA period",
+      path: ["longMAPeriod"],
+    },
+  )
+  .refine(
+    (data) => data.fastEMAPeriod < data.slowEMAPeriod,
+    {
+      message:
+        "Fast EMA period must be less than slow EMA period",
+      path: ["slowEMAPeriod"],
+    },
+  )
+  .refine(
+    (data) => data.macdFastPeriod < data.macdSlowPeriod,
+    {
+      message:
+        "Fast MACD period must be less than slow MACD period",
+      path: ["macdSlowPeriod"],
+    },
+  )
+  .refine(
+    (data) => data.oversold < data.overbought,
+    {
+      message:
+        "Oversold must be less than overbought",
+      path: ["overbought"],
+    },
+  );
+
+export type BacktestConfig = z.infer<
+  typeof backtestConfigSchema
+>;
