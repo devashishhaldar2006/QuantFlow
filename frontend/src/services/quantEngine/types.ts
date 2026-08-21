@@ -9,7 +9,6 @@ export type QuantEngineBacktestResponse = {
   status: "running" | "completed" | "failed";
 };
 
-
 export type QuantEngineBacktestResult = {
   initialCapital: number;
   finalEquity: number;
@@ -34,4 +33,11 @@ export type QuantEngineBacktestResult = {
   annualizedReturn: number;
   annualizedVolatility: number;
   sharpeRatio: number;
+};
+
+export type QuantEngineStrategy = {
+  name: string;
+  category: string;
+  description: string;
+  parameters: string[];
 };

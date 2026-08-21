@@ -8,5 +8,6 @@ class Strategy
 public:
     virtual ~Strategy() = default;
 
-    virtual Signal onCandle(const Candle& candle) = 0;
+    virtual Signal onCandle(
+        const Candle& candle) = 0;
 };
