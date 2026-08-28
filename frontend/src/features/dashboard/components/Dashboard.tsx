@@ -1,9 +1,11 @@
-import PageHeader from "@/components/common/PageHeader";
+import PageLayout from "@/components/layout/PageLayout";
+import AnimatedPage, { AnimatedItem } from "@/components/common/AnimatedPage";
 import MetricsGrid from "./MetricsGrid";
 import PerformanceChart from "../../../components/charts/PerformanceChart";
 import RecentBacktests from "./RecentBacktests";
 import { getBacktests } from "@/services/backtest/backtestService";
 import type { PersistedBacktest, EquityPoint } from "@/features/backtest/types";
+import SectionHeader from "@/components/common/SectionHeader";
 
 const mockEquityData: EquityPoint[] = [
   { timestamp: "2024-01-01T10:00:00Z", equity: 100000 },
@@ -54,17 +56,30 @@ export default async function Dashboard() {
     backtests.length > 0 ? backtests.slice(0, 5) : [mockBacktest];
 
   return (
-    <div className="space-y-6 p-6">
-      <PageHeader
+    <AnimatedPage>
+      <PageLayout
+        eyebrow="Overview"
         title="Dashboard"
-        description="Overview of your trading performance."
-      />
+        description="Overview of your trading performance and recent activity."
+      >
+        <MetricsGrid result={displayBacktest} />
 
-      <MetricsGrid result={displayBacktest} />
+        <AnimatedItem>
+          <div className="rounded-lg border border-border bg-card p-5">
+            <SectionHeader
+              eyebrow="Performance"
+              title="Equity Curve"
+              description="Portfolio value over time based on your latest backtest."
+            />
 
-      <PerformanceChart data={performanceData} />
+            <PerformanceChart data={performanceData} />
+          </div>
+        </AnimatedItem>
 
-      <RecentBacktests backtests={displayRecent} />
-    </div>
+        <AnimatedItem>
+          <RecentBacktests backtests={displayRecent} />
+        </AnimatedItem>
+      </PageLayout>
+    </AnimatedPage>
   );
 }

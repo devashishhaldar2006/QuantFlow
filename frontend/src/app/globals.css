@@ -61,132 +61,118 @@
 }
 
 /*
- * QuantFlow Design System
+ * QuantFlow Design System — Refined
  *
- * Based on the provided institutional trading terminal reference.
+ * Palette: Deep navy tones with cool blue accents.
+ * No neon — uses muted, sophisticated color pairings.
  *
- * Background:
- *   #0b1326
+ * Backgrounds:
+ *   Base      #0a1120
+ *   Sidebar   #0f1729
+ *   Panel     #141d30
+ *   Elevated  #1c2640
  *
- * Sidebar:
- *   #131b2e
+ * Accents:
+ *   Primary   #7da2e0  (muted steel blue)
+ *   Positive  #56c79d  (muted emerald)
+ *   Warning   #d4a853  (warm gold)
+ *   Error     #d97b72  (muted coral)
  *
- * Panel:
- *   #171f33
+ * Text:
+ *   Primary   #d8dfef
+ *   Secondary #7d8599
  *
- * Elevated:
- *   #222a3d
- *
- * Primary:
- *   #adc6ff
- *
- * Positive:
- *   #4edea3
- *
- * Error:
- *   #ffb4ab
- *
- * Border:
- *   #424754
+ * Border:     #283148
  */
 
 :root {
-  --background: #0b1326;
-  --foreground: #dae2fd;
+  --background: #0a1120;
+  --foreground: #d8dfef;
 
-  --card: #171f33;
-  --card-foreground: #dae2fd;
+  --card: #141d30;
+  --card-foreground: #d8dfef;
 
-  --popover: #222a3d;
-  --popover-foreground: #dae2fd;
+  --popover: #1c2640;
+  --popover-foreground: #d8dfef;
 
-  --primary: #adc6ff;
-  --primary-foreground: #002e6a;
+  --primary: #7da2e0;
+  --primary-foreground: #0a1120;
 
-  --secondary: #222a3d;
-  --secondary-foreground: #dae2fd;
+  --secondary: #1c2640;
+  --secondary-foreground: #d8dfef;
 
-  --muted: #171f33;
-  --muted-foreground: #8c909f;
+  --muted: #141d30;
+  --muted-foreground: #7d8599;
 
-  --accent: #2d3449;
-  --accent-foreground: #dae2fd;
+  --accent: #1c2640;
+  --accent-foreground: #d8dfef;
 
-  --destructive: #ffb4ab;
+  --destructive: #d97b72;
 
-  --border: #424754;
-  --input: #424754;
-  --ring: #adc6ff;
+  --border: #283148;
+  --input: #283148;
+  --ring: #7da2e0;
 
-  /*
-   * Chart colors
-   *
-   * Chart 1 = primary blue
-   * Chart 2 = positive green
-   * Chart 3 = warning
-   * Chart 4 = error
-   * Chart 5 = muted blue
-   */
-  --chart-1: #adc6ff;
-  --chart-2: #4edea3;
-  --chart-3: #f5c86a;
-  --chart-4: #ffb4ab;
-  --chart-5: #8fa8d8;
+  --chart-1: #7da2e0;
+  --chart-2: #56c79d;
+  --chart-3: #d4a853;
+  --chart-4: #d97b72;
+  --chart-5: #6b85b8;
 
-  --sidebar: #131b2e;
-  --sidebar-foreground: #dae2fd;
-  --sidebar-primary: #adc6ff;
-  --sidebar-primary-foreground: #002e6a;
-  --sidebar-accent: #2d3449;
-  --sidebar-accent-foreground: #dae2fd;
-  --sidebar-border: #424754;
-  --sidebar-ring: #adc6ff;
+  --sidebar: #0f1729;
+  --sidebar-foreground: #d8dfef;
+  --sidebar-primary: #7da2e0;
+  --sidebar-primary-foreground: #0a1120;
+  --sidebar-accent: #1c2640;
+  --sidebar-accent-foreground: #d8dfef;
+  --sidebar-border: #283148;
+  --sidebar-ring: #7da2e0;
 
   --radius: 0.375rem;
 }
 
 .dark {
-  --background: #0b1326;
-  --foreground: #dae2fd;
+  --background: #0a1120;
+  --foreground: #d8dfef;
 
-  --card: #171f33;
-  --card-foreground: #dae2fd;
+  --card: #141d30;
+  --card-foreground: #d8dfef;
 
-  --popover: #222a3d;
-  --popover-foreground: #dae2fd;
+  --popover: #1c2640;
+  --popover-foreground: #d8dfef;
 
-  --primary: #adc6ff;
-  --primary-foreground: #002e6a;
+  --primary: #7da2e0;
+  --primary-foreground: #0a1120;
 
-  --secondary: #222a3d;
-  --secondary-foreground: #dae2fd;
+  --secondary: #1c2640;
+  --secondary-foreground: #d8dfef;
 
-  --muted: #171f33;
-  --muted-foreground: #8c909f;
+  --muted: #141d30;
+  --muted-foreground: #7d8599;
 
-  --accent: #2d3449;
-  --accent-foreground: #dae2fd;
+  --accent: #1c2640;
+  --accent-foreground: #d8dfef;
 
-  --destructive: #ffb4ab;
+  --destructive: #d97b72;
 
-  --border: #424754;
-  --input: #424754;
-  --ring: #adc6ff;
+  --border: #283148;
+  --input: #283148;
+  --ring: #7da2e0;
 
-  --chart-1: #adc6ff;
-  --chart-2: #4edea3;
-  --chart-3: #f5c86a;
-  --chart-4: #ffb4ab;
-  --chart-5: #8fa8d8;
+  --chart-1: #7da2e0;
+  --chart-2: #56c79d;
+  --chart-3: #d4a853;
+  --chart-4: #d97b72;
+  --chart-5: #6b85b8;
 
-  --sidebar: #131b2e;
-  --sidebar-foreground: #dae2fd;
-  --sidebar-primary: #adc6ff;
-  --sidebar-primary-foreground: #002e6a;
-  --sidebar-accent: #2d3449;
-  --sidebar-accent-foreground: #dae2fd;
-  --sidebar-border: #424754;
-  --sidebar-ring: #adc6ff;
+  --sidebar: #0f1729;
+  --sidebar-foreground: #d8dfef;
+  --sidebar-primary: #7da2e0;
+  --sidebar-primary-foreground: #0a1120;
+  --sidebar-accent: #1c2640;
+  --sidebar-accent-foreground: #d8dfef;
+  --sidebar-border: #283148;
+  --sidebar-ring: #7da2e0;
 }
 
 @layer base {
@@ -196,7 +182,7 @@
 
   html {
     @apply font-sans;
-    background: #0b1326;
+    background: #0a1120;
   }
 
   body {
@@ -211,6 +197,25 @@
   select {
     font: inherit;
   }
+
+  /* Smooth scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #283148;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3a4a68;
+  }
 }
 
 @layer utilities {
@@ -220,22 +225,50 @@
   }
 
   .text-profit {
-    color: #4edea3;
+    color: #56c79d;
   }
 
   .text-loss {
-    color: #ffb4ab;
+    color: #d97b72;
+  }
+
+  .text-warning {
+    color: #d4a853;
   }
 
   .surface {
-    background: #171f33;
+    background: #141d30;
   }
 
   .surface-elevated {
-    background: #222a3d;
+    background: #1c2640;
   }
 
   .terminal-border {
-    border-color: #424754;
+    border-color: #283148;
+  }
+
+  /* Gradient borders for premium feel */
+  .gradient-border {
+    position: relative;
+  }
+
+  .gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      rgba(125, 162, 224, 0.15),
+      rgba(86, 199, 157, 0.08),
+      rgba(125, 162, 224, 0.05)
+    );
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
   }
 }

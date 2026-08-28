@@ -1,47 +1,32 @@
 import type { PortfolioActivity as Activity } from "@/services/portfolio/portfolioService";
+import SectionHeader from "@/components/common/SectionHeader";
+import EmptyState from "@/components/common/EmptyState";
+import { formatDate, formatCurrency } from "@/lib/format";
+import { History } from "lucide-react";
 
 type PortfolioActivityProps = {
   activities: Activity[];
 };
-
-function formatDate(value: string) {
-  return new Date(value).toLocaleString("en-IN", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-function formatNumber(value: number) {
-  return value.toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-}
 
 export default function PortfolioActivity({
   activities,
 }: PortfolioActivityProps) {
   return (
     <section>
-      <div className="mb-4">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-          Execution
-        </p>
+      <SectionHeader
+        eyebrow="Execution"
+        title="Recent Activity"
+        description="Latest trades executed across all your strategies."
+      />
 
-        <h2 className="mt-1 text-lg font-semibold tracking-tight">
-          Recent Activity
-        </h2>
-      </div>
-
-      <div className="overflow-x-auto border border-border bg-card">
-        {activities.length === 0 ? (
-          <div className="px-4 py-12 text-center text-sm text-muted-foreground">
-            No trades recorded across completed backtests.
-          </div>
-        ) : (
+      {activities.length === 0 ? (
+        <EmptyState
+          icon={History}
+          title="No Recent Activity"
+          description="We couldn't find any recent trades across your portfolio. Run a backtest to see activity here."
+        />
+      ) : (
+        <div className="overflow-x-auto rounded-lg border border-border bg-card">
           <table className="w-full min-w-[900px] text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/30">
@@ -79,25 +64,27 @@ export default function PortfolioActivity({
               {activities.map((activity, index) => (
                 <tr
                   key={`${activity.timestamp}-${activity.strategy}-${index}`}
-                  className="border-b border-border/70 last:border-0 hover:bg-accent/30"
+                  className="border-b border-border/50 transition-colors last:border-0 hover:bg-[#1c2640]/30"
                 >
                   <td className="whitespace-nowrap px-4 py-3 font-financial text-xs text-muted-foreground">
                     {formatDate(activity.timestamp)}
                   </td>
 
-                  <td className="px-4 py-3 text-xs font-medium">
+                  <td className="px-4 py-3 text-xs font-medium text-[#d8dfef]">
                     {activity.strategy}
                   </td>
 
-                  <td
-                    className={[
-                      "px-4 py-3 font-financial text-xs font-semibold",
-                      activity.side === "BUY"
-                        ? "text-profit"
-                        : "text-loss",
-                    ].join(" ")}
-                  >
-                    {activity.side}
+                  <td className="px-4 py-3">
+                    <span
+                      className={[
+                        "inline-flex rounded-md px-2 py-0.5 font-financial text-[10px] font-bold uppercase tracking-wider",
+                        activity.side === "BUY"
+                          ? "bg-[#56c79d]/10 text-[#56c79d]"
+                          : "bg-[#d97b72]/10 text-[#d97b72]",
+                      ].join(" ")}
+                    >
+                      {activity.side}
+                    </span>
                   </td>
 
                   <td className="px-4 py-3 text-right font-financial text-xs">
@@ -105,29 +92,29 @@ export default function PortfolioActivity({
                   </td>
 
                   <td className="px-4 py-3 text-right font-financial text-xs">
-                    {formatNumber(activity.executionPrice)}
+                    {formatCurrency(activity.executionPrice)}
                   </td>
 
                   <td className="px-4 py-3 text-right font-financial text-xs text-muted-foreground">
-                    {formatNumber(activity.commission)}
+                    {formatCurrency(activity.commission)}
                   </td>
 
                   <td
                     className={[
                       "px-4 py-3 text-right font-financial text-xs font-medium",
                       activity.cashFlow >= 0
-                        ? "text-profit"
-                        : "text-loss",
+                        ? "text-[#56c79d]"
+                        : "text-[#d97b72]",
                     ].join(" ")}
                   >
-                    {formatNumber(activity.cashFlow)}
+                    {formatCurrency(activity.cashFlow)}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        )}
-      </div>
+        </div>
+      )}
     </section>
   );
 }

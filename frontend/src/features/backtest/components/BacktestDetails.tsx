@@ -1,13 +1,17 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowLeft, FlaskConical } from "lucide-react";
 
 import type { PersistedBacktest } from "../types";
 
+import AnimatedPage, { AnimatedItem } from "@/components/common/AnimatedPage";
 import BacktestDetailsHeader from "./BacktestDetailsHeader";
 import BacktestPerformance from "./BacktestPerformance";
 import BacktestRiskMetrics from "./BacktestRiskMetrics";
 import BacktestTradeHistory from "./BacktestTradeHistory";
 import BacktestTradeStats from "./BacktestTradeStats";
+import EmptyState from "@/components/common/EmptyState";
 
 type BacktestDetailsProps = {
   backtest: PersistedBacktest;
@@ -17,49 +21,49 @@ export default function BacktestDetails({
   backtest,
 }: BacktestDetailsProps) {
   return (
-    <div className="min-h-[calc(100vh-64px)]">
+    <AnimatedPage className="min-h-[calc(100vh-56px)]">
       <BacktestDetailsHeader backtest={backtest} />
 
       <main className="mx-auto max-w-7xl space-y-8 px-6 py-8">
-        <BacktestPerformance backtest={backtest} />
+        <AnimatedItem>
+          <BacktestPerformance backtest={backtest} />
+        </AnimatedItem>
 
         <div className="grid gap-8 xl:grid-cols-2">
-          <BacktestRiskMetrics backtest={backtest} />
+          <AnimatedItem>
+            <BacktestRiskMetrics backtest={backtest} />
+          </AnimatedItem>
 
-          <BacktestTradeStats backtest={backtest} />
+          <AnimatedItem>
+            <BacktestTradeStats backtest={backtest} />
+          </AnimatedItem>
         </div>
 
-        <BacktestTradeHistory backtest={backtest} />
+        <AnimatedItem>
+          <BacktestTradeHistory backtest={backtest} />
+        </AnimatedItem>
       </main>
-    </div>
+    </AnimatedPage>
   );
 }
 
 export function BacktestNotFound() {
   return (
-    <div className="mx-auto flex min-h-[calc(100vh-64px)] max-w-7xl items-center justify-center px-6">
-      <div className="max-w-md border border-border bg-card p-8 text-center">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center border border-border bg-muted">
-          <FlaskConical className="size-5 text-muted-foreground" />
-        </div>
-
-        <h1 className="mt-5 text-xl font-semibold">
-          Backtest Not Found
-        </h1>
-
-        <p className="mt-2 text-sm text-muted-foreground">
-          The requested backtest does not exist or is no longer
-          available.
-        </p>
-
-        <Link
-          href="/backtests"
-          className="mt-6 inline-flex h-9 items-center gap-2 border border-border px-4 text-sm font-medium transition-colors hover:bg-accent"
-        >
-          <ArrowLeft className="size-4" />
-          Back to Backtests
-        </Link>
-      </div>
-    </div>
+    <AnimatedPage className="mx-auto flex min-h-[calc(100vh-56px)] max-w-7xl items-center justify-center px-6">
+      <EmptyState
+        icon={FlaskConical}
+        title="Backtest Not Found"
+        description="The requested backtest does not exist or is no longer available."
+        action={
+          <Link
+            href="/backtests"
+            className="inline-flex h-9 items-center gap-2 rounded-md bg-[#7da2e0] px-4 text-sm font-semibold text-[#0a1120] transition-colors hover:bg-[#9bb8e8]"
+          >
+            <ArrowLeft className="size-4" />
+            Back to Backtests
+          </Link>
+        }
+      />
+    </AnimatedPage>
   );
 }

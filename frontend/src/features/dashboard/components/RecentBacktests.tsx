@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+
 import {
   Table,
   TableBody,
@@ -9,7 +12,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
+
+import {
+  formatCurrency,
+  formatSignedPercent,
+  formatNumber,
+  formatDateCompact,
+} from "@/lib/format";
 
 import type { PersistedBacktest } from "@/features/backtest/types";
 
@@ -17,39 +26,69 @@ type RecentBacktestsProps = {
   backtests: PersistedBacktest[];
 };
 
-function formatNumber(value: number, decimals = 2) {
-  return value.toFixed(decimals);
+function StatusBadge({ status }: { status: string }) {
+  const styles: Record<string, string> = {
+    completed:
+      "border-[#56c79d]/20 bg-[#56c79d]/10 text-[#56c79d]",
+    running:
+      "border-[#7da2e0]/20 bg-[#7da2e0]/10 text-[#7da2e0]",
+    failed:
+      "border-[#d97b72]/20 bg-[#d97b72]/10 text-[#d97b72]",
+  };
+
+  return (
+    <Badge
+      variant="secondary"
+      className={`rounded-md border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${styles[status] ?? ""}`}
+    >
+      {status}
+    </Badge>
+  );
 }
 
 export default function RecentBacktests({ backtests }: RecentBacktestsProps) {
   return (
-    <div className="rounded-lg border bg-card">
-      <div className="flex items-center justify-between p-6">
+    <div className="rounded-lg border border-border bg-card">
+      <div className="flex items-center justify-between px-5 py-4">
         <div>
-          <h2 className="text-base font-semibold">Recent Backtests</h2>
+          <h2 className="text-sm font-semibold">Recent Backtests</h2>
 
-          <p className="text-sm text-muted-foreground">
-            Your latest strategy performance results.
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            Your latest strategy performance results
           </p>
         </div>
 
         <Link
           href="/backtests"
-          className="inline-flex h-8 items-center justify-center rounded-md px-3 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+          className="inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
         >
           View all
+          <ArrowUpRight className="size-3" />
         </Link>
       </div>
 
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Result</TableHead>
-              <TableHead>Initial Capital</TableHead>
-              <TableHead>Return</TableHead>
-              <TableHead>Sharpe</TableHead>
-              <TableHead>Status</TableHead>
+            <TableRow className="border-border hover:bg-transparent">
+              <TableHead className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                Strategy
+              </TableHead>
+              <TableHead className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                Capital
+              </TableHead>
+              <TableHead className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                Return
+              </TableHead>
+              <TableHead className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                Sharpe
+              </TableHead>
+              <TableHead className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                Date
+              </TableHead>
+              <TableHead className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                Status
+              </TableHead>
             </TableRow>
           </TableHeader>
 
@@ -57,38 +96,54 @@ export default function RecentBacktests({ backtests }: RecentBacktestsProps) {
             {backtests.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={5}
-                  className="text-center text-muted-foreground"
+                  colSpan={6}
+                  className="py-12 text-center text-sm text-muted-foreground"
                 >
-                  No backtests run yet.
+                  No backtests run yet. Create your first backtest to get started.
                 </TableCell>
               </TableRow>
             ) : (
               backtests.map((backtest) => (
-                <TableRow key={backtest.id}>
+                <TableRow
+                  key={backtest.id}
+                  className="border-border/50 transition-colors hover:bg-accent/30"
+                >
                   <TableCell className="font-medium">
-                    {backtest.strategy}
+                    <Link
+                      href={`/backtests/${backtest.id}`}
+                      className="transition-colors hover:text-[#7da2e0]"
+                    >
+                      {backtest.strategy}
+                    </Link>
+                  </TableCell>
+
+                  <TableCell className="font-financial text-xs">
+                    {formatCurrency(backtest.initialCapital)}
                   </TableCell>
 
                   <TableCell>
-                    ₹{formatNumber(backtest.initialCapital)}
+                    <span
+                      className={[
+                        "font-financial text-xs font-semibold",
+                        backtest.totalReturnPercent >= 0
+                          ? "text-[#56c79d]"
+                          : "text-[#d97b72]",
+                      ].join(" ")}
+                    >
+                      {formatSignedPercent(backtest.totalReturnPercent)}
+                    </span>
                   </TableCell>
 
-                  <TableCell
-                    className={
-                      backtest.totalReturnPercent >= 0
-                        ? "font-medium text-emerald-500"
-                        : "font-medium text-red-500"
-                    }
-                  >
-                    {backtest.totalReturnPercent >= 0 ? "+" : ""}
-                    {formatNumber(backtest.totalReturnPercent)}%
+                  <TableCell className="font-financial text-xs">
+                    {formatNumber(backtest.sharpeRatio)}
                   </TableCell>
 
-                  <TableCell>{formatNumber(backtest.sharpeRatio)}</TableCell>
+                  <TableCell className="text-xs text-muted-foreground">
+                    {formatDateCompact(backtest.createdAt)}
+                  </TableCell>
 
                   <TableCell>
-                    <Badge variant="secondary">{backtest.status}</Badge>
+                    <StatusBadge status={backtest.status} />
                   </TableCell>
                 </TableRow>
               ))

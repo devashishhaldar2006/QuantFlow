@@ -40,7 +40,7 @@ double Statistics::mean(const std::vector<double> &data)
 {
     if (data.empty())
     {
-        throw std::invalid_argument("Cannot calculate mean of empty data");
+        return 0.0;
     }
 
     double sum = std::accumulate(data.begin(), data.end(), 0.0);
@@ -52,8 +52,7 @@ double Statistics::standardDeviation(
 {
     if (data.size() < 2)
     {
-        throw std::invalid_argument(
-            "At least two observations are required.");
+        return 0.0;
     }
 
     const double meanValue = mean(data);
@@ -106,8 +105,12 @@ double Statistics::sharpeRatio(
 {
     if (tradingDays <= 0)
     {
-        throw std::invalid_argument(
-            "Trading days must be positive.");
+        return 0.0;
+    }
+
+    if (returns.size() < 2)
+    {
+        return 0.0;
     }
 
     const double annualizedReturnValue =
@@ -120,8 +123,7 @@ double Statistics::sharpeRatio(
 
     if (annualizedVolatilityValue < EPS)
     {
-        throw std::runtime_error(
-            "Annualized volatility is zero, cannot calculate Sharpe ratio.");
+        return 0.0;
     }
 
     return (annualizedReturnValue - riskFreeRate) /

@@ -102,6 +102,12 @@ PerformanceReport PerformanceAnalyzer::analyze() const
         report.profitFactor =
             totalWins / std::abs(totalLosses);
     }
+    else if (totalWins > 0.0)
+    {
+        // All wins, no losses: profit factor is infinite.
+        // Use -1.0 as a sentinel the frontend displays as "∞".
+        report.profitFactor = -1.0;
+    }
 
     if (completedTrades > 0)
     {

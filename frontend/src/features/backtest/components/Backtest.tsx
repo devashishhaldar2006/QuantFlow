@@ -2,7 +2,8 @@
 
 import { useMemo } from "react";
 
-import PageHeader from "@/components/common/PageHeader";
+import PageLayout from "@/components/layout/PageLayout";
+import AnimatedPage, { AnimatedItem } from "@/components/common/AnimatedPage";
 
 import BacktestToolbar from "./BacktestToolbar";
 import BacktestTable from "./BacktestTable";
@@ -42,26 +43,31 @@ export default function Backtests({
   }, [backtests]);
 
   return (
-    <div className="space-y-6 p-6">
-      <PageHeader
+    <AnimatedPage>
+      <PageLayout
+        eyebrow="Research & Analysis"
         title="Backtests"
-        description="Create, run, and analyze your trading strategies."
-      />
+        description="Create, run, and analyze your trading strategies against historical market data."
+      >
+        <AnimatedItem>
+          <BacktestToolbar
+            search={search}
+            status={status}
+            strategy={strategy}
+            strategies={strategies}
+          />
+        </AnimatedItem>
 
-      <BacktestToolbar
-        search={search}
-        status={status}
-        strategy={strategy}
-        strategies={strategies}
-      />
-
-      <BacktestTable
-        backtests={backtests}
-        page={page}
-        pageSize={pageSize}
-        total={total}
-        totalPages={totalPages}
-      />
-    </div>
+        <AnimatedItem>
+          <BacktestTable
+            backtests={backtests}
+            page={page}
+            pageSize={pageSize}
+            total={total}
+            totalPages={totalPages}
+          />
+        </AnimatedItem>
+      </PageLayout>
+    </AnimatedPage>
   );
 }

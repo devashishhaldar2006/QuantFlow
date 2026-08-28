@@ -7,27 +7,28 @@ import {
 
 import type { PersistedBacktest } from "../types";
 import { Badge } from "@/components/ui/badge";
+import { formatDate } from "@/lib/format";
 
 type BacktestDetailsHeaderProps = {
   backtest: PersistedBacktest;
 };
 
-function formatDate(value: string) {
-  return new Date(value).toLocaleString("en-IN", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
+const statusStyles: Record<string, string> = {
+  completed:
+    "border-[#56c79d]/20 bg-[#56c79d]/10 text-[#56c79d]",
+  running:
+    "border-[#7da2e0]/20 bg-[#7da2e0]/10 text-[#7da2e0]",
+  failed:
+    "border-[#d97b72]/20 bg-[#d97b72]/10 text-[#d97b72]",
+};
 
 export default function BacktestDetailsHeader({
   backtest,
 }: BacktestDetailsHeaderProps) {
   return (
-    <section className="border-b border-border">
+    <section className="border-b border-border bg-gradient-to-b from-[#0f1729]/50 to-transparent">
       <div className="mx-auto max-w-7xl px-6 py-6">
+        {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <Link
             href="/backtests"
@@ -52,7 +53,7 @@ export default function BacktestDetailsHeader({
 
               <Badge
                 variant="secondary"
-                className="rounded border border-[#4edea3]/30 bg-[#4edea3]/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#4edea3]"
+                className={`rounded-md border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${statusStyles[backtest.status] ?? ""}`}
               >
                 {backtest.status}
               </Badge>
@@ -64,7 +65,7 @@ export default function BacktestDetailsHeader({
                 {formatDate(backtest.createdAt)}
               </span>
 
-              <span className="font-financial">
+              <span className="font-financial text-[10px]">
                 ID: {backtest.id}
               </span>
             </div>
@@ -72,9 +73,9 @@ export default function BacktestDetailsHeader({
 
           <Link
             href="/backtests"
-            className="inline-flex h-9 items-center gap-2 border border-border px-3 text-sm font-medium transition-colors hover:bg-accent"
+            className="inline-flex h-8 items-center gap-2 rounded-md border border-border px-3 text-xs font-medium transition-colors hover:bg-accent"
           >
-            <ArrowLeft className="size-4" />
+            <ArrowLeft className="size-3.5" />
             Backtests
           </Link>
         </div>

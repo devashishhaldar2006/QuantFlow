@@ -1,4 +1,10 @@
 import PerformanceChart from "@/components/charts/PerformanceChart";
+import SectionHeader from "@/components/common/SectionHeader";
+
+import {
+  formatCurrency,
+  formatPercent,
+} from "@/lib/format";
 
 import type { PersistedBacktest } from "../types";
 import BacktestMetricCard from "./BacktestMetricCard";
@@ -6,17 +12,6 @@ import BacktestMetricCard from "./BacktestMetricCard";
 type BacktestPerformanceProps = {
   backtest: PersistedBacktest;
 };
-
-function formatCurrency(value: number) {
-  return `₹${value.toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
-}
-
-function formatPercent(value: number) {
-  return `${value.toFixed(2)}%`;
-}
 
 export default function BacktestPerformance({
   backtest,
@@ -26,17 +21,12 @@ export default function BacktestPerformance({
 
   return (
     <section>
-      <div className="mb-4">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-          Performance
-        </p>
+      <SectionHeader
+        eyebrow="Performance"
+        title="Performance Summary"
+      />
 
-        <h2 className="mt-1 text-lg font-semibold tracking-tight">
-          Performance Summary
-        </h2>
-      </div>
-
-      <div className="grid gap-px border border-border bg-border md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-px overflow-hidden rounded-lg border border-border bg-border md:grid-cols-2 xl:grid-cols-4">
         <BacktestMetricCard
           label="Initial Capital"
           value={formatCurrency(backtest.initialCapital)}
@@ -67,17 +57,12 @@ export default function BacktestPerformance({
       </div>
 
       <div className="mt-8">
-        <div className="mb-4">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-            Performance Analysis
-          </p>
+        <SectionHeader
+          eyebrow="Performance Analysis"
+          title="Equity Curve"
+        />
 
-          <h2 className="mt-1 text-lg font-semibold tracking-tight">
-            Equity Curve
-          </h2>
-        </div>
-
-        <div className="border border-border bg-card p-5">
+        <div className="rounded-lg border border-border bg-card p-5">
           <PerformanceChart data={backtest.equityCurve} />
         </div>
       </div>

@@ -1,12 +1,10 @@
 import type { StrategyAnalytics } from "@/services/analytics/analyticsService";
+import SectionHeader from "@/components/common/SectionHeader";
+import { formatSignedPercent } from "@/lib/format";
 
 type PerformanceComparisonProps = {
   strategies: StrategyAnalytics[];
 };
-
-function formatPercent(value: number) {
-  return `${value.toFixed(2)}%`;
-}
 
 export default function PerformanceComparison({
   strategies,
@@ -22,45 +20,40 @@ export default function PerformanceComparison({
 
   return (
     <section>
-      <div className="mb-4">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-          Comparison
-        </p>
+      <SectionHeader
+        eyebrow="Comparison"
+        title="Average Return by Strategy"
+        description="Visualizing the average percentage return for each strategy."
+      />
 
-        <h2 className="mt-1 text-lg font-semibold tracking-tight">
-          Average Return by Strategy
-        </h2>
-      </div>
-
-      <div className="border border-border bg-card p-6">
+      <div className="rounded-lg border border-border bg-card p-6">
         <div className="space-y-6">
           {strategies.map((strategy) => {
             const width = (Math.abs(strategy.averageReturn) / maximum) * 100;
-
             const positive = strategy.averageReturn >= 0;
 
             return (
-              <div key={strategy.strategy}>
+               <div key={strategy.strategy} className="group">
                 <div className="mb-2 flex items-center justify-between gap-4">
-                  <span className="text-sm font-medium">
+                  <span className="text-sm font-medium text-[#d8dfef] transition-colors group-hover:text-[#7da2e0]">
                     {strategy.strategy}
                   </span>
 
                   <span
                     className={[
                       "font-financial text-xs font-semibold",
-                      positive ? "text-profit" : "text-loss",
+                      positive ? "text-[#56c79d]" : "text-[#d97b72]",
                     ].join(" ")}
                   >
-                    {formatPercent(strategy.averageReturn)}
+                    {formatSignedPercent(strategy.averageReturn)}
                   </span>
                 </div>
 
-                <div className="h-2 w-full bg-muted">
+                <div className="h-2 w-full overflow-hidden rounded-full bg-[#1c2640]">
                   <div
                     className={[
-                      "h-full transition-all",
-                      positive ? "bg-[#4edea3]" : "bg-[#ff8f8f]",
+                      "h-full rounded-full transition-all duration-1000",
+                      positive ? "bg-gradient-to-r from-[#56c79d]/50 to-[#56c79d]" : "bg-gradient-to-r from-[#d97b72]/50 to-[#d97b72]",
                     ].join(" ")}
                     style={{
                       width: `${width}%`,

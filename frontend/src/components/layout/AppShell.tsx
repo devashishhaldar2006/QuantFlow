@@ -13,7 +13,7 @@ export default function AppShell({ children }: AppShellProps) {
       <div className="min-w-0 md:pl-[240px]">
         <TopNavbar />
 
-        <main className="min-h-[calc(100vh-64px)]">
+        <main className="min-h-[calc(100vh-56px)]">
           {children}
         </main>
       </div>

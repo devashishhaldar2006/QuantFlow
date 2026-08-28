@@ -15,11 +15,11 @@ export default function NavSection({
 }: NavSectionProps) {
   return (
     <section>
-      <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8c909f]">
+      <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#7d8599]">
         {title}
       </p>
 
-      <div className="space-y-1">
+      <div className="space-y-0.5">
         {items.map((item) => {
           const Icon = item.icon;
 
@@ -32,19 +32,28 @@ export default function NavSection({
               key={item.href}
               href={item.href}
               className={[
-                "flex h-9 items-center gap-3 rounded px-3",
-                "text-sm transition-colors",
+                "group flex h-9 items-center gap-3 rounded-md px-3",
+                "text-sm transition-all duration-200",
                 isActive
-                  ? "bg-[#3a4a5f]/30 font-semibold text-[#adc6ff]"
-                  : "text-[#c2c6d6] hover:bg-[#2d3449] hover:text-[#dae2fd]",
+                  ? "bg-[#7da2e0]/10 font-semibold text-[#7da2e0]"
+                  : "text-[#8b91a3] hover:bg-[#1c2640] hover:text-[#d8dfef]",
               ].join(" ")}
             >
               <Icon
-                className="size-4 shrink-0"
+                className={[
+                  "size-4 shrink-0 transition-transform duration-200",
+                  isActive
+                    ? ""
+                    : "group-hover:scale-110",
+                ].join(" ")}
                 strokeWidth={isActive ? 2.2 : 1.8}
               />
 
               <span>{item.label}</span>
+
+              {isActive && (
+                <span className="ml-auto h-1.5 w-1.5 rounded-full bg-[#7da2e0]" />
+              )}
             </Link>
           );
         })}
