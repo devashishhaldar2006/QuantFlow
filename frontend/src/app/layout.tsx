@@ -6,18 +6,18 @@ import AppShell from "@/components/layout/AppShell";
 import "./globals.css";
 
 const inter = Inter({
-  variable: "--font-inter",
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
-const jetBrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
   title: "QuantFlow",
-  description: "Professional quantitative trading platform",
+  description: "Institutional Quantitative Research Terminal",
 };
 
 export default function RootLayout({
@@ -28,9 +28,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetBrainsMono.variable} dark h-full`}
+      className={`${inter.variable} ${jetbrainsMono.variable} dark h-full`}
     >
-      <body className="min-h-full bg-[#0a1120] font-[var(--font-inter)] text-[#d8dfef] antialiased">
+      <body className="min-h-full bg-slate-950 font-sans text-slate-100 antialiased">
         <AppShell>{children}</AppShell>
       </body>
     </html>

@@ -1,11 +1,12 @@
-import PageLayout from "@/components/layout/PageLayout";
 import AnimatedPage, { AnimatedItem } from "@/components/common/AnimatedPage";
+import PageHeader from "@/components/common/PageHeader";
 import MetricsGrid from "./MetricsGrid";
 import PerformanceChart from "../../../components/charts/PerformanceChart";
 import RecentBacktests from "./RecentBacktests";
 import { getBacktests } from "@/services/backtest/backtestService";
 import type { PersistedBacktest, EquityPoint } from "@/features/backtest/types";
-import SectionHeader from "@/components/common/SectionHeader";
+import { formatCurrency, formatSignedPercent } from "@/lib/format";
+import { LayoutDashboard, TrendingUp, TrendingDown } from "lucide-react";
 
 const mockEquityData: EquityPoint[] = [
   { timestamp: "2024-01-01T10:00:00Z", equity: 100000 },
@@ -52,34 +53,63 @@ export default async function Dashboard() {
 
   const displayBacktest = useMock ? mockBacktest : realLatest;
   const performanceData = displayBacktest.equityCurve;
-  const displayRecent =
-    backtests.length > 0 ? backtests.slice(0, 5) : [mockBacktest];
+  const displayRecent = backtests.length > 0 ? backtests.slice(0, 5) : [mockBacktest];
+  const positive = displayBacktest.totalReturnPercent >= 0;
+  const TrendIcon = positive ? TrendingUp : TrendingDown;
 
   return (
     <AnimatedPage>
-      <PageLayout
-        eyebrow="Overview"
+      <PageHeader
         title="Dashboard"
-        description="Overview of your trading performance and recent activity."
-      >
-        <MetricsGrid result={displayBacktest} />
+        description="Quantitative performance overview and recent execution activity."
+        icon={LayoutDashboard}
+        action={{ label: "New Backtest", href: "/backtests/new" }}
+      />
 
+      <div className="space-y-5">
+        {/* Hero: Portfolio Value + Chart */}
         <AnimatedItem>
-          <div className="rounded-lg border border-border bg-card p-5">
-            <SectionHeader
-              eyebrow="Performance"
-              title="Equity Curve"
-              description="Portfolio value over time based on your latest backtest."
-            />
-
-            <PerformanceChart data={performanceData} />
+          <div className="glass-panel rounded-2xl overflow-hidden">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 pt-6 pb-4 border-b border-white/5">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-1.5">
+                  Portfolio Value {useMock && <span className="text-amber-500/60 ml-1">· Demo</span>}
+                </p>
+                <div className="flex items-baseline gap-3 flex-wrap">
+                  <span className="font-mono text-3xl font-bold tracking-tight text-slate-100">
+                    {formatCurrency(displayBacktest.finalEquity)}
+                  </span>
+                  <div className={`flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${positive ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"}`}>
+                    <TrendIcon className="size-3" />
+                    {positive ? "+" : ""}{formatCurrency(displayBacktest.netProfit)} ({formatSignedPercent(displayBacktest.totalReturnPercent)})
+                  </div>
+                </div>
+              </div>
+              <div className="text-xs text-slate-600 font-mono">
+                Strategy: <span className="text-slate-400">{displayBacktest.strategy}</span>
+              </div>
+            </div>
+            <div className="h-[300px] px-1 pt-2 pb-1">
+              <PerformanceChart data={performanceData} />
+            </div>
           </div>
         </AnimatedItem>
 
+        {/* Metrics */}
+        <AnimatedItem>
+          <div className="glass-panel rounded-2xl px-6 py-5">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-5">
+              Key Metrics
+            </p>
+            <MetricsGrid result={displayBacktest} />
+          </div>
+        </AnimatedItem>
+
+        {/* Recent Backtests */}
         <AnimatedItem>
           <RecentBacktests backtests={displayRecent} />
         </AnimatedItem>
-      </PageLayout>
+      </div>
     </AnimatedPage>
   );
 }

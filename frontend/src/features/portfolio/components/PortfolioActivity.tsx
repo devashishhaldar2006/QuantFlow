@@ -12,7 +12,7 @@ export default function PortfolioActivity({
   activities,
 }: PortfolioActivityProps) {
   return (
-    <section>
+    <section className="w-full">
       <SectionHeader
         eyebrow="Execution"
         title="Recent Activity"
@@ -26,85 +26,58 @@ export default function PortfolioActivity({
           description="We couldn't find any recent trades across your portfolio. Run a backtest to see activity here."
         />
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-border bg-card">
+        <div className="overflow-x-auto rounded-xl glass-panel">
           <table className="w-full min-w-[900px] text-sm">
-            <thead>
-              <tr className="border-b border-border bg-muted/30">
-                <th className="px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-                  Time
-                </th>
-
-                <th className="px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-                  Strategy
-                </th>
-
-                <th className="px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-                  Side
-                </th>
-
-                <th className="px-4 py-3 text-right text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-                  Quantity
-                </th>
-
-                <th className="px-4 py-3 text-right text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-                  Price
-                </th>
-
-                <th className="px-4 py-3 text-right text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-                  Commission
-                </th>
-
-                <th className="px-4 py-3 text-right text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-                  Cash Flow
-                </th>
+            <thead className="bg-slate-900/40 backdrop-blur-md text-xs uppercase font-semibold text-slate-400 border-b border-slate-700/50">
+              <tr>
+                <th className="px-4 py-3 text-left font-semibold">Time</th>
+                <th className="px-4 py-3 text-left font-semibold">Strategy</th>
+                <th className="px-4 py-3 text-left font-semibold">Side</th>
+                <th className="px-4 py-3 text-right font-semibold">Quantity</th>
+                <th className="px-4 py-3 text-right font-semibold">Price</th>
+                <th className="px-4 py-3 text-right font-semibold">Commission</th>
+                <th className="px-4 py-3 text-right font-semibold">Cash Flow</th>
               </tr>
             </thead>
-
             <tbody>
               {activities.map((activity, index) => (
                 <tr
                   key={`${activity.timestamp}-${activity.strategy}-${index}`}
-                  className="border-b border-border/50 transition-colors last:border-0 hover:bg-[#1c2640]/30"
+                  className="border-b border-slate-700/50 transition-colors last:border-0 hover:bg-slate-800/30"
                 >
-                  <td className="whitespace-nowrap px-4 py-3 font-financial text-xs text-muted-foreground">
+                  <td className="whitespace-nowrap px-4 py-3 font-mono text-xs text-slate-400">
                     {formatDate(activity.timestamp)}
                   </td>
-
-                  <td className="px-4 py-3 text-xs font-medium text-[#d8dfef]">
+                  <td className="px-4 py-3 text-xs font-medium text-slate-200">
                     {activity.strategy}
                   </td>
-
                   <td className="px-4 py-3">
                     <span
                       className={[
-                        "inline-flex rounded-md px-2 py-0.5 font-financial text-[10px] font-bold uppercase tracking-wider",
+                        "inline-flex rounded-md px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider",
                         activity.side === "BUY"
-                          ? "bg-[#56c79d]/10 text-[#56c79d]"
-                          : "bg-[#d97b72]/10 text-[#d97b72]",
+                          ? "bg-emerald-500/10 text-emerald-400"
+                          : "bg-red-500/10 text-red-400",
                       ].join(" ")}
                     >
                       {activity.side}
                     </span>
                   </td>
-
-                  <td className="px-4 py-3 text-right font-financial text-xs">
+                  <td className="px-4 py-3 text-right font-mono text-xs text-slate-300">
                     {activity.quantity}
                   </td>
-
-                  <td className="px-4 py-3 text-right font-financial text-xs">
+                  <td className="px-4 py-3 text-right font-mono text-xs text-slate-300">
                     {formatCurrency(activity.executionPrice)}
                   </td>
-
-                  <td className="px-4 py-3 text-right font-financial text-xs text-muted-foreground">
+                  <td className="px-4 py-3 text-right font-mono text-xs text-slate-500">
                     {formatCurrency(activity.commission)}
                   </td>
-
                   <td
                     className={[
-                      "px-4 py-3 text-right font-financial text-xs font-medium",
+                      "px-4 py-3 text-right font-mono text-xs font-medium",
                       activity.cashFlow >= 0
-                        ? "text-[#56c79d]"
-                        : "text-[#d97b72]",
+                        ? "text-profit"
+                        : "text-loss",
                     ].join(" ")}
                   >
                     {formatCurrency(activity.cashFlow)}

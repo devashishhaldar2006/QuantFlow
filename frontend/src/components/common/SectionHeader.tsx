@@ -18,16 +18,16 @@ export default function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <div className="mb-5">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
         {eyebrow}
       </p>
 
-      <h2 className="mt-1 text-lg font-semibold tracking-tight">
+      <h2 className="mt-1 text-lg font-semibold tracking-tight text-slate-100">
         {title}
       </h2>
 
       {description && (
-        <p className="mt-1.5 max-w-2xl text-sm text-muted-foreground">
+        <p className="mt-1.5 text-sm text-slate-400 leading-relaxed">
           {description}
         </p>
       )}

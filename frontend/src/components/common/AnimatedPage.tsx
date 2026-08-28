@@ -48,7 +48,7 @@ export default function AnimatedPage({
       initial="hidden"
       animate="visible"
       variants={pageVariants}
-      className={className}
+      className={`w-full min-w-0 ${className}`}
     >
       {children}
     </motion.div>
@@ -67,7 +67,7 @@ export function AnimatedItem({
   className?: string;
 }) {
   return (
-    <motion.div variants={itemVariants} className={className}>
+    <motion.div variants={itemVariants} className={`w-full ${className}`}>
       {children}
     </motion.div>
   );

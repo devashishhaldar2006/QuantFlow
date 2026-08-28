@@ -1,17 +1,11 @@
-"use client";
-
 import { useMemo } from "react";
-
-import PageLayout from "@/components/layout/PageLayout";
+import Link from "next/link";
+import { Plus, Activity } from "lucide-react";
 import AnimatedPage, { AnimatedItem } from "@/components/common/AnimatedPage";
-
+import PageHeader from "@/components/common/PageHeader";
 import BacktestToolbar from "./BacktestToolbar";
 import BacktestTable from "./BacktestTable";
-
-import type {
-  BacktestStatus,
-  BacktestSummary,
-} from "../types";
+import type { BacktestStatus, BacktestSummary } from "../types";
 
 type BacktestsProps = {
   backtests: BacktestSummary[];
@@ -35,20 +29,20 @@ export default function Backtests({
   strategy = "all",
 }: BacktestsProps) {
   const strategies = useMemo(() => {
-    return Array.from(
-      new Set(
-        backtests.map((backtest) => backtest.strategy),
-      ),
-    );
+    return Array.from(new Set(backtests.map((b) => b.strategy)));
   }, [backtests]);
 
   return (
     <AnimatedPage>
-      <PageLayout
-        eyebrow="Research & Analysis"
+      <PageHeader
         title="Backtests"
-        description="Create, run, and analyze your trading strategies against historical market data."
-      >
+        description="Create, run, and analyze strategies against historical market data."
+        icon={Activity}
+        badge={total > 0 ? `${total} runs` : undefined}
+        action={{ label: "New Backtest", href: "/backtests/new" }}
+      />
+
+      <div className="space-y-4">
         <AnimatedItem>
           <BacktestToolbar
             search={search}
@@ -67,7 +61,7 @@ export default function Backtests({
             totalPages={totalPages}
           />
         </AnimatedItem>
-      </PageLayout>
+      </div>
     </AnimatedPage>
   );
 }

@@ -1,19 +1,22 @@
-import PageLayout from "@/components/layout/PageLayout";
 import AnimatedPage, { AnimatedItem } from "@/components/common/AnimatedPage";
+import PageHeader from "@/components/common/PageHeader";
 import BacktestForm from "./BacktestForm";
+import { FlaskConical } from "lucide-react";
 
 export default function NewBacktest() {
   return (
     <AnimatedPage>
-      <PageLayout
-        eyebrow="Simulation"
+      <PageHeader
         title="New Backtest"
         description="Configure and run a strategy against historical market data."
-      >
-        <AnimatedItem>
+        icon={FlaskConical}
+      />
+
+      <AnimatedItem>
+        <div className="w-full max-w-4xl rounded-2xl glass-panel p-6">
           <BacktestForm />
-        </AnimatedItem>
-      </PageLayout>
+        </div>
+      </AnimatedItem>
     </AnimatedPage>
   );
 }

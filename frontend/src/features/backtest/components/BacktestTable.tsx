@@ -2,25 +2,9 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
-import { Badge } from "@/components/ui/badge";
-
+import { CheckCircle2, Clock, XCircle } from "lucide-react";
 import type { BacktestSummary } from "../types";
-import {
-  formatCurrency,
-  formatSignedPercent,
-  formatNumber,
-  formatDateCompact,
-} from "@/lib/format";
+import { formatCurrency, formatSignedPercent, formatNumber, formatDateCompact } from "@/lib/format";
 
 type BacktestTableProps = {
   backtests: BacktestSummary[];
@@ -30,11 +14,18 @@ type BacktestTableProps = {
   totalPages: number;
 };
 
-const statusStyles: Record<string, string> = {
-  completed: "border-[#56c79d]/20 bg-[#56c79d]/10 text-[#56c79d]",
-  running: "border-[#7da2e0]/20 bg-[#7da2e0]/10 text-[#7da2e0]",
-  failed: "border-[#d97b72]/20 bg-[#d97b72]/10 text-[#d97b72]",
-};
+function StatusIcon({ status }: { status: string }) {
+  switch (status) {
+    case "completed":
+      return <div className="flex items-center gap-1.5 text-slate-400"><CheckCircle2 className="size-3.5 text-emerald-500" /> Done</div>;
+    case "running":
+      return <div className="flex items-center gap-1.5 text-slate-400"><Clock className="size-3.5 text-indigo-500" /> Running</div>;
+    case "failed":
+      return <div className="flex items-center gap-1.5 text-slate-400"><XCircle className="size-3.5 text-red-500" /> Failed</div>;
+    default:
+      return <span className="text-slate-500">{status}</span>;
+  }
+}
 
 export default function BacktestTable({
   backtests,
@@ -55,131 +46,95 @@ export default function BacktestTable({
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-border bg-card">
-      <Table>
-        <TableHeader>
-          <TableRow className="border-border hover:bg-transparent">
-            <TableHead className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-              Strategy
-            </TableHead>
-            <TableHead className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-              Initial Capital
-            </TableHead>
-            <TableHead className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-              Return
-            </TableHead>
-            <TableHead className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-              Sharpe
-            </TableHead>
-            <TableHead className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-              Drawdown
-            </TableHead>
-            <TableHead className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-              Status
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
+    <div className="overflow-x-auto rounded-md border border-slate-700">
+      <table className="w-full min-w-[800px] text-sm text-left">
+        <thead className="bg-slate-900/50 text-xs uppercase font-semibold text-slate-400 border-b border-slate-700">
+          <tr>
+            <th className="px-4 py-3 font-semibold">Strategy</th>
+            <th className="px-4 py-3 text-right font-semibold">Initial Capital</th>
+            <th className="px-4 py-3 text-right font-semibold">Return</th>
+            <th className="px-4 py-3 text-right font-semibold">Sharpe</th>
+            <th className="px-4 py-3 text-right font-semibold">Drawdown</th>
+            <th className="px-4 py-3 text-center font-semibold">Status</th>
+          </tr>
+        </thead>
+        <tbody>
           {backtests.length === 0 ? (
-            <TableRow>
-              <TableCell
-                colSpan={6}
-                className="h-32 text-center text-sm text-muted-foreground"
-              >
+            <tr>
+              <td colSpan={6} className="py-12 text-center text-sm text-slate-500 bg-slate-900/20">
                 No backtests found.
-              </TableCell>
-            </TableRow>
+              </td>
+            </tr>
           ) : (
             backtests.map((backtest) => (
-              <TableRow
+              <tr
                 key={backtest.id}
-                className="border-border/50 transition-colors hover:bg-[#1c2640]/30"
+                className="border-b border-slate-800 transition-colors hover:bg-slate-800/50 last:border-0"
               >
-                <TableCell className="font-medium">
-                  <Link
-                    href={`/backtests/${backtest.id}`}
-                    className="transition-colors hover:text-[#7da2e0]"
-                  >
-                    {backtest.strategy}
-                  </Link>
-                  <div className="mt-1 text-[10px] text-muted-foreground">
-                    {formatDateCompact(backtest.createdAt)}
+                <td className="px-4 py-3 font-medium text-slate-200">
+                  <div className="flex flex-col gap-0.5">
+                    <Link href={`/backtests/${backtest.id}`} className="hover:underline decoration-slate-500 underline-offset-2 transition-all">
+                      {backtest.strategy}
+                    </Link>
+                    <span className="text-[10px] font-normal text-slate-500">
+                      {formatDateCompact(backtest.createdAt)}
+                    </span>
                   </div>
-                </TableCell>
-
-                <TableCell className="font-financial text-xs">
+                </td>
+                <td className="px-4 py-3 text-right font-mono text-slate-300">
                   {formatCurrency(backtest.initialCapital)}
-                </TableCell>
-
-                <TableCell
-                  className={[
-                    "font-financial text-xs font-semibold",
-                    backtest.totalReturnPercent >= 0
-                      ? "text-[#56c79d]"
-                      : "text-[#d97b72]",
-                  ].join(" ")}
-                >
+                </td>
+                <td className={`px-4 py-3 text-right font-mono ${backtest.totalReturnPercent >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
                   {formatSignedPercent(backtest.totalReturnPercent)}
-                </TableCell>
-
-                <TableCell className="font-financial text-xs">
+                </td>
+                <td className="px-4 py-3 text-right font-mono text-slate-300">
                   {formatNumber(backtest.sharpeRatio)}
-                </TableCell>
-
-                <TableCell className="font-financial text-xs">
+                </td>
+                <td className="px-4 py-3 text-right font-mono text-slate-300">
                   {backtest.maximumDrawdown > 0 ? "-" : ""}
                   {formatNumber(backtest.maximumDrawdown)}%
-                </TableCell>
-
-                <TableCell>
-                  <Badge
-                    variant="secondary"
-                    className={`rounded-md border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${statusStyles[backtest.status] ?? ""}`}
-                  >
-                    {backtest.status}
-                  </Badge>
-                </TableCell>
-              </TableRow>
+                </td>
+                <td className="px-4 py-3 flex justify-center">
+                  <StatusIcon status={backtest.status} />
+                </td>
+              </tr>
             ))
           )}
-        </TableBody>
-      </Table>
+        </tbody>
+      </table>
 
-      <div className="flex items-center justify-between border-t border-border p-4">
-        <p className="text-sm text-muted-foreground">
-          {total === 0
-            ? "No backtests"
-            : `Showing ${startIndex}–${endIndex} of ${total} backtests`}
+      <div className="flex items-center justify-between border-t border-slate-700 bg-slate-900/30 p-4">
+        <p className="text-sm text-slate-500">
+          {total === 0 ? "No backtests" : `Showing ${startIndex}–${endIndex} of ${total}`}
         </p>
 
         <div className="flex items-center gap-3">
           {page > 1 ? (
             <Link
               href={getPageUrl(page - 1)}
-              className="rounded-md border border-border px-3 py-1.5 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="rounded border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-slate-100"
             >
               Previous
             </Link>
           ) : (
-            <span className="cursor-not-allowed rounded-md border border-border/50 px-3 py-1.5 text-xs text-muted-foreground/50">
+            <span className="cursor-not-allowed rounded border border-slate-800 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-600">
               Previous
             </span>
           )}
 
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs font-medium text-slate-500">
             Page {page} of {totalPages}
           </span>
 
           {page < totalPages ? (
             <Link
               href={getPageUrl(page + 1)}
-              className="rounded-md border border-border px-3 py-1.5 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="rounded border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-slate-100"
             >
               Next
             </Link>
           ) : (
-            <span className="cursor-not-allowed rounded-md border border-border/50 px-3 py-1.5 text-xs text-muted-foreground/50">
+            <span className="cursor-not-allowed rounded border border-slate-800 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-600">
               Next
             </span>
           )}
