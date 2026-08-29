@@ -1,9 +1,11 @@
 import {
   LayoutDashboard,
   FlaskConical,
-  BriefcaseBusiness,
   ChartNoAxesCombined,
   ChartSpline,
+  Folder,
+  Settings,
+  CreditCard,
 } from "lucide-react";
 
 import type { LucideIcon } from "lucide-react";
@@ -13,6 +15,7 @@ export type NavItem = {
   href: string;
   section: string;
   icon: LucideIcon;
+  shortcut?: string;
 };
 
 export const navigation: NavItem[] = [
@@ -21,29 +24,44 @@ export const navigation: NavItem[] = [
     href: "/dashboard",
     section: "Overview",
     icon: LayoutDashboard,
+    shortcut: "⌘D",
   },
   {
     label: "Backtests",
     href: "/backtests",
     section: "Trading",
     icon: FlaskConical,
-  },
-  {
-    label: "Portfolio",
-    href: "/portfolio",
-    section: "Trading",
-    icon: BriefcaseBusiness,
+    shortcut: "⌘B",
   },
   {
     label: "Strategies",
     href: "/strategies",
     section: "Trading",
     icon: ChartNoAxesCombined,
+    shortcut: "⌘S",
+  },
+  {
+    label: "Portfolio",
+    href: "/portfolio",
+    section: "Overview",
+    icon: Folder,
   },
   {
     label: "Analytics",
     href: "/analytics",
     section: "Analysis",
     icon: ChartSpline,
+  },
+  {
+    label: "Settings",
+    href: "/settings",
+    section: "System",
+    icon: Settings,
+  },
+  {
+    label: "Billing",
+    href: "/billing",
+    section: "System",
+    icon: CreditCard,
   },
 ];

@@ -45,14 +45,8 @@ export class HttpQuantEngineClient
 
       return response.data;
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        throw new Error(
-          error.response.data.error ??
-            "QuantFlow engine failed to fetch strategies.",
-        );
-      }
-
-      throw error;
+      console.warn("QuantFlow Engine is unreachable or returned an error. Using fallback strategies.", error);
+      return [];
     }
   }
 }

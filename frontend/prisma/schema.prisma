@@ -11,8 +11,29 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
-model Backtest{
+enum Plan {
+  FREE
+  PRO
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  name      String?
+
+  plan      Plan     @default(FREE)
+
+  backtests Backtest[]
+  usage     BacktestUsage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Backtest {
   id String @id @default(cuid())
+
   strategy String
   initialCapital Float
   finalEquity Float
@@ -38,9 +59,16 @@ model Backtest{
 
   status String
 
+  userId String
+  user   User @relation(fields: [userId], references: [id])
+
   trades Trade[]
   equityCurve EquityPoint[]
+
   createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([userId, createdAt])
 }
 model Trade {
   id             String   @id @default(cuid())
@@ -61,4 +89,20 @@ model EquityPoint {
 
   backtestId String
   backtest   Backtest @relation(fields: [backtestId], references: [id])
+}
+
+model BacktestUsage {
+  id        String   @id @default(cuid())
+
+  userId    String
+  date      DateTime
+  count     Int      @default(0)
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, date])
+  @@index([userId, date])
 }

@@ -12,12 +12,21 @@ const quantEngine = new HttpQuantEngineClient(
   process.env.QUANT_ENGINE_URL ?? "http://localhost:8080",
 );
 
-export async function createBacktest(config: BacktestConfig) {
+export async function createBacktest(
+  config: BacktestConfig,
+  userId: string,
+) {
   const result = await quantEngine.runBacktest(config);
 
   const backtest = await prisma.$transaction(async (tx) => {
     const createdBacktest = await tx.backtest.create({
       data: {
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
+
         strategy: config.strategy,
 
         initialCapital: result.initialCapital,
@@ -70,14 +79,24 @@ export async function createBacktest(config: BacktestConfig) {
     return createdBacktest;
   });
 
-  return { ...result, id: backtest.id };
+  return {
+    ...result,
+    id: backtest.id,
+  };
 }
 
-export async function getBacktests(): Promise<PersistedBacktest[]> {
+export async function getBacktests(
+  userId: string,
+): Promise<PersistedBacktest[]> {
   const backtests = await prisma.backtest.findMany({
+    where: {
+      userId,
+    },
+
     orderBy: {
       createdAt: "desc",
     },
+
     include: {
       trades: true,
       equityCurve: true,
@@ -109,11 +128,14 @@ export async function getBacktests(): Promise<PersistedBacktest[]> {
 
 export async function getBacktestById(
   id: string,
+  userId: string,
 ): Promise<PersistedBacktest | null> {
-  const backtest = await prisma.backtest.findUnique({
+  const backtest = await prisma.backtest.findFirst({
     where: {
       id,
+      userId,
     },
+
     include: {
       trades: true,
       equityCurve: true,
@@ -148,6 +170,7 @@ export async function getBacktestById(
 }
 
 export async function getBacktestSummaries(
+  userId: string,
   page: number,
   pageSize: number,
   search?: string,
@@ -155,6 +178,8 @@ export async function getBacktestSummaries(
   strategy?: string,
 ): Promise<BacktestSummaryPage> {
   const where = {
+    userId,
+
     ...(search
       ? {
           strategy: {

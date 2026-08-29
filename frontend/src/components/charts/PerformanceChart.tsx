@@ -1,7 +1,7 @@
 "use client";
 
 import type { EquityPoint } from "@/features/backtest/types";
-
+import { formatCurrency } from "@/lib/format";
 import {
   AreaChart,
   Area,
@@ -11,13 +11,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
-/**
- * PerformanceChart — Equity curve visualization.
- *
- * Renders an area chart with gradient fill for a premium look.
- * Handles edge cases: empty data, single point, flat equity.
- */
 
 type PerformanceChartProps = {
   data: EquityPoint[];
@@ -31,7 +24,7 @@ export default function PerformanceChart({
   if (!data || data.length === 0) {
     return (
       <div
-        className="flex items-center justify-center rounded-lg border border-border bg-card text-sm text-muted-foreground"
+        className="flex items-center justify-center rounded-md border border-slate-700 bg-slate-900/50 text-sm text-slate-500"
         style={{ height }}
       >
         No equity data available
@@ -49,30 +42,21 @@ export default function PerformanceChart({
   const yMin = Math.floor((minEquity - padding) / 100) * 100;
   const yMax = Math.ceil((maxEquity + padding) / 100) * 100;
 
-  // Determine if overall performance is positive
-  const isPositive = data.length >= 2 && data[data.length - 1].equity >= data[0].equity;
-  const lineColor = isPositive ? "#56c79d" : "#d97b72";
-  const gradientId = isPositive ? "equityGradientPositive" : "equityGradientNegative";
-
   return (
-    <div style={{ height }}>
+    <div style={{ height, width: "100%" }}>
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+        <AreaChart data={data} margin={{ top: 8, right: 0, left: 0, bottom: 0 }}>
           <defs>
-            <linearGradient id="equityGradientPositive" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#56c79d" stopOpacity={0.2} />
-              <stop offset="100%" stopColor="#56c79d" stopOpacity={0.0} />
-            </linearGradient>
-            <linearGradient id="equityGradientNegative" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#d97b72" stopOpacity={0.2} />
-              <stop offset="100%" stopColor="#d97b72" stopOpacity={0.0} />
+            <linearGradient id="colorEquity" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#6366F1" stopOpacity={0.2} />
+              <stop offset="100%" stopColor="#6366F1" stopOpacity={0} />
             </linearGradient>
           </defs>
 
           <CartesianGrid
-            strokeDasharray="3 3"
-            stroke="#283148"
-            strokeOpacity={0.5}
+            strokeDasharray="0"
+            stroke="#334155"
+            strokeOpacity={0.3}
             vertical={false}
           />
 
@@ -85,17 +69,17 @@ export default function PerformanceChart({
                 month: "short",
               });
             }}
-            stroke="#7d8599"
-            tick={{ fontSize: 10, fill: "#7d8599" }}
+            stroke="#64748B"
+            tick={{ fontSize: 12, fill: "#64748B" }}
             tickLine={false}
-            axisLine={{ stroke: "#283148" }}
+            axisLine={{ stroke: "#334155", opacity: 0.3 }}
           />
 
           <YAxis
             domain={[yMin, yMax]}
             tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
-            stroke="#7d8599"
-            tick={{ fontSize: 10, fill: "#7d8599" }}
+            stroke="#64748B"
+            tick={{ fontSize: 12, fill: "#64748B" }}
             tickLine={false}
             axisLine={false}
             width={60}
@@ -103,17 +87,20 @@ export default function PerformanceChart({
 
           <Tooltip
             contentStyle={{
-              backgroundColor: "#1c2640",
-              border: "1px solid #283148",
-              borderRadius: "6px",
-              fontSize: "12px",
-              color: "#d8dfef",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+              backgroundColor: "#0F1520",
+              border: "1px solid #334155",
+              borderRadius: "4px",
+              fontSize: "13px",
+              color: "#E7EDF7",
+              boxShadow: "0 10px 15px rgba(0,0,0,0.35)",
             }}
+            cursor={{ stroke: "#475569", strokeDasharray: "4" }}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             formatter={(value: any) => [
-              `₹${value.toLocaleString("en-IN", { minimumFractionDigits: 2 })}`,
+              formatCurrency(Number(value)),
               "Equity",
             ]}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             labelFormatter={(label: any) => {
               const date = new Date(label);
               return date.toLocaleString("en-IN", {
@@ -129,14 +116,15 @@ export default function PerformanceChart({
           <Area
             type="monotone"
             dataKey="equity"
-            stroke={lineColor}
+            stroke="#6366F1"
             strokeWidth={2}
-            fill={`url(#${gradientId})`}
+            fill="url(#colorEquity)"
             dot={false}
+            isAnimationActive={false}
             activeDot={{
               r: 4,
-              fill: lineColor,
-              stroke: "#141d30",
+              fill: "#6366F1",
+              stroke: "#0F1520",
               strokeWidth: 2,
             }}
           />

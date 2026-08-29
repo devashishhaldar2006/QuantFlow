@@ -5,12 +5,12 @@
  * one of these functions so that formatting is consistent.
  */
 
-const INR_FORMATTER = new Intl.NumberFormat("en-IN", {
+const INR_FORMATTER = new Intl.NumberFormat("en-US", {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 });
 
-const COMPACT_FORMATTER = new Intl.NumberFormat("en-IN", {
+const COMPACT_FORMATTER = new Intl.NumberFormat("en-US", {
   notation: "compact",
   maximumFractionDigits: 1,
 });
@@ -39,9 +39,10 @@ export function formatNumber(
   value: number,
   decimals: number = 2,
 ): string {
-  return INR_FORMATTER.format(
-    Number(value.toFixed(decimals)),
-  );
+  return new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  }).format(Number(value.toFixed(decimals)));
 }
 
 /**

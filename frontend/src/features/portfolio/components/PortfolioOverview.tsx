@@ -1,62 +1,58 @@
 import type { PortfolioSummary } from "@/services/portfolio/portfolioService";
-import MetricCard from "@/components/common/MetricCard";
-import SectionHeader from "@/components/common/SectionHeader";
-import { formatCurrency, formatPercent, formatSignedPercent } from "@/lib/format";
-import { DollarSign, TrendingUp, BarChart3, Activity, Briefcase } from "lucide-react";
+import { formatCurrency, formatSignedPercent } from "@/lib/format";
 
 type PortfolioOverviewProps = {
   portfolio: PortfolioSummary;
 };
 
-export default function PortfolioOverview({
-  portfolio,
-}: PortfolioOverviewProps) {
+function Stat({
+  label,
+  value,
+  valueClass = "text-slate-100",
+  sub,
+}: {
+  label: string;
+  value: string | number;
+  valueClass?: string;
+  sub?: string;
+}) {
   return (
-    <section>
-      <SectionHeader
-        eyebrow="Overview"
-        title="Portfolio Performance"
-        description="Aggregate performance across all your completed backtests."
-      />
+    <div className="flex flex-col gap-1">
+      <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+        {label}
+      </span>
+      <span className={`font-mono text-xl font-semibold tabular-nums ${valueClass}`}>
+        {value}
+      </span>
+      {sub && <span className="text-[10px] text-slate-500">{sub}</span>}
+    </div>
+  );
+}
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-        <MetricCard
-          label="Backtests"
-          value={portfolio.totalBacktests}
-          description="Completed simulations"
-          icon={Activity}
-        />
+export default function PortfolioOverview({ portfolio }: PortfolioOverviewProps) {
+  const positive = portfolio.returnPercent >= 0;
 
-        <MetricCard
-          label="Initial Capital"
-          value={formatCurrency(portfolio.initialCapital)}
-          description="Combined starting capital"
-          icon={Briefcase}
-        />
-
-        <MetricCard
-          label="Final Equity"
-          value={formatCurrency(portfolio.finalEquity)}
-          description="Combined final equity"
-          icon={DollarSign}
-        />
-
-        <MetricCard
+  return (
+    <section className="glass-panel rounded-2xl p-6">
+      <div className="mb-6 flex items-center gap-2">
+        <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+          Portfolio Performance
+        </span>
+        <div className="h-px flex-1 bg-slate-800/60" />
+      </div>
+      <div className="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-5">
+        <Stat label="Backtests Run" value={portfolio.totalBacktests} />
+        <Stat label="Initial Capital" value={formatCurrency(portfolio.initialCapital)} />
+        <Stat label="Final Equity" value={formatCurrency(portfolio.finalEquity)} />
+        <Stat
           label="Net P&L"
           value={formatCurrency(portfolio.netProfit)}
-          description="Combined result"
-          icon={TrendingUp}
-          positive={portfolio.netProfit >= 0}
-          negative={portfolio.netProfit < 0}
+          valueClass={portfolio.netProfit >= 0 ? "text-profit" : "text-loss"}
         />
-
-        <MetricCard
-          label="Return"
+        <Stat
+          label="Total Return"
           value={formatSignedPercent(portfolio.returnPercent)}
-          description="Portfolio-level return"
-          icon={BarChart3}
-          positive={portfolio.returnPercent >= 0}
-          negative={portfolio.returnPercent < 0}
+          valueClass={positive ? "text-profit" : "text-loss"}
         />
       </div>
     </section>
