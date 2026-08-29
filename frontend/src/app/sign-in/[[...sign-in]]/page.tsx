@@ -1,9 +1,13 @@
-import { SignIn } from "@clerk/nextjs";
+import AuthLayout from "@/features/auth/components/AuthLayout";
+import CustomSignInForm from "@/features/auth/components/CustomSignInForm";
 
 export default function SignInPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-950 p-6">
-      <SignIn fallbackRedirectUrl="/dashboard" />
-    </main>
+    <AuthLayout
+      title="Welcome back to QuantFlow"
+      subtitle="Sign in to access your quantitative backtesting terminal and strategies."
+    >
+      <CustomSignInForm />
+    </AuthLayout>
   );
 }

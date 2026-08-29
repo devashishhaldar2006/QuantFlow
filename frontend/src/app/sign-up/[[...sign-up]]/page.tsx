@@ -1,9 +1,13 @@
-import { SignUp } from "@clerk/nextjs";
+import AuthLayout from "@/features/auth/components/AuthLayout";
+import CustomSignUpForm from "@/features/auth/components/CustomSignUpForm";
 
 export default function SignUpPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-950 p-6">
-      <SignUp fallbackRedirectUrl="/dashboard" />
-    </main>
+    <AuthLayout
+      title="Create your QuantFlow account"
+      subtitle="Start backtesting quantitative strategies with compiled C++ execution speed."
+    >
+      <CustomSignUpForm />
+    </AuthLayout>
   );
 }

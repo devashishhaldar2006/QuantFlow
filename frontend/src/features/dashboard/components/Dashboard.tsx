@@ -99,35 +99,28 @@ const mockBacktest: PersistedBacktest = {
 export default async function Dashboard() {
   const user = await getCurrentUser();
 
-  if (!user) {
-    return null;
+  let backtests: PersistedBacktest[] = [];
+  if (user?.id) {
+    try {
+      backtests = await getBacktests(user.id);
+    } catch (err) {
+      console.error("Failed to fetch user backtests:", err);
+    }
   }
-
-  const backtests = await getBacktests(user.id);
 
   const realLatest = backtests[0] ?? null;
 
-  const useMock =
-    !realLatest || realLatest.totalTrades === 0;
+  const useMock = !realLatest || realLatest.totalTrades === 0;
 
-  const displayBacktest = useMock
-    ? mockBacktest
-    : realLatest;
+  const displayBacktest = useMock ? mockBacktest : realLatest;
 
-  const performanceData =
-    displayBacktest.equityCurve;
+  const performanceData = displayBacktest.equityCurve;
 
-  const displayRecent =
-    backtests.length > 0
-      ? backtests.slice(0, 5)
-      : [mockBacktest];
+  const displayRecent = backtests.length > 0 ? backtests.slice(0, 5) : [mockBacktest];
 
-  const positive =
-    displayBacktest.totalReturnPercent >= 0;
+  const positive = displayBacktest.totalReturnPercent >= 0;
 
-  const TrendIcon = positive
-    ? TrendingUp
-    : TrendingDown;
+  const TrendIcon = positive ? TrendingUp : TrendingDown;
 
   return (
     <AnimatedPage>
@@ -143,7 +136,6 @@ export default async function Dashboard() {
 
       <div className="space-y-5">
         {/* Hero: Portfolio Value + Chart */}
-
         <AnimatedItem>
           <div className="glass-panel rounded-2xl overflow-hidden">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 pt-6 pb-4 border-b border-white/5">
@@ -152,16 +144,14 @@ export default async function Dashboard() {
                   Portfolio Value{" "}
                   {useMock && (
                     <span className="text-amber-500/60 ml-1">
-                      · Demo
+                      · Demo Mode
                     </span>
                   )}
                 </p>
 
                 <div className="flex items-baseline gap-3 flex-wrap">
                   <span className="font-mono text-3xl font-bold tracking-tight text-slate-100">
-                    {formatCurrency(
-                      displayBacktest.finalEquity,
-                    )}
+                    {formatCurrency(displayBacktest.finalEquity)}
                   </span>
 
                   <div
@@ -172,19 +162,10 @@ export default async function Dashboard() {
                     }`}
                   >
                     <TrendIcon className="size-3" />
-
                     {positive ? "+" : ""}
-
-                    {formatCurrency(
-                      displayBacktest.netProfit,
-                    )}
-
+                    {formatCurrency(displayBacktest.netProfit)}
                     {" ("}
-
-                    {formatSignedPercent(
-                      displayBacktest.totalReturnPercent,
-                    )}
-
+                    {formatSignedPercent(displayBacktest.totalReturnPercent)}
                     {")"}
                   </div>
                 </div>
@@ -199,33 +180,25 @@ export default async function Dashboard() {
             </div>
 
             <div className="h-[300px] px-1 pt-2 pb-1">
-              <PerformanceChart
-                data={performanceData}
-              />
+              <PerformanceChart data={performanceData} />
             </div>
           </div>
         </AnimatedItem>
 
         {/* Metrics */}
-
         <AnimatedItem>
           <div className="glass-panel rounded-2xl px-6 py-5">
             <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-5">
               Key Metrics
             </p>
 
-            <MetricsGrid
-              result={displayBacktest}
-            />
+            <MetricsGrid result={displayBacktest} />
           </div>
         </AnimatedItem>
 
         {/* Recent Backtests */}
-
         <AnimatedItem>
-          <RecentBacktests
-            backtests={displayRecent}
-          />
+          <RecentBacktests backtests={displayRecent} />
         </AnimatedItem>
       </div>
     </AnimatedPage>

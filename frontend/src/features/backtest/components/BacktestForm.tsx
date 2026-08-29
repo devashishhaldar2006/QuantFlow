@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import {
   ArrowRight,
   AlertCircle,
@@ -256,45 +257,37 @@ export default function BacktestForm({
     }
 
     try {
-      const response = await fetch(
+      const response = await axios.post<{ id: string }>(
         "/api/backtests",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(result.data),
-        },
+        result.data,
       );
 
-      const data = await response.json();
+      onBacktestCreated?.();
 
-      if (!response.ok) {
+      router.push(`/backtests/${response.data.id}`);
+    } catch (err) {
+      console.error(err);
+
+      if (axios.isAxiosError(err) && err.response?.data) {
         if (
-          data.code ===
+          err.response.data.code ===
           "BACKTEST_LIMIT_REACHED"
         ) {
           setLimitReached(true);
           return;
         }
 
-        throw new Error(
-          data.error ??
+        setError(
+          err.response.data.error ??
             "Failed to create backtest.",
         );
+      } else {
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Failed to create backtest.",
+        );
       }
-
-      onBacktestCreated?.();
-
-      router.push(`/backtests/${data.id}`);
-    } catch (err) {
-      console.error(err);
-
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to create backtest.",
-      );
     } finally {
       setIsSubmitting(false);
     }

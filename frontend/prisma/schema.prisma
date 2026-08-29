@@ -11,21 +11,24 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
 enum Plan {
   FREE
   PRO
 }
 
 model User {
-  id        String   @id @default(cuid())
-  clerkId   String   @unique
-  email     String   @unique
-  name      String?
+  id      String  @id @default(cuid())
+  clerkId String  @unique
+  email   String  @unique
+  name    String?
 
-  plan      Plan     @default(FREE)
+  plan Plan @default(FREE)
 
   backtests Backtest[]
   usage     BacktestUsage[]
+
+  subscriptions Subscription[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -34,35 +37,35 @@ model User {
 model Backtest {
   id String @id @default(cuid())
 
-  strategy String
-  initialCapital Float
-  finalEquity Float
-  netProfit Float
+  strategy           String
+  initialCapital     Float
+  finalEquity        Float
+  netProfit          Float
   totalReturnPercent Float
 
-  totalTrades Int
-  winningTrades Int
-  losingTrades Int
+  totalTrades    Int
+  winningTrades  Int
+  losingTrades   Int
   winRatePercent Float
 
-  averageWin Float
+  averageWin  Float
   averageLoss Float
-  largestWin Float
+  largestWin  Float
   largestLoss Float
 
-  maximumDrawdown Float
-  profitFactor Float
-  expectancy Float
-  annualizedReturn Float
+  maximumDrawdown      Float
+  profitFactor         Float
+  expectancy           Float
+  annualizedReturn     Float
   annualizedVolatility Float
-  sharpeRatio Float
+  sharpeRatio          Float
 
   status String
 
   userId String
-  user   User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
-  trades Trade[]
+  trades      Trade[]
   equityCurve EquityPoint[]
 
   createdAt DateTime @default(now())
@@ -70,6 +73,7 @@ model Backtest {
   @@index([userId])
   @@index([userId, createdAt])
 }
+
 model Trade {
   id             String   @id @default(cuid())
   timestamp      DateTime
@@ -79,9 +83,10 @@ model Trade {
   commission     Float
   cashFlow       Float
 
-  backtestId     String
-  backtest       Backtest @relation(fields: [backtestId], references: [id])
+  backtestId String
+  backtest   Backtest @relation(fields: [backtestId], references: [id])
 }
+
 model EquityPoint {
   id        String   @id @default(cuid())
   timestamp DateTime
@@ -92,17 +97,81 @@ model EquityPoint {
 }
 
 model BacktestUsage {
-  id        String   @id @default(cuid())
+  id String @id @default(cuid())
 
-  userId    String
-  date      DateTime
-  count     Int      @default(0)
+  userId String
+  date   DateTime
+  count  Int      @default(0)
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([userId, date])
   @@index([userId, date])
+}
+
+enum SubscriptionStatus {
+  CREATED
+  ACTIVE
+  PAUSED
+  CANCELLED
+  EXPIRED
+}
+
+model Subscription {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  provider String @default("razorpay")
+
+  providerSubscriptionId String @unique
+
+  status SubscriptionStatus @default(CREATED)
+
+  plan Plan
+
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
+
+  cancelledAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([userId, status])
+}
+
+enum BillingEventStatus {
+  RECEIVED
+  PROCESSED
+  FAILED
+}
+
+model BillingEvent {
+  id String @id @default(cuid())
+
+  provider String @default("razorpay")
+
+  providerEventId String @unique
+
+  eventType String
+
+  status BillingEventStatus @default(RECEIVED)
+
+  payload Json
+
+  processedAt DateTime?
+  failedAt    DateTime?
+
+  errorMessage String?
+
+  createdAt DateTime @default(now())
+
+  @@index([provider, eventType])
+  @@index([createdAt])
 }

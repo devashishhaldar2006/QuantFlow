@@ -6,6 +6,7 @@ import {
   Folder,
   Settings,
   CreditCard,
+  User,
 } from "lucide-react";
 
 import type { LucideIcon } from "lucide-react";
@@ -51,6 +52,13 @@ export const navigation: NavItem[] = [
     href: "/analytics",
     section: "Analysis",
     icon: ChartSpline,
+  },
+  {
+    label: "Profile",
+    href: "/profile",
+    section: "System",
+    icon: User,
+    shortcut: "⌘P",
   },
   {
     label: "Settings",

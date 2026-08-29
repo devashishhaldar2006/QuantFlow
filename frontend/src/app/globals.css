@@ -25,14 +25,6 @@
   --color-red-500: #EF4444;
   --color-amber-500: #F59E0B;
 
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 12px;
-  --spacing-lg: 16px;
-  --spacing-xl: 24px;
-  --spacing-2xl: 32px;
-  --spacing-3xl: 48px;
-
   --radius-xs: 2px;
   --radius-sm: 4px;
   --radius-md: 6px;
@@ -156,4 +148,138 @@
   .focus-ring {
     @apply ring-2 ring-indigo-500/30 border-indigo-400;
   }
+}
+
+/* ==========================================================================
+   Clerk High-Density Institutional Theme Overrides
+   ========================================================================== */
+.cl-rootBox {
+  width: 100% !important;
+}
+
+.cl-cardBox {
+  width: 100% !important;
+  box-shadow: none !important;
+}
+
+.cl-card {
+  background-color: rgba(11, 19, 43, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(24px) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(99, 102, 241, 0.15) !important;
+  border-radius: 1.25rem !important;
+  padding: 2rem !important;
+  width: 100% !important;
+}
+
+.cl-headerTitle,
+.cl-headerSubtitle {
+  display: none !important;
+}
+
+.cl-socialButtonsBlockButton {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 0.75rem !important;
+  color: #e2e8f0 !important;
+  transition: all 0.2s ease !important;
+  padding: 0.65rem 1rem !important;
+}
+
+.cl-socialButtonsBlockButton:hover {
+  background-color: rgba(99, 102, 241, 0.15) !important;
+  border-color: rgba(99, 102, 241, 0.5) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+}
+
+.cl-socialButtonsBlockButtonText {
+  color: #e2e8f0 !important;
+  font-weight: 600 !important;
+  font-size: 0.8125rem !important;
+}
+
+.cl-dividerLine {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.cl-dividerText {
+  color: #64748b !important;
+  font-family: var(--font-mono), monospace !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.cl-formFieldLabel {
+  color: #94a3b8 !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 0.35rem !important;
+}
+
+.cl-formFieldInput {
+  background-color: #050a12 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 0.75rem !important;
+  color: #f8fafc !important;
+  font-size: 0.875rem !important;
+  padding: 0.75rem 1rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.cl-formFieldInput:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+  outline: none !important;
+}
+
+.cl-formButtonPrimary {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35) !important;
+  border: none !important;
+  padding: 0.875rem 1rem !important;
+  font-size: 0.875rem !important;
+  letter-spacing: 0.025em !important;
+  transition: all 0.2s ease !important;
+}
+
+.cl-formButtonPrimary:hover {
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%) !important;
+  box-shadow: 0 12px 25px rgba(99, 102, 241, 0.5) !important;
+  transform: translateY(-1px) !important;
+}
+
+.cl-footer {
+  background: transparent !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+  padding-top: 1.25rem !important;
+  margin-top: 1rem !important;
+}
+
+.cl-footerActionText {
+  color: #94a3b8 !important;
+  font-size: 0.8125rem !important;
+}
+
+.cl-footerActionLink {
+  color: #818cf8 !important;
+  font-weight: 600 !important;
+  font-size: 0.8125rem !important;
+  transition: color 0.2s ease !important;
+}
+
+.cl-footerActionLink:hover {
+  color: #a5b4fc !important;
+  text-decoration: underline !important;
+}
+
+.cl-badge,
+.cl-developmentModeBadge {
+  display: none !important;
 }

@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { useUser, SignOutButton } from "@clerk/nextjs";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut } from "lucide-react";
 
 import NavSection from "./NavSection";
 import { navigation } from "./navigation";
@@ -22,11 +24,37 @@ type SidebarProps = {
 
 export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
   const pathname = usePathname();
+  const { user } = useUser();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const isPublicRoute =
+    pathname === "/" ||
+    pathname?.startsWith("/sign-in") ||
+    pathname?.startsWith("/sign-up") ||
+    pathname?.startsWith("/terms") ||
+    pathname?.startsWith("/privacy") ||
+    pathname?.startsWith("/refund") ||
+    pathname?.startsWith("/contact") ||
+    pathname?.startsWith("/sso-callback");
+
+  // Do not render sidebar on public pages
+  if (isPublicRoute) {
+    return null;
+  }
 
   const overviewItems = navigation.filter((item) => item.section === "Overview");
   const tradingItems = navigation.filter((item) => item.section === "Trading");
   const analysisItems = navigation.filter((item) => item.section === "Analysis");
+  const systemItems = navigation.filter((item) => item.section === "System");
+
+  const displayName = user?.fullName || user?.username || "QuantFlow User";
+  const displayEmail = user?.primaryEmailAddress?.emailAddress || "";
+  const initials = displayName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .substring(0, 2)
+    .toUpperCase();
 
   const sidebarContent = (
     <>
@@ -38,46 +66,78 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
         <NavSection title="Overview" items={overviewItems} pathname={pathname} isCollapsed={isCollapsed} />
         <NavSection title="Trading" items={tradingItems} pathname={pathname} isCollapsed={isCollapsed} />
         <NavSection title="Analysis" items={analysisItems} pathname={pathname} isCollapsed={isCollapsed} />
+        <NavSection title="System" items={systemItems} pathname={pathname} isCollapsed={isCollapsed} />
       </nav>
 
-      {/* Engine Status & Toggle */}
-      <div className="border-t border-slate-700/50 p-3">
+      {/* Engine Status & User Profile */}
+      <div className="shrink-0 border-t border-slate-800/80 bg-slate-900/60 p-3 backdrop-blur-md">
         {!isCollapsed ? (
           <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-slate-400 hover:text-slate-200 transition-colors">
-              <span className="relative flex h-2 w-2">
+            <div className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs text-slate-400 bg-white/[0.02] border border-white/5">
+              <span className="relative flex size-2 shrink-0">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-50" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
               </span>
-              <span className="text-xs font-medium">Engine Online</span>
+              <span className="font-medium text-emerald-400">Engine Online</span>
             </div>
-            
-            <div className="mt-2 border-t border-slate-700/30 pt-3">
-              <div className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-slate-300">
-                <div className="size-6 rounded-full bg-slate-700 flex items-center justify-center text-xs font-medium">
-                  DH
-                </div>
-                <div className="flex-1 overflow-hidden">
-                  <p className="truncate text-xs font-medium text-slate-200">Devashish H.</p>
-                  <p className="truncate text-[10px] text-slate-500">Free Tier</p>
+
+            <Link
+              href="/profile"
+              className="mt-1 flex items-center justify-between gap-2 rounded-xl border border-white/5 bg-white/[0.03] p-2 hover:bg-white/[0.08] hover:border-indigo-500/30 transition-all group"
+            >
+              <div className="flex min-w-0 flex-1 items-center gap-2.5">
+                {user?.imageUrl ? (
+                  <img
+                    src={user.imageUrl}
+                    alt={displayName}
+                    className="size-8 shrink-0 rounded-full object-cover border border-indigo-500/30"
+                  />
+                ) : (
+                  <div className="size-8 shrink-0 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white shadow-md">
+                    {initials || "QF"}
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs font-semibold text-slate-200 group-hover:text-indigo-300 transition-colors">{displayName}</p>
+                  <p className="truncate text-[10px] text-slate-400">{displayEmail || "View Profile"}</p>
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
         ) : (
           <div className="flex flex-col items-center gap-3 w-full">
-            <div className="group relative flex size-9 items-center justify-center rounded-md text-emerald-500 hover:bg-slate-800 transition-colors">
-              <span className="relative flex h-2.5 w-2.5">
+            <div className="group relative flex size-8 items-center justify-center rounded-lg text-emerald-500 bg-emerald-500/10 border border-emerald-500/20">
+              <span className="relative flex size-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-50" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
+                <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
               </span>
             </div>
-            
-            <div className="w-6 border-t border-slate-700/30 my-1" />
-            
-            <div className="size-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-medium text-slate-300">
-               DH
-            </div>
+
+            <div className="w-5 border-t border-white/10 my-0.5" />
+
+            <Link href="/profile" title="View Profile">
+              {user?.imageUrl ? (
+                <img
+                  src={user.imageUrl}
+                  alt={displayName}
+                  className="size-8 shrink-0 rounded-full object-cover border border-slate-600 hover:border-indigo-400 transition-colors"
+                />
+              ) : (
+                <div className="size-8 shrink-0 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white hover:bg-indigo-500 transition-colors">
+                  {initials || "QF"}
+                </div>
+              )}
+            </Link>
+
+            <SignOutButton redirectUrl="/sign-in">
+              <button
+                type="button"
+                title="Sign Out"
+                className="flex size-7 shrink-0 items-center justify-center rounded-lg text-slate-500 hover:bg-red-500/10 hover:text-red-400 transition-colors"
+              >
+                <LogOut className="size-3.5" />
+              </button>
+            </SignOutButton>
           </div>
         )}
       </div>

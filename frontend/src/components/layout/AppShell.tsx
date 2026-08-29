@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import Sidebar from "../navigation/Sidebar";
 import TopNavbar from "./TopNavbar";
 
@@ -9,7 +10,26 @@ type AppShellProps = {
 };
 
 export default function AppShell({ children }: AppShellProps) {
+  const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const isPublicRoute =
+    pathname === "/" ||
+    pathname?.startsWith("/sign-in") ||
+    pathname?.startsWith("/sign-up") ||
+    pathname?.startsWith("/terms") ||
+    pathname?.startsWith("/privacy") ||
+    pathname?.startsWith("/refund") ||
+    pathname?.startsWith("/contact") ||
+    pathname?.startsWith("/sso-callback");
+
+  if (isPublicRoute) {
+    return (
+      <main className="w-full min-h-screen bg-[#030712] text-slate-100 selection:bg-indigo-500 selection:text-white">
+        {children}
+      </main>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">

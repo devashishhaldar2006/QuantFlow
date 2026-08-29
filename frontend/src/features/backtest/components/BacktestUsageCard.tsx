@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Crown, Loader2, Zap } from "lucide-react";
+import axios from "axios";
 
 type UsageResponse = {
   plan: "FREE" | "PRO";
@@ -29,32 +30,23 @@ export default function BacktestUsageCard({
       try {
         setError(null);
 
-        const response = await fetch(
+        const response = await axios.get<UsageResponse>(
           "/api/backtests/usage",
-          {
-            method: "GET",
-            cache: "no-store",
-          },
         );
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            data.error ??
-              "Failed to load backtest usage.",
-          );
-        }
-
-        setUsage(data);
+        setUsage(response.data);
       } catch (err) {
         console.error(err);
 
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Failed to load backtest usage.",
-        );
+        if (axios.isAxiosError(err) && err.response?.data?.error) {
+          setError(err.response.data.error);
+        } else {
+          setError(
+            err instanceof Error
+              ? err.message
+              : "Failed to load backtest usage.",
+          );
+        }
       }
     }
 
