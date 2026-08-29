@@ -1,3 +1,5 @@
+import { getCurrentUser } from "@/services/auth/currentUser";
+
 import { getBacktestById } from "@/services/backtest/backtestService";
 
 type RouteContext = {
@@ -11,9 +13,21 @@ export async function GET(
   context: RouteContext,
 ) {
   try {
+    const user = await getCurrentUser();
+
+    if (!user) {
+      return Response.json(
+        { error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
     const { id } = await context.params;
 
-    const backtest = await getBacktestById(id);
+    const backtest = await getBacktestById(
+      id,
+      user.id,
+    );
 
     if (!backtest) {
       return Response.json(
@@ -24,10 +38,15 @@ export async function GET(
 
     return Response.json(backtest);
   } catch (error) {
-    console.error("Failed to fetch backtest:", error);
+    console.error(
+      "Failed to fetch backtest:",
+      error,
+    );
 
     return Response.json(
-      { error: "Failed to fetch backtest" },
+      {
+        error: "Failed to fetch backtest",
+      },
       { status: 500 },
     );
   }

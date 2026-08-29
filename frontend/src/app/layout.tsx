@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 
 import AppShell from "@/components/layout/AppShell";
 
@@ -31,7 +32,9 @@ export default function RootLayout({
       className={`${inter.variable} ${jetbrainsMono.variable} dark h-full`}
     >
       <body className="min-h-full bg-slate-950 font-sans text-slate-100 antialiased">
-        <AppShell>{children}</AppShell>
+        <ClerkProvider>
+          <AppShell>{children}</AppShell>
+        </ClerkProvider>
       </body>
     </html>
   );

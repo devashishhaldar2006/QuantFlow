@@ -1,4 +1,7 @@
+import { getCurrentUser } from "@/services/auth/currentUser";
+
 import { getBacktestSummaries } from "@/services/backtest/backtestService";
+
 import Backtests from "@/features/backtest/components/Backtest";
 
 type PageProps = {
@@ -13,6 +16,12 @@ type PageProps = {
 export default async function BacktestsPage({
   searchParams,
 }: PageProps) {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return null;
+  }
+
   const params = await searchParams;
 
   const page = Math.max(
@@ -22,7 +31,8 @@ export default async function BacktestsPage({
 
   const pageSize = 20;
 
-  const search = params.search?.trim() || undefined;
+  const search =
+    params.search?.trim() || undefined;
 
   const status =
     params.status === "completed" ||
@@ -35,6 +45,7 @@ export default async function BacktestsPage({
     params.strategy?.trim() || undefined;
 
   const result = await getBacktestSummaries(
+    user.id,
     page,
     pageSize,
     search,
