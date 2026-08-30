@@ -1,9 +1,8 @@
 "use client";
 
-import { useUser, UserProfile } from "@clerk/nextjs";
-import { useState } from "react";
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { Shield, Key, Crown, CreditCard, ExternalLink } from "lucide-react";
+import { Shield, Crown, CreditCard, ExternalLink } from "lucide-react";
 import AnimatedPage, { AnimatedItem } from "@/components/common/AnimatedPage";
 import BacktestUsageCard from "@/features/backtest/components/BacktestUsageCard";
 import ProfileHeader from "@/features/profile/components/ProfileHeader";
@@ -12,14 +11,13 @@ import ProfileSecurityCard from "@/features/profile/components/ProfileSecurityCa
 
 export default function ProfilePage() {
   const { isLoaded, isSignedIn, user } = useUser();
-  const [showManageModal, setShowManageModal] = useState(false);
 
   if (!isLoaded) {
     return (
       <AnimatedPage className="flex min-h-[70vh] w-full items-center justify-center p-6">
         <div className="flex items-center gap-3 text-slate-400">
           <div className="size-6 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
-          <span className="text-sm font-medium">Loading user profile...</span>
+          <span className="text-sm font-medium">Loading profile…</span>
         </div>
       </AnimatedPage>
     );
@@ -51,56 +49,18 @@ export default function ProfilePage() {
 
   return (
     <AnimatedPage className="w-full space-y-8 p-4 md:p-8">
-      {/* Top Banner Header Component */}
+      {/* Profile Banner */}
       <AnimatedItem>
         <ProfileHeader
           user={user}
           displayName={displayName}
           primaryEmail={primaryEmail}
-          showManageModal={showManageModal}
-          onToggleManageModal={() => setShowManageModal(!showManageModal)}
         />
       </AnimatedItem>
 
-      {/* Embedded Clerk UserProfile Editor Toggle */}
-      {showManageModal && (
-        <AnimatedItem>
-          <div className="glass-panel overflow-hidden rounded-2xl p-4 border border-indigo-500/30">
-            <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4 px-2">
-              <div className="flex items-center gap-2 text-sm font-semibold text-slate-200">
-                <Key className="size-4 text-indigo-400" />
-                Clerk Account Security Settings
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowManageModal(false)}
-                className="text-xs text-slate-400 hover:text-slate-200"
-              >
-                Done
-              </button>
-            </div>
-            <div className="clerk-dark-wrapper overflow-x-auto">
-              <UserProfile
-                appearance={{
-                  elements: {
-                    card: "bg-slate-900/90 text-slate-100 border border-white/10 shadow-none",
-                    navbar: "hidden",
-                    headerTitle: "text-slate-100",
-                    headerSubtitle: "text-slate-400",
-                    profileSectionTitle: "text-slate-300 border-b border-white/10",
-                    userPreviewMainIdentifier: "text-slate-100 font-semibold",
-                    userPreviewSecondaryIdentifier: "text-slate-400",
-                  },
-                }}
-              />
-            </div>
-          </div>
-        </AnimatedItem>
-      )}
-
       {/* Modular Profile Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {/* Card 1: Account Information */}
+        {/* Account Details */}
         <AnimatedItem>
           <ProfileAccountCard
             displayName={displayName}
@@ -110,7 +70,7 @@ export default function ProfilePage() {
           />
         </AnimatedItem>
 
-        {/* Card 2: Plan & Backtest Usage */}
+        {/* Plan & Billing */}
         <AnimatedItem>
           <div className="glass-panel h-full rounded-2xl p-6 border border-white/10 space-y-5 flex flex-col justify-between">
             <div className="space-y-5">
@@ -124,13 +84,12 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              {/* Usage Card Embed */}
               <BacktestUsageCard />
             </div>
 
             <div className="pt-2">
               <Link
-                href="/billing/test"
+                href="/billing"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:bg-indigo-500"
               >
                 <CreditCard className="size-4" />
@@ -141,7 +100,7 @@ export default function ProfilePage() {
           </div>
         </AnimatedItem>
 
-        {/* Card 3: Security & Terminal Auth */}
+        {/* Security */}
         <AnimatedItem>
           <ProfileSecurityCard />
         </AnimatedItem>

@@ -34,6 +34,10 @@ export const backtestConfigSchema = z
       .min(0, "Take profit cannot be negative")
       .max(1, "Take profit must be between 0 and 1"),
 
+    slippage: z
+      .number()
+      .min(0, "Slippage cannot be negative"),
+
     shortMAPeriod: z
       .number()
       .int()

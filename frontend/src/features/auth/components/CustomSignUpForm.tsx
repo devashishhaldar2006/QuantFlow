@@ -1,7 +1,7 @@
 "use client";
 
-import { useClerk } from "@clerk/nextjs";
-import { useState, FormEvent } from "react";
+import { useClerk, useAuth } from "@clerk/nextjs";
+import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -19,7 +19,14 @@ import {
 
 export default function CustomSignUpForm() {
   const clerk = useClerk();
+  const { isLoaded: authLoaded, isSignedIn } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    if (authLoaded && isSignedIn) {
+      router.replace("/dashboard");
+    }
+  }, [authLoaded, isSignedIn, router]);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

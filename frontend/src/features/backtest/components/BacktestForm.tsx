@@ -11,6 +11,10 @@ import {
   Database,
   TrendingUp,
   Shield,
+  Upload,
+  FileText,
+  CheckCircle2,
+  X,
 } from "lucide-react";
 
 import {
@@ -41,6 +45,7 @@ const initialForm: BacktestConfig = {
   commission: 0.001,
   stopLossPercent: 0.02,
   takeProfitPercent: 0.05,
+  slippage: 0.001,
   shortMAPeriod: 10,
   longMAPeriod: 20,
   rsiPeriod: 14,
@@ -204,6 +209,15 @@ export default function BacktestForm({
   const [limitReached, setLimitReached] =
     useState(false);
 
+  const [csvUploading, setCsvUploading] =
+    useState(false);
+
+  const [csvUploadError, setCsvUploadError] =
+    useState("");
+
+  const [uploadedFile, setUploadedFile] =
+    useState<{ name: string; rows: number } | null>(null);
+
   useEffect(() => {
     async function loadStrategies() {
       try {
@@ -225,6 +239,46 @@ export default function BacktestForm({
 
     loadStrategies();
   }, []);
+
+  const handleCSVUpload = async (
+    file: File,
+  ) => {
+    setCsvUploadError("");
+    setCsvUploading(true);
+    setUploadedFile(null);
+
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+
+      const res = await fetch("/api/upload/csv", {
+        method: "POST",
+        body: fd,
+      });
+
+      const data = await res.json() as {
+        path?: string;
+        originalName?: string;
+        rows?: number;
+        error?: string;
+      };
+
+      if (!res.ok) {
+        setCsvUploadError(data.error ?? "Upload failed.");
+        return;
+      }
+
+      updateField("csvFile", data.path ?? "");
+      setUploadedFile({
+        name: data.originalName ?? file.name,
+        rows: data.rows ?? 0,
+      });
+    } catch {
+      setCsvUploadError("Network error during upload.");
+    } finally {
+      setCsvUploading(false);
+    }
+  };
 
   const updateField = <
     K extends keyof BacktestConfig,
@@ -406,26 +460,99 @@ export default function BacktestForm({
 
           <div>
             <FieldLabel htmlFor="csvFile">
-              Market Data (CSV Path)
+              Market Data (CSV File)
             </FieldLabel>
 
-            <FieldInput
-              id="csvFile"
-              placeholder="e.g. data/sample.csv"
-              value={form.csvFile}
-              disabled={limitReached}
-              onChange={(e) =>
-                updateField(
-                  "csvFile",
-                  e.target.value,
-                )
-              }
-            />
+            {/* Upload area */}
+            <label
+              htmlFor="csv-upload-input"
+              className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed px-4 py-5 transition-all ${
+                limitReached || csvUploading
+                  ? "cursor-not-allowed border-slate-800/60 opacity-40"
+                  : "border-slate-700/50 hover:border-indigo-500/50 hover:bg-indigo-500/5"
+              }`}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                e.preventDefault();
+                const f = e.dataTransfer.files?.[0];
+                if (f) handleCSVUpload(f);
+              }}
+            >
+              <input
+                id="csv-upload-input"
+                type="file"
+                accept=".csv,text/csv"
+                className="sr-only"
+                disabled={limitReached || csvUploading}
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) handleCSVUpload(f);
+                  e.target.value = "";
+                }}
+              />
 
-            <p className="mt-1.5 text-[10px] text-slate-600">
-              Relative to engine working
-              directory
-            </p>
+              {csvUploading ? (
+                <>
+                  <Loader2 className="size-6 animate-spin text-indigo-400" />
+                  <span className="text-xs text-slate-400">Uploading…</span>
+                </>
+              ) : uploadedFile ? (
+                <>
+                  <CheckCircle2 className="size-6 text-emerald-400" />
+                  <div className="text-center">
+                    <p className="text-xs font-semibold text-emerald-300">{uploadedFile.name}</p>
+                    <p className="text-[10px] text-slate-500">{uploadedFile.rows.toLocaleString()} data rows</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setUploadedFile(null);
+                      updateField("csvFile", "data/sample.csv");
+                    }}
+                    className="flex items-center gap-1 text-[10px] text-slate-500 hover:text-red-400 transition-colors"
+                  >
+                    <X className="size-3" /> Use sample data
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="flex size-9 items-center justify-center rounded-lg bg-indigo-500/10 border border-indigo-500/20">
+                    <Upload className="size-4 text-indigo-400" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs font-medium text-slate-300">
+                      Drop CSV or <span className="text-indigo-400">click to browse</span>
+                    </p>
+                    <p className="text-[10px] text-slate-600">Requires: date, open, high, low, close columns</p>
+                  </div>
+                </>
+              )}
+            </label>
+
+            {csvUploadError && (
+              <p className="mt-1.5 flex items-center gap-1 text-[10px] text-red-400">
+                <AlertCircle className="size-3" /> {csvUploadError}
+              </p>
+            )}
+
+            {/* Manual path override */}
+            <div className="mt-2">
+              <p className="mb-1 text-[10px] text-slate-600">Or specify path manually:</p>
+              <div className="flex items-center gap-2">
+                <FileText className="size-3.5 shrink-0 text-slate-600" />
+                <FieldInput
+                  id="csvFile"
+                  placeholder="data/sample.csv"
+                  value={form.csvFile}
+                  disabled={limitReached}
+                  onChange={(e) => {
+                    updateField("csvFile", e.target.value);
+                    setUploadedFile(null);
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -679,6 +806,33 @@ export default function BacktestForm({
 
             <p className="mt-1.5 text-[10px] text-slate-600">
               e.g. 0.001 = 0.1%
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <FieldLabel htmlFor="slippage">
+              Slippage
+            </FieldLabel>
+
+            <FieldInput
+              id="slippage"
+              type="number"
+              min={0}
+              step={0.0001}
+              value={form.slippage}
+              disabled={limitReached}
+              onChange={(e) =>
+                updateField(
+                  "slippage",
+                  Number(e.target.value),
+                )
+              }
+            />
+
+            <p className="mt-1.5 text-[10px] text-slate-600">
+              e.g. 0.001 = 0.1% market impact
             </p>
           </div>
         </div>

@@ -13,6 +13,7 @@ struct BacktestRequest
     double commission = 0.0;
     double stopLossPercent = 0.0;
     double takeProfitPercent = 0.0;
+    double slippage = 0.0;
 
     // Moving Average Cross
     int shortMAPeriod = 10;

@@ -14,9 +14,21 @@ const isPublicRoute = createRouteMatcher([
   "/api/razorpay/webhook(.*)",
 ]);
 
+const isAuthRoute = createRouteMatcher([
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+]);
+
 export default clerkMiddleware(async (auth, req) => {
   const { userId } = await auth();
 
+  // If user is already logged in and navigates to sign-in or sign-up, redirect to dashboard
+  if (userId && isAuthRoute(req)) {
+    const dashboardUrl = new URL("/dashboard", req.url);
+    return NextResponse.redirect(dashboardUrl);
+  }
+
+  // If user is not logged in and route is protected, redirect to sign-in
   if (!userId && !isPublicRoute(req)) {
     const signInUrl = new URL("/sign-in", req.url);
     return NextResponse.redirect(signInUrl);

@@ -23,6 +23,9 @@ BacktestRequest BacktestRequest::fromJson(
     request.takeProfitPercent =
         body.at("takeProfitPercent").get<double>();
 
+    request.slippage =
+        body.value("slippage", 0.001);
+
     // Moving Average Cross
     request.shortMAPeriod =
         body.value("shortMAPeriod", 10);

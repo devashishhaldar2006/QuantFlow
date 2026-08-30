@@ -1,11 +1,11 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
+import { useUser, useClerk } from "@clerk/nextjs";
 import {
-  User as UserIcon,
   Mail,
   ShieldCheck,
   Calendar,
+  Settings2,
 } from "lucide-react";
 
 type UserResource = NonNullable<ReturnType<typeof useUser>["user"]>;
@@ -14,17 +14,15 @@ type ProfileHeaderProps = {
   user: UserResource;
   displayName: string;
   primaryEmail: string;
-  showManageModal: boolean;
-  onToggleManageModal: () => void;
 };
 
 export default function ProfileHeader({
   user,
   displayName,
   primaryEmail,
-  showManageModal,
-  onToggleManageModal,
 }: ProfileHeaderProps) {
+  const { openUserProfile } = useClerk();
+
   const createdAtFormatted = user.createdAt
     ? new Date(user.createdAt).toLocaleDateString("en-US", {
         month: "long",
@@ -35,9 +33,11 @@ export default function ProfileHeader({
 
   return (
     <div className="glass-panel relative overflow-hidden rounded-2xl p-6 md:p-8 border border-white/10 shadow-2xl">
+      {/* Decorative glow */}
       <div className="absolute right-0 top-0 -mr-16 -mt-16 size-64 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
 
       <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        {/* Avatar + info */}
         <div className="flex items-center gap-5">
           {user.imageUrl ? (
             <img
@@ -58,7 +58,7 @@ export default function ProfileHeader({
               </h1>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-0.5 text-xs font-semibold text-emerald-400">
                 <ShieldCheck className="size-3.5" />
-                Verified Trader
+                Verified
               </span>
             </div>
 
@@ -74,16 +74,15 @@ export default function ProfileHeader({
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={onToggleManageModal}
-            className="inline-flex items-center gap-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-4 py-2.5 text-sm font-semibold text-indigo-300 transition hover:bg-indigo-500/20 hover:text-white shadow-md"
-          >
-            <UserIcon className="size-4 text-indigo-400" />
-            {showManageModal ? "Close Account Settings" : "Edit Account Details"}
-          </button>
-        </div>
+        {/* Opens Clerk's own hosted user-profile modal — properly themed */}
+        <button
+          type="button"
+          onClick={() => openUserProfile()}
+          className="inline-flex items-center gap-2 rounded-xl border border-slate-700/50 bg-white/[0.03] px-4 py-2.5 text-sm font-semibold text-slate-300 transition hover:border-indigo-500/30 hover:bg-indigo-500/10 hover:text-indigo-300 shadow-md"
+        >
+          <Settings2 className="size-4 text-slate-400" />
+          Edit Account
+        </button>
       </div>
     </div>
   );

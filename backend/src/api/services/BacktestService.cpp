@@ -26,10 +26,33 @@ BacktestResult BacktestService::run(
     config.commission = request.commission;
     config.stopLossPercent = request.stopLossPercent;
     config.takeProfitPercent = request.takeProfitPercent;
-    config.shortMAPeriod =
-        request.shortMAPeriod;
-    config.longMAPeriod =
-        request.longMAPeriod;
+    config.slippage = request.slippage;
+
+    // SMA Strategy
+    config.shortMAPeriod = request.shortMAPeriod;
+    config.longMAPeriod  = request.longMAPeriod;
+
+    // RSI Strategy
+    config.rsiPeriod  = request.rsiPeriod;
+    config.oversold   = request.oversold;
+    config.overbought = request.overbought;
+
+    // EMA Cross Strategy
+    config.fastEMAPeriod = request.fastEMAPeriod;
+    config.slowEMAPeriod = request.slowEMAPeriod;
+
+    // MACD Strategy
+    config.macdFastPeriod   = request.macdFastPeriod;
+    config.macdSlowPeriod   = request.macdSlowPeriod;
+    config.macdSignalPeriod = request.macdSignalPeriod;
+
+    // Bollinger Bands Strategy
+    config.bollingerPeriod     = request.bollingerPeriod;
+    config.bollingerMultiplier = request.bollingerMultiplier;
+
+    // ATR Filter Strategy
+    config.atrPeriod   = request.atrPeriod;
+    config.minimumATR  = request.minimumATR;
 
     MarketData marketData =
         CSVParser::parse(config.csvFile);
