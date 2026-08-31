@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useUser, SignOutButton } from "@clerk/nextjs";
+import { useUser, useAuth, SignOutButton } from "@clerk/nextjs";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, LogOut } from "lucide-react";
 
@@ -24,11 +24,13 @@ type SidebarProps = {
 
 export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
   const pathname = usePathname();
+  const { isSignedIn, isLoaded } = useAuth();
   const { user } = useUser();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isPublicRoute =
     pathname === "/" ||
+    pathname?.startsWith("/about") ||
     pathname?.startsWith("/sign-in") ||
     pathname?.startsWith("/sign-up") ||
     pathname?.startsWith("/terms") ||
@@ -37,8 +39,8 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
     pathname?.startsWith("/contact") ||
     pathname?.startsWith("/sso-callback");
 
-  // Do not render sidebar on public pages
-  if (isPublicRoute) {
+  // Do not render sidebar when logged out or on public landing/auth pages
+  if (isPublicRoute && (!isLoaded || !isSignedIn)) {
     return null;
   }
 

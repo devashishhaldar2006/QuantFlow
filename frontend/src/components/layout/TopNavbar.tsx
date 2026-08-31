@@ -2,7 +2,7 @@
 
 import { Bell, Search, Menu, Zap } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, useAuth } from "@clerk/nextjs";
 import { navigation } from "../navigation/navigation";
 
 type TopNavbarProps = {
@@ -13,8 +13,11 @@ type TopNavbarProps = {
 export default function TopNavbar({ isCollapsed, setIsCollapsed }: TopNavbarProps) {
   const pathname = usePathname();
 
+  const { isSignedIn, isLoaded } = useAuth();
+
   const isPublicRoute =
     pathname === "/" ||
+    pathname?.startsWith("/about") ||
     pathname?.startsWith("/sign-in") ||
     pathname?.startsWith("/sign-up") ||
     pathname?.startsWith("/terms") ||
@@ -23,7 +26,7 @@ export default function TopNavbar({ isCollapsed, setIsCollapsed }: TopNavbarProp
     pathname?.startsWith("/contact") ||
     pathname?.startsWith("/sso-callback");
 
-  if (isPublicRoute) {
+  if (isPublicRoute && (!isLoaded || !isSignedIn)) {
     return null;
   }
 

@@ -7,6 +7,7 @@ import {
   Settings,
   CreditCard,
   User,
+  Info,
 } from "lucide-react";
 
 import type { LucideIcon } from "lucide-react";
@@ -71,5 +72,11 @@ export const navigation: NavItem[] = [
     href: "/billing",
     section: "System",
     icon: CreditCard,
+  },
+  {
+    label: "About Developer",
+    href: "/about",
+    section: "System",
+    icon: Info,
   },
 ];

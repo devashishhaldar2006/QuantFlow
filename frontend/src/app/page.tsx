@@ -85,6 +85,7 @@ export default function LandingPage() {
             <a href="#strategies" className="hover:text-indigo-400 transition-colors">C++ Engines</a>
             <a href="#simulation" className="hover:text-indigo-400 transition-colors">Simulator</a>
             <a href="#pricing" className="hover:text-indigo-400 transition-colors">Pricing</a>
+            <Link href="/about" className="hover:text-indigo-400 transition-colors text-indigo-300">About</Link>
             <Link href="/terms" className="hover:text-indigo-400 transition-colors">Legal</Link>
           </nav>
 
@@ -578,6 +579,7 @@ export default function LandingPage() {
           <div className="space-y-3">
             <p className="font-semibold text-white uppercase tracking-wider text-[11px]">Platform</p>
             <ul className="space-y-2 text-slate-400">
+              <li><Link href="/about" className="hover:text-indigo-400 font-semibold text-indigo-300 transition-colors">About Devashish Haldar</Link></li>
               <li><Link href="/dashboard" className="hover:text-white transition-colors">Terminal Console</Link></li>
               <li><Link href="/analytics" className="hover:text-white transition-colors">Risk Analytics</Link></li>
               <li><Link href="/strategies" className="hover:text-white transition-colors">Strategy Library</Link></li>
