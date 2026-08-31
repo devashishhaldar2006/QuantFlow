@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Folder, Plus, Briefcase } from "lucide-react";
+import { Folder, Briefcase } from "lucide-react";
 import type { PortfolioSummary } from "@/services/portfolio/portfolioService";
 import AnimatedPage, { AnimatedItem } from "@/components/common/AnimatedPage";
 import PageHeader from "@/components/common/PageHeader";

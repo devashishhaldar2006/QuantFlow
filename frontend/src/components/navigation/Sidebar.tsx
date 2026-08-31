@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useUser, useAuth, SignOutButton } from "@clerk/nextjs";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, LogOut } from "lucide-react";
@@ -19,10 +20,9 @@ import { navigation } from "./navigation";
 
 type SidebarProps = {
   isCollapsed: boolean;
-  setIsCollapsed: (collapsed: boolean) => void;
 };
 
-export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
+export default function Sidebar({ isCollapsed }: SidebarProps) {
   const pathname = usePathname();
   const { isSignedIn, isLoaded } = useAuth();
   const { user } = useUser();
@@ -89,9 +89,11 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
             >
               <div className="flex min-w-0 flex-1 items-center gap-2.5">
                 {user?.imageUrl ? (
-                  <img
+                  <Image
                     src={user.imageUrl}
                     alt={displayName}
+                    width={32}
+                    height={32}
                     className="size-8 shrink-0 rounded-full object-cover border border-indigo-500/30"
                   />
                 ) : (
@@ -119,9 +121,11 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
 
             <Link href="/profile" title="View Profile">
               {user?.imageUrl ? (
-                <img
+                <Image
                   src={user.imageUrl}
                   alt={displayName}
+                  width={32}
+                  height={32}
                   className="size-8 shrink-0 rounded-full object-cover border border-slate-600 hover:border-indigo-400 transition-colors"
                 />
               ) : (

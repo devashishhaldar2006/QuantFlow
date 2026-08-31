@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useUser, useClerk } from "@clerk/nextjs";
 import {
   Mail,
@@ -40,9 +41,11 @@ export default function ProfileHeader({
         {/* Avatar + info */}
         <div className="flex items-center gap-5">
           {user.imageUrl ? (
-            <img
+            <Image
               src={user.imageUrl}
               alt={displayName}
+              width={80}
+              height={80}
               className="size-20 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-xl"
             />
           ) : (

@@ -41,7 +41,7 @@ export default function AppShell({ children }: AppShellProps) {
       <TopNavbar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
       <div className="flex pt-[60px]">
-        <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+        <Sidebar isCollapsed={isCollapsed} />
 
         <main className={`flex-1 min-w-0 flex flex-col transition-all duration-200 ${isCollapsed ? 'md:ml-[64px]' : 'md:ml-[240px]'}`}>
           <div className="flex-1 min-w-0 w-full p-6">

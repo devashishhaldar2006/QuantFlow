@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { LineChart } from "lucide-react";
 import type { StrategyWithPerformance } from "../types";
 import AnimatedPage, { AnimatedItem } from "@/components/common/AnimatedPage";

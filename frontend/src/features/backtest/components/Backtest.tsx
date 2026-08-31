@@ -1,6 +1,5 @@
 import { useMemo } from "react";
-import Link from "next/link";
-import { Plus, Activity } from "lucide-react";
+import { Activity } from "lucide-react";
 import AnimatedPage, { AnimatedItem } from "@/components/common/AnimatedPage";
 import PageHeader from "@/components/common/PageHeader";
 import BacktestToolbar from "./BacktestToolbar";

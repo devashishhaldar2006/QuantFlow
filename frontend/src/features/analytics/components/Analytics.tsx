@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BarChart2, Plus, TrendingUp } from "lucide-react";
+import { BarChart2, TrendingUp } from "lucide-react";
 import type { AnalyticsSummary } from "@/services/analytics/analyticsService";
 import AnimatedPage, { AnimatedItem } from "@/components/common/AnimatedPage";
 import PageHeader from "@/components/common/PageHeader";

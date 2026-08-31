@@ -14,6 +14,9 @@ export function useEngineConfig() {
 
   useEffect(() => {
     async function load() {
+      const storedUrl = localStorage.getItem("quantflow_engine_url");
+      if (storedUrl) setEngineUrl(storedUrl);
+
       try {
         const res = await fetch("/api/settings/engine-config");
         if (res.ok) {
@@ -26,9 +29,6 @@ export function useEngineConfig() {
         setLoading(false);
       }
     }
-
-    const storedUrl = localStorage.getItem("quantflow_engine_url");
-    if (storedUrl) setEngineUrl(storedUrl);
 
     load();
   }, []);
