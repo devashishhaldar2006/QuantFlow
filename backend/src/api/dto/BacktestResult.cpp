@@ -32,5 +32,29 @@ json BacktestResult::toJson() const
     response["annualizedVolatility"] = annualizedVolatility;
     response["sharpeRatio"] = sharpeRatio;
 
+    json equityCurveJson = json::array();
+
+    for (const auto &point : this->equityCurve)
+    {
+        equityCurveJson.push_back({{"timestamp", point.timestamp},
+                                   {"equity", point.equity}});
+    }
+
+    response["equityCurve"] = equityCurveJson;
+
+    json tradesJson = json::array();
+
+    for (const auto &trade : this->trades)
+    {
+        tradesJson.push_back({{"timestamp", trade.timestamp},
+                              {"side", trade.side},
+                              {"quantity", trade.quantity},
+                              {"executionPrice", trade.executionPrice},
+                              {"commission", trade.commission},
+                              {"cashFlow", trade.cashFlow}});
+    }
+
+    response["trades"] = tradesJson;
+
     return response;
 }

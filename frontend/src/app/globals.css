@@ -1,0 +1,285 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-slate-50: #F8FAFC;
+  --color-slate-100: #F1F5F9;
+  --color-slate-200: #E2E8F0;
+  --color-slate-300: #CBD5E1;
+  --color-slate-400: #94A3B8;
+  --color-slate-500: #64748B;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1E293B;
+  --color-slate-900: #0F1520;
+  --color-slate-950: #090D14;
+
+  --color-indigo-500: #6366F1;
+  --color-indigo-600: #4F46E5;
+  --color-indigo-700: #4338CA;
+
+  --color-emerald-500: #10B981;
+  --color-red-400: #F87171;
+  --color-red-500: #EF4444;
+  --color-amber-500: #F59E0B;
+
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --text-xs: 12px;
+  --text-xs--line-height: 1.4;
+  --text-xs--letter-spacing: 0.4px;
+
+  --text-sm: 13px;
+  --text-sm--line-height: 1.5;
+
+  --text-base: 14px;
+  --text-base--line-height: 1.6;
+
+  --text-lg: 16px;
+  --text-lg--line-height: 1.6;
+
+  --text-xl: 18px;
+  --text-xl--line-height: 1.5;
+
+  --text-2xl: 22px;
+  --text-2xl--line-height: 1.4;
+  --text-2xl--letter-spacing: -0.4px;
+
+  --text-3xl: 28px;
+  --text-3xl--line-height: 1.2;
+  --text-3xl--letter-spacing: -0.6px;
+}
+
+:root {
+  --background: #090D14;
+  --foreground: #E7EDF7;
+  --border: rgba(226, 232, 240, 0.08);
+}
+
+.dark {
+  --background: #090D14;
+  --foreground: #E7EDF7;
+  --border: rgba(226, 232, 240, 0.08);
+}
+
+@layer base {
+  * {
+    @apply border-slate-800/60 outline-none;
+  }
+  
+  html {
+    @apply font-sans;
+    background: #040810;
+  }
+  
+  body {
+    @apply text-slate-200;
+    margin: 0;
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+    background-color: #040810;
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+      radial-gradient(at 50% 0%, hsla(225,39%,30%,0.1) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(339,49%,30%,0.05) 0, transparent 50%);
+    background-attachment: fixed;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  ::selection {
+    background: rgba(99, 102, 241, 0.4);
+    color: #FFFFFF;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-slate-900/30 backdrop-blur-2xl border border-slate-700/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.36)];
+  }
+
+  .glass-card {
+    @apply bg-slate-900/40 backdrop-blur-xl border border-slate-700/40 shadow-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.15)] hover:border-indigo-500/30 hover:bg-slate-800/50 hover:-translate-y-0.5;
+  }
+
+  .font-financial {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  
+  .text-profit {
+    @apply text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.3)];
+  }
+  
+  .text-loss {
+    @apply text-red-400 drop-shadow-[0_0_8px_rgba(248,113,113,0.3)];
+  }
+  
+  .text-warning {
+    @apply text-amber-400;
+  }
+  
+  .text-neutral {
+    @apply text-slate-400;
+  }
+
+  .focus-ring {
+    @apply ring-2 ring-indigo-500/30 border-indigo-400;
+  }
+}
+
+/* ==========================================================================
+   Clerk High-Density Institutional Theme Overrides
+   ========================================================================== */
+.cl-rootBox {
+  width: 100% !important;
+}
+
+.cl-cardBox {
+  width: 100% !important;
+  box-shadow: none !important;
+}
+
+.cl-card {
+  background-color: rgba(11, 19, 43, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(24px) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(99, 102, 241, 0.15) !important;
+  border-radius: 1.25rem !important;
+  padding: 2rem !important;
+  width: 100% !important;
+}
+
+.cl-headerTitle,
+.cl-headerSubtitle {
+  display: none !important;
+}
+
+.cl-socialButtonsBlockButton {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 0.75rem !important;
+  color: #e2e8f0 !important;
+  transition: all 0.2s ease !important;
+  padding: 0.65rem 1rem !important;
+}
+
+.cl-socialButtonsBlockButton:hover {
+  background-color: rgba(99, 102, 241, 0.15) !important;
+  border-color: rgba(99, 102, 241, 0.5) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+}
+
+.cl-socialButtonsBlockButtonText {
+  color: #e2e8f0 !important;
+  font-weight: 600 !important;
+  font-size: 0.8125rem !important;
+}
+
+.cl-dividerLine {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.cl-dividerText {
+  color: #64748b !important;
+  font-family: var(--font-mono), monospace !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.cl-formFieldLabel {
+  color: #94a3b8 !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  margin-bottom: 0.35rem !important;
+}
+
+.cl-formFieldInput {
+  background-color: #050a12 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 0.75rem !important;
+  color: #f8fafc !important;
+  font-size: 0.875rem !important;
+  padding: 0.75rem 1rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.cl-formFieldInput:focus {
+  border-color: #6366f1 !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+  outline: none !important;
+}
+
+.cl-formButtonPrimary {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35) !important;
+  border: none !important;
+  padding: 0.875rem 1rem !important;
+  font-size: 0.875rem !important;
+  letter-spacing: 0.025em !important;
+  transition: all 0.2s ease !important;
+}
+
+.cl-formButtonPrimary:hover {
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%) !important;
+  box-shadow: 0 12px 25px rgba(99, 102, 241, 0.5) !important;
+  transform: translateY(-1px) !important;
+}
+
+.cl-footer {
+  background: transparent !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+  padding-top: 1.25rem !important;
+  margin-top: 1rem !important;
+}
+
+.cl-footerActionText {
+  color: #94a3b8 !important;
+  font-size: 0.8125rem !important;
+}
+
+.cl-footerActionLink {
+  color: #818cf8 !important;
+  font-weight: 600 !important;
+  font-size: 0.8125rem !important;
+  transition: color 0.2s ease !important;
+}
+
+.cl-footerActionLink:hover {
+  color: #a5b4fc !important;
+  text-decoration: underline !important;
+}
+
+.cl-badge,
+.cl-developmentModeBadge {
+  display: none !important;
+}

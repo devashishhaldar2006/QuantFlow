@@ -2,9 +2,10 @@
 #include "analytics/Statistics.hpp"
 
 #include <cmath>
+#include <vector>
 
 PerformanceAnalyzer::PerformanceAnalyzer(
-    const Portfolio &portfolio)
+    const Portfolio& portfolio)
     : portfolio_(portfolio)
 {
 }
@@ -25,14 +26,14 @@ PerformanceReport PerformanceAnalyzer::analyze() const
             (report.netProfit / report.initialCapital) * 100.0;
     }
 
-    const auto &trades = portfolio_.getTrades();
+    const auto& trades = portfolio_.getTrades();
 
-    const Trade *buyTrade = nullptr;
+    const Trade* buyTrade = nullptr;
 
     double totalWins = 0.0;
     double totalLosses = 0.0;
 
-    for (const auto &trade : trades)
+    for (const auto& trade : trades)
     {
         if (trade.getSide() == TradeSide::Buy)
         {
@@ -101,6 +102,12 @@ PerformanceReport PerformanceAnalyzer::analyze() const
         report.profitFactor =
             totalWins / std::abs(totalLosses);
     }
+    else if (totalWins > 0.0)
+    {
+        // All wins, no losses: profit factor is infinite.
+        // Use -1.0 as a sentinel the frontend displays as "∞".
+        report.profitFactor = -1.0;
+    }
 
     if (completedTrades > 0)
     {
@@ -120,10 +127,22 @@ PerformanceReport PerformanceAnalyzer::analyze() const
     report.maximumDrawdown =
         maximumDrawdown();
 
-    const auto &equityCurve = portfolio_.getEquityCurve();
+    const auto& equityCurve =
+        portfolio_.getEquityCurve();
+
+    // Statistics operates only on equity values,
+    // so extract the values from EquityPoint.
+    std::vector<double> equityValues;
+
+    equityValues.reserve(equityCurve.size());
+
+    for (const auto& point : equityCurve)
+    {
+        equityValues.push_back(point.equity);
+    }
 
     const auto returns =
-        Statistics::calculateReturns(equityCurve);
+        Statistics::calculateReturns(equityValues);
 
     if (returns.size() >= 2)
     {
@@ -142,7 +161,6 @@ PerformanceReport PerformanceAnalyzer::analyze() const
             report.sharpeRatio =
                 Statistics::sharpeRatio(returns);
         }
-        // else: sharpeRatio stays at its default 0.0
     }
 
     return report;
@@ -150,7 +168,7 @@ PerformanceReport PerformanceAnalyzer::analyze() const
 
 double PerformanceAnalyzer::maximumDrawdown() const
 {
-    const auto &equityCurve =
+    const auto& equityCurve =
         portfolio_.getEquityCurve();
 
     if (equityCurve.empty())
@@ -158,11 +176,15 @@ double PerformanceAnalyzer::maximumDrawdown() const
         return 0.0;
     }
 
-    double peak = equityCurve.front();
+    double peak =
+        equityCurve.front().equity;
+
     double maxDrawdown = 0.0;
 
-    for (double equity : equityCurve)
+    for (const auto& point : equityCurve)
     {
+        const double equity = point.equity;
+
         if (equity > peak)
         {
             peak = equity;

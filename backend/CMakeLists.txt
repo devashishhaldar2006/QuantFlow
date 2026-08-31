@@ -118,15 +118,26 @@ target_link_libraries(QuantFlow
 
 add_executable(QuantFlowServer
     src/server_main.cpp
+
+    # API
     src/api/Server.cpp
+
+    # Controllers
     src/api/controllers/HealthController.cpp
     src/api/controllers/BacktestController.cpp
+    src/api/controllers/StrategyController.cpp
+
+    # DTOs
     src/api/dto/BacktestRequest.cpp
     src/api/dto/BacktestResult.cpp
+    src/api/dto/StrategyInfo.cpp
+
+    # Services
     src/api/services/BacktestService.cpp
+
+    # Validation
     src/api/validation/RequestValidator.cpp
 )
-
 target_link_libraries(QuantFlowServer
     PRIVATE
         QuantFlowLib

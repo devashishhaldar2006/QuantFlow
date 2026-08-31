@@ -1,6 +1,29 @@
 # QuantFlow
 
-A production-quality quantitative trading backtesting engine written in modern C++20, with a REST API server for programmatic access.
+A production-grade quantitative trading backtesting engine, built with modern C++20.
+QuantFlow lets traders and developers backtest trading strategies against historical market data, analyze performance with institutional-grade metrics, and simulate realistic trading conditions — via a CLI tool or a REST API for automated, programmatic strategy evaluation.
+
+---
+
+📌 Overview
+
+QuantFlow is designed for anyone who wants to validate a trading idea before risking real capital. It replays historical price data through a configurable strategy engine and reports back exactly how that strategy would have performed — including realistic frictions like slippage and commissions.
+
+Core capabilities:
+
+Historical strategy backtesting with realistic execution modeling
+
+Slippage & commission simulation
+
+Risk management via stop-loss / take-profit rules
+
+A library of built-in technical indicators
+
+A pluggable, factory-based strategy engine
+
+Both CLI and REST API workflows
+
+Use it as a local CLI tool for one-off research, or run the REST API server to integrate backtesting into a larger pipeline, dashboard, or automated research workflow.
 
 ---
 
@@ -33,6 +56,20 @@ QuantFlow/
 ```
 
 ---
+
+## Features
+Category  |  Details
+|--------|--------|
+|Execution modeling	|  Commission and slippage applied per trade for realistic P&L|
+|Risk management  |  Configurable stop-loss and take-profit thresholds|
+|Indicators	|  SMA, EMA, RSI, MACD, ATR, Bollinger Bands|
+|Strategies	 |  7 built-in strategies, extensible via factory pattern|
+|Interfaces  |	CLI binary + REST API server|
+|Performance analytics |  Return %, win rate, Sharpe ratio, and more|
+|Validation & security  |  Input validation, path traversal protection, error sanitization|
+|Testing |  197 unit and integration tests|
+
+----
 
 ## Prerequisites
 

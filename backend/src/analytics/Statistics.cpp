@@ -7,14 +7,12 @@
 std::vector<double> Statistics::calculateReturns(
     const std::vector<double> &equityCurve)
 {
-
     if (equityCurve.size() < 2)
     {
         return {};
     }
 
     std::vector<double> returns;
-
     returns.reserve(equityCurve.size() - 1);
 
     for (size_t i = 1; i < equityCurve.size(); ++i)
@@ -40,20 +38,19 @@ double Statistics::mean(const std::vector<double> &data)
 {
     if (data.empty())
     {
-        throw std::invalid_argument("Cannot calculate mean of empty data");
+        throw std::invalid_argument("Cannot calculate mean of empty vector");
     }
 
     double sum = std::accumulate(data.begin(), data.end(), 0.0);
-
     return sum / static_cast<double>(data.size());
 }
+
 double Statistics::standardDeviation(
     const std::vector<double> &data)
 {
     if (data.size() < 2)
     {
-        throw std::invalid_argument(
-            "At least two observations are required.");
+        throw std::invalid_argument("Need at least 2 data points for standard deviation");
     }
 
     const double meanValue = mean(data);
@@ -66,8 +63,7 @@ double Statistics::standardDeviation(
     }
 
     return std::sqrt(
-    sumSquaredDiff /
-    static_cast<double>(data.size() - 1));
+        sumSquaredDiff / static_cast<double>(data.size() - 1));
 }
 
 double Statistics::annualizedVolatility(
@@ -76,11 +72,14 @@ double Statistics::annualizedVolatility(
 {
     if (tradingDays <= 0)
     {
-        throw std::invalid_argument(
-            "Trading days must be positive.");
+        throw std::invalid_argument("Trading days must be positive.");
     }
-    const double stdDev = standardDeviation(returns);
+    if (returns.size() < 2)
+    {
+        throw std::invalid_argument("Need at least 2 returns for annualized volatility");
+    }
 
+    const double stdDev = standardDeviation(returns);
     return stdDev * std::sqrt(static_cast<double>(tradingDays));
 }
 
@@ -90,12 +89,14 @@ double Statistics::annualizedReturn(
 {
     if (tradingDays <= 0)
     {
-        throw std::invalid_argument(
-            "Trading days must be positive.");
+        throw std::invalid_argument("Trading days must be positive.");
+    }
+    if (returns.empty())
+    {
+        throw std::invalid_argument("Returns cannot be empty");
     }
 
     const double meanReturn = mean(returns);
-
     return meanReturn * static_cast<double>(tradingDays);
 }
 
@@ -106,8 +107,11 @@ double Statistics::sharpeRatio(
 {
     if (tradingDays <= 0)
     {
-        throw std::invalid_argument(
-            "Trading days must be positive.");
+        throw std::invalid_argument("Trading days must be positive.");
+    }
+    if (returns.size() < 2)
+    {
+        throw std::invalid_argument("Need at least 2 returns for Sharpe ratio");
     }
 
     const double annualizedReturnValue =
@@ -120,8 +124,7 @@ double Statistics::sharpeRatio(
 
     if (annualizedVolatilityValue < EPS)
     {
-        throw std::runtime_error(
-            "Annualized volatility is zero, cannot calculate Sharpe ratio.");
+        throw std::runtime_error("Sharpe ratio undefined for zero volatility");
     }
 
     return (annualizedReturnValue - riskFreeRate) /

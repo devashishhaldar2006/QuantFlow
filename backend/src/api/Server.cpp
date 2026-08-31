@@ -1,6 +1,8 @@
 #include "api/Server.hpp"
+
 #include "api/controllers/HealthController.hpp"
 #include "api/controllers/BacktestController.hpp"
+#include "api/controllers/StrategyController.hpp"
 
 #include <iostream>
 #include <stdexcept>
@@ -8,16 +10,16 @@
 void Server::registerRoutes(
     httplib::Server& server)
 {
-    // CORS — allow browser frontends to reach this API
     server.set_default_headers(
     {
-        {"Access-Control-Allow-Origin",  "*"},
+        {"Access-Control-Allow-Origin", "*"},
         {"Access-Control-Allow-Methods", "GET, POST, OPTIONS"},
         {"Access-Control-Allow-Headers", "Content-Type"}
     });
 
     HealthController::registerRoutes(server);
     BacktestController::registerRoutes(server);
+    StrategyController::registerRoutes(server);
 }
 
 void Server::start(int port)
