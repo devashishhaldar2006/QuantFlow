@@ -1,3 +1,4 @@
+import Link from "next/link";
 import AnimatedPage, {
   AnimatedItem,
 } from "@/components/common/AnimatedPage";
@@ -108,19 +109,7 @@ export default async function Dashboard() {
     }
   }
 
-  const realLatest = backtests[0] ?? null;
-
-  const useMock = !realLatest || realLatest.totalTrades === 0;
-
-  const displayBacktest = useMock ? mockBacktest : realLatest;
-
-  const performanceData = displayBacktest.equityCurve;
-
-  const displayRecent = backtests.length > 0 ? backtests.slice(0, 5) : [mockBacktest];
-
-  const positive = displayBacktest.totalReturnPercent >= 0;
-
-  const TrendIcon = positive ? TrendingUp : TrendingDown;
+  const latestBacktest = backtests[0] ?? null;
 
   return (
     <AnimatedPage>
@@ -134,73 +123,92 @@ export default async function Dashboard() {
         }}
       />
 
-      <div className="space-y-5">
-        {/* Hero: Portfolio Value + Chart */}
-        <AnimatedItem>
-          <div className="glass-panel rounded-2xl overflow-hidden">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 pt-6 pb-4 border-b border-white/5">
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-1.5">
-                  Portfolio Value{" "}
-                  {useMock && (
-                    <span className="text-amber-500/60 ml-1">
-                      · Demo Mode
-                    </span>
-                  )}
+      {!latestBacktest ? (
+        <div className="space-y-6">
+          <AnimatedItem>
+            <div className="glass-panel flex flex-col items-center justify-center py-20 px-4 rounded-2xl text-center space-y-4">
+              <div className="flex size-14 items-center justify-center rounded-2xl border border-indigo-500/20 bg-indigo-500/10 text-indigo-400 shadow-inner">
+                <LayoutDashboard className="size-7" />
+              </div>
+              <div className="space-y-1 max-w-md">
+                <h2 className="text-xl font-bold text-slate-100">Welcome to QuantFlow Terminal</h2>
+                <p className="text-xs text-slate-400">
+                  Execute your first high-frequency or multi-asset strategy against real historical market data to start tracking institutional analytics.
                 </p>
+              </div>
+              <Link
+                href="/backtests/new"
+                className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-xs font-semibold text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-500 transition-all"
+              >
+                Launch First Backtest
+              </Link>
+            </div>
+          </AnimatedItem>
+        </div>
+      ) : (
+        <div className="space-y-5">
+          {/* Hero: Portfolio Value + Chart */}
+          <AnimatedItem>
+            <div className="glass-panel rounded-2xl overflow-hidden">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 pt-6 pb-4 border-b border-white/5">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-1.5">
+                    Latest Strategy Final Equity
+                  </p>
 
-                <div className="flex items-baseline gap-3 flex-wrap">
-                  <span className="font-mono text-3xl font-bold tracking-tight text-slate-100">
-                    {formatCurrency(displayBacktest.finalEquity)}
-                  </span>
+                  <div className="flex items-baseline gap-3 flex-wrap">
+                    <span className="font-mono text-3xl font-bold tracking-tight text-slate-100">
+                      {formatCurrency(latestBacktest.finalEquity)}
+                    </span>
 
-                  <div
-                    className={`flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                      positive
-                        ? "bg-emerald-500/10 text-emerald-400"
-                        : "bg-red-500/10 text-red-400"
-                    }`}
-                  >
-                    <TrendIcon className="size-3" />
-                    {positive ? "+" : ""}
-                    {formatCurrency(displayBacktest.netProfit)}
-                    {" ("}
-                    {formatSignedPercent(displayBacktest.totalReturnPercent)}
-                    {")"}
+                    <div
+                      className={`flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                        latestBacktest.totalReturnPercent >= 0
+                          ? "bg-emerald-500/10 text-emerald-400"
+                          : "bg-red-500/10 text-red-400"
+                      }`}
+                    >
+                      {latestBacktest.totalReturnPercent >= 0 ? <TrendingUp className="size-3" /> : <TrendingDown className="size-3" />}
+                      {latestBacktest.totalReturnPercent >= 0 ? "+" : ""}
+                      {formatCurrency(latestBacktest.netProfit)}
+                      {" ("}
+                      {formatSignedPercent(latestBacktest.totalReturnPercent)}
+                      {")"}
+                    </div>
                   </div>
+                </div>
+
+                <div className="text-xs text-slate-400 font-mono">
+                  Strategy:{" "}
+                  <span className="text-indigo-400 font-semibold">
+                    {latestBacktest.strategy}
+                  </span>
                 </div>
               </div>
 
-              <div className="text-xs text-slate-600 font-mono">
-                Strategy:{" "}
-                <span className="text-slate-400">
-                  {displayBacktest.strategy}
-                </span>
+              <div className="h-[300px] px-1 pt-2 pb-1">
+                <PerformanceChart data={latestBacktest.equityCurve} />
               </div>
             </div>
+          </AnimatedItem>
 
-            <div className="h-[300px] px-1 pt-2 pb-1">
-              <PerformanceChart data={performanceData} />
+          {/* Metrics */}
+          <AnimatedItem>
+            <div className="glass-panel rounded-2xl px-6 py-5">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-5">
+                Key Metrics
+              </p>
+
+              <MetricsGrid result={latestBacktest} />
             </div>
-          </div>
-        </AnimatedItem>
+          </AnimatedItem>
 
-        {/* Metrics */}
-        <AnimatedItem>
-          <div className="glass-panel rounded-2xl px-6 py-5">
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-5">
-              Key Metrics
-            </p>
-
-            <MetricsGrid result={displayBacktest} />
-          </div>
-        </AnimatedItem>
-
-        {/* Recent Backtests */}
-        <AnimatedItem>
-          <RecentBacktests backtests={displayRecent} />
-        </AnimatedItem>
-      </div>
+          {/* Recent Backtests */}
+          <AnimatedItem>
+            <RecentBacktests backtests={backtests.slice(0, 5)} />
+          </AnimatedItem>
+        </div>
+      )}
     </AnimatedPage>
   );
 }

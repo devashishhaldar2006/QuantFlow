@@ -46,12 +46,13 @@ export function DatasetCard({ dataset, onDelete, onSyncSuccess }: DatasetCardPro
     setSyncing(true);
     setSyncMessage("");
     try {
+      const cleanName = dataset.name.replace(/\s*\(Live Sync\)/g, "").trim();
       const res = await fetch("/api/datasets/sync", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           symbol: dataset.symbol,
-          name: `${dataset.name} (Live Sync)`,
+          name: cleanName,
           assetClass: dataset.assetClass,
           timeframe: dataset.timeframe,
           provider: dataset.assetClass === "CRYPTO" ? "BINANCE" : "YAHOO",
@@ -205,18 +206,6 @@ export function DatasetCard({ dataset, onDelete, onSyncSuccess }: DatasetCardPro
           )}
           <span className="hidden sm:inline text-[11px]">Sync</span>
         </Button>
-
-        {!isSystem && onDelete && (
-          <Button
-            size="sm"
-            variant="ghost"
-            className="text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 px-2.5 transition-colors"
-            onClick={() => onDelete(dataset.id)}
-            title="Delete dataset"
-          >
-            <Trash2 className="w-4 h-4" />
-          </Button>
-        )}
       </div>
     </div>
   );

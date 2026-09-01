@@ -23,49 +23,60 @@ export class DatasetService {
    * Get all user datasets + system library items formatted consistently.
    */
   static async getUserDatasets(userId: string): Promise<Dataset[]> {
-    const userDbDatasets = await prisma.dataset.findMany({
-      where: { userId },
-      orderBy: { createdAt: "desc" },
-    });
+    let userDatasets: Dataset[] = [];
+    try {
+      const userDbDatasets = await prisma.dataset.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+      });
 
-    const userDatasets: Dataset[] = userDbDatasets.map((d) => ({
-      id: d.id,
-      name: d.name,
-      symbol: d.symbol,
-      assetClass: d.assetClass as AssetClass,
-      timeframe: d.timeframe as Timeframe,
-      source: d.source as DatasetSource,
-      filePath: d.filePath,
-      fileSize: d.fileSize,
-      rowCount: d.rowCount,
-      startDate: d.startDate ? d.startDate.toISOString() : null,
-      endDate: d.endDate ? d.endDate.toISOString() : null,
-      version: d.version,
-      status: d.status as any,
-      columnMap: (d.columnMap as unknown as ColumnMapping) || null,
-      validation: (d.validation as unknown as ValidationReport) || null,
-      createdAt: d.createdAt.toISOString(),
-      updatedAt: d.updatedAt.toISOString(),
-    }));
+      userDatasets = userDbDatasets.map((d) => ({
+        id: d.id,
+        name: d.name,
+        symbol: d.symbol,
+        assetClass: d.assetClass as AssetClass,
+        timeframe: d.timeframe as Timeframe,
+        source: d.source as DatasetSource,
+        filePath: d.filePath,
+        fileSize: d.fileSize,
+        rowCount: d.rowCount,
+        startDate: d.startDate ? d.startDate.toISOString() : null,
+        endDate: d.endDate ? d.endDate.toISOString() : null,
+        version: d.version,
+        status: d.status as any,
+        columnMap: (d.columnMap as unknown as ColumnMapping) || null,
+        validation: (d.validation as unknown as ValidationReport) || null,
+        createdAt: d.createdAt.toISOString(),
+        updatedAt: d.updatedAt.toISOString(),
+      }));
+    } catch (err) {
+      console.error("getUserDatasets error:", err);
+    }
 
-    // System library converted to virtual Datasets
-    const systemDatasets: Dataset[] = SYSTEM_DATASET_LIBRARY.map((item) => ({
-      id: item.id,
-      name: item.name,
-      symbol: item.symbol,
-      assetClass: item.assetClass,
-      timeframe: item.timeframe,
-      source: "SYSTEM_LIBRARY",
-      filePath: item.samplePath,
-      fileSize: item.rowCount * 64, // Approximate payload
-      rowCount: item.rowCount,
-      startDate: item.startDate,
-      endDate: item.endDate,
-      version: "v1.0.0",
-      status: "VALIDATED",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }));
+    // Deduplicate system library datasets: If user has synced a live copy of a symbol & timeframe, don't return the stale static placeholder
+    const userKeys = new Set(
+      userDatasets.map((d) => `${d.symbol.toUpperCase()}_${d.timeframe}`)
+    );
+
+    const systemDatasets: Dataset[] = SYSTEM_DATASET_LIBRARY
+      .filter((item) => !userKeys.has(`${item.symbol.toUpperCase()}_${item.timeframe}`))
+      .map((item) => ({
+        id: item.id,
+        name: item.name,
+        symbol: item.symbol,
+        assetClass: item.assetClass,
+        timeframe: item.timeframe,
+        source: "SYSTEM_LIBRARY",
+        filePath: item.samplePath,
+        fileSize: item.rowCount * 64, // Approximate payload
+        rowCount: item.rowCount,
+        startDate: item.startDate,
+        endDate: item.endDate,
+        version: "v1.0.0",
+        status: "VALIDATED",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }));
 
     return [...userDatasets, ...systemDatasets];
   }
@@ -124,28 +135,56 @@ export class DatasetService {
   }
 
   /**
-   * Save a newly created dataset record.
+   * Create or update dataset record (Upsert based on symbol and timeframe).
    */
-  static async createDataset(userId: string, input: CreateDatasetInput): Promise<Dataset> {
-    const d = await prisma.dataset.create({
-      data: {
+  static async upsertDataset(userId: string, input: CreateDatasetInput): Promise<Dataset> {
+    const existing = await prisma.dataset.findFirst({
+      where: {
         userId,
-        name: input.name,
         symbol: input.symbol,
-        assetClass: input.assetClass,
         timeframe: input.timeframe,
-        source: input.source || "CSV_UPLOAD",
-        filePath: input.filePath,
-        fileSize: input.fileSize,
-        rowCount: input.rowCount,
-        startDate: input.startDate ? new Date(input.startDate) : null,
-        endDate: input.endDate ? new Date(input.endDate) : null,
-        version: input.version || "v1.0.0",
-        status: input.validation?.isValid ? "VALIDATED" : "UNVALIDATED",
-        columnMap: input.columnMap ? (input.columnMap as any) : undefined,
-        validation: input.validation ? (input.validation as any) : undefined,
       },
     });
+
+    let d;
+    if (existing) {
+      d = await prisma.dataset.update({
+        where: { id: existing.id },
+        data: {
+          name: input.name,
+          assetClass: input.assetClass,
+          filePath: input.filePath,
+          fileSize: input.fileSize,
+          rowCount: input.rowCount,
+          startDate: input.startDate ? new Date(input.startDate) : null,
+          endDate: input.endDate ? new Date(input.endDate) : null,
+          version: input.version || "v1.0.0",
+          status: input.validation?.isValid ? "VALIDATED" : "UNVALIDATED",
+          columnMap: input.columnMap ? (input.columnMap as any) : undefined,
+          validation: input.validation ? (input.validation as any) : undefined,
+        },
+      });
+    } else {
+      d = await prisma.dataset.create({
+        data: {
+          userId,
+          name: input.name,
+          symbol: input.symbol,
+          assetClass: input.assetClass,
+          timeframe: input.timeframe,
+          source: input.source || "CSV_UPLOAD",
+          filePath: input.filePath,
+          fileSize: input.fileSize,
+          rowCount: input.rowCount,
+          startDate: input.startDate ? new Date(input.startDate) : null,
+          endDate: input.endDate ? new Date(input.endDate) : null,
+          version: input.version || "v1.0.0",
+          status: input.validation?.isValid ? "VALIDATED" : "UNVALIDATED",
+          columnMap: input.columnMap ? (input.columnMap as any) : undefined,
+          validation: input.validation ? (input.validation as any) : undefined,
+        },
+      });
+    }
 
     return {
       id: d.id,
@@ -166,6 +205,13 @@ export class DatasetService {
       createdAt: d.createdAt.toISOString(),
       updatedAt: d.updatedAt.toISOString(),
     };
+  }
+
+  /**
+   * Save a newly created dataset record.
+   */
+  static async createDataset(userId: string, input: CreateDatasetInput): Promise<Dataset> {
+    return this.upsertDataset(userId, input);
   }
 
   /**

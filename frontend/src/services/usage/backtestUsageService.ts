@@ -21,26 +21,36 @@ export async function getBacktestUsage(
 ) {
   const date = getUtcDay();
 
-  const usage = await prisma.backtestUsage.findUnique({
-    where: {
-      userId_date: {
-        userId,
-        date,
+  try {
+    const usage = await prisma.backtestUsage.findUnique({
+      where: {
+        userId_date: {
+          userId,
+          date,
+        },
       },
-    },
-  });
+    });
 
-  const used = usage?.count ?? 0;
+    const used = usage?.count ?? 0;
 
-  return {
-    used,
-    limit: FREE_BACKTEST_LIMIT,
-    remaining: Math.max(
-      0,
-      FREE_BACKTEST_LIMIT - used,
-    ),
-    date,
-  };
+    return {
+      used,
+      limit: FREE_BACKTEST_LIMIT,
+      remaining: Math.max(
+        0,
+        FREE_BACKTEST_LIMIT - used,
+      ),
+      date,
+    };
+  } catch (err) {
+    console.error("getBacktestUsage error:", err);
+    return {
+      used: 0,
+      limit: FREE_BACKTEST_LIMIT,
+      remaining: FREE_BACKTEST_LIMIT,
+      date,
+    };
+  }
 }
 
 export async function consumeFreeBacktest(

@@ -22,14 +22,18 @@ export default function AboutContent() {
   const { isSignedIn } = useUser();
 
   return (
-    <div className="relative min-h-screen bg-[#030712] text-slate-100 selection:bg-indigo-500 selection:text-white overflow-hidden">
+    <div className={`relative ${isSignedIn ? 'w-full' : 'min-h-screen bg-[#030712]'} text-slate-100 selection:bg-indigo-500 selection:text-white overflow-hidden`}>
       {/* Dynamic Ambient Background Glows */}
-      <div className="absolute inset-0 bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:32px_32px] opacity-20 pointer-events-none" />
-      <motion.div
-        animate={{ opacity: [0.1, 0.18, 0.1] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -top-40 left-1/2 -translate-x-1/2 size-[650px] rounded-full bg-indigo-900/20 blur-[160px] pointer-events-none"
-      />
+      {!isSignedIn && (
+        <>
+          <div className="absolute inset-0 bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:32px_32px] opacity-20 pointer-events-none" />
+          <motion.div
+            animate={{ opacity: [0.1, 0.18, 0.1] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -top-40 left-1/2 -translate-x-1/2 size-[650px] rounded-full bg-indigo-900/20 blur-[160px] pointer-events-none"
+          />
+        </>
+      )}
 
       {/* Navigation Header (Only displayed when logged out; when logged in, TopNavbar & Sidebar render) */}
       {!isSignedIn && (

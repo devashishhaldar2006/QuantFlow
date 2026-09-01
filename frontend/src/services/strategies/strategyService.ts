@@ -65,15 +65,21 @@ function toDefinition(
 export async function getStrategies(): Promise<
   StrategyWithPerformance[]
 > {
-  const [engineStrategies, backtests] =
-    await Promise.all([
-      quantEngine.getStrategies(),
+  let engineStrategies: QuantEngineStrategy[] = [];
+  let backtests: {
+    strategy: string;
+    totalReturnPercent: number;
+    sharpeRatio: number;
+    maximumDrawdown: number;
+  }[] = [];
 
+  try {
+    const results = await Promise.all([
+      quantEngine.getStrategies(),
       prisma.backtest.findMany({
         where: {
           status: "completed",
         },
-
         select: {
           strategy: true,
           totalReturnPercent: true,
@@ -82,6 +88,16 @@ export async function getStrategies(): Promise<
         },
       }),
     ]);
+    engineStrategies = results[0];
+    backtests = results[1];
+  } catch (err) {
+    console.error("getStrategies error:", err);
+    try {
+      engineStrategies = await quantEngine.getStrategies();
+    } catch {
+      engineStrategies = [];
+    }
+  }
 
   return engineStrategies.map((engineStrategy) => {
     const strategy = toDefinition(engineStrategy);

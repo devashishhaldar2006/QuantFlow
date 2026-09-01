@@ -3,6 +3,7 @@ import path from "path";
 import { AssetClass, Timeframe } from "@/features/data/types";
 import { DatasetService } from "./datasetService";
 import { R2StorageService } from "@/lib/r2Storage";
+import { NotificationService } from "@/services/notifications/notificationService";
 
 export interface SyncDatasetInput {
   symbol: string;
@@ -52,7 +53,10 @@ export class MarketDataService {
    */
   private static async fetchFromBinance(symbol: string, timeframe: Timeframe): Promise<string[][]> {
     const mappedSymbol = this.mapProviderSymbol(symbol, "CRYPTO");
-    const formattedSymbol = mappedSymbol.replace("/", "").replace("-", "").toUpperCase();
+    let formattedSymbol = mappedSymbol.replace("/", "").replace("-", "").toUpperCase();
+    if (!formattedSymbol.endsWith("USDT") && !formattedSymbol.endsWith("USD") && !formattedSymbol.endsWith("BTC")) {
+      formattedSymbol = `${formattedSymbol}USDT`;
+    }
     const intervalMap: Record<Timeframe, string> = {
       "1m": "1m",
       "5m": "5m",
@@ -66,10 +70,14 @@ export class MarketDataService {
 
     const res = await fetch(url, { headers: { "User-Agent": "QuantFlow-Terminal/1.0" } });
     if (!res.ok) {
-      throw new Error(`Binance API error (${res.status}): Symbol ${formattedSymbol} not found`);
+      throw new Error(`Binance API returned ${res.status}: Ticker '${formattedSymbol}' not found or unavailable`);
     }
 
     const rawData = await res.json();
+    if (!Array.isArray(rawData) || rawData.length === 0) {
+      throw new Error(`No candle data returned from Binance for '${formattedSymbol}'`);
+    }
+
     const rows: string[][] = [["Timestamp", "Open", "High", "Low", "Close", "Volume"]];
 
     for (const candle of rawData) {
@@ -90,7 +98,12 @@ export class MarketDataService {
    * Fetch historical candles from Yahoo Finance (Equity / Index / Forex)
    */
   private static async fetchFromYahoo(symbol: string, timeframe: Timeframe, assetClass: AssetClass): Promise<string[][]> {
-    const targetSymbol = this.mapProviderSymbol(symbol, assetClass);
+    let targetSymbol = this.mapProviderSymbol(symbol, assetClass);
+    // Add default .NS suffix for Indian symbols if not present and symbol looks like an Indian stock (e.g. RELIANCE, TCS, INFY)
+    if (assetClass === "EQUITY" && !targetSymbol.includes(".") && !targetSymbol.includes("^") && !targetSymbol.includes("=")) {
+      // Keep as targetSymbol (e.g. AAPL, MSFT, TSLA) or fallback
+    }
+
     const rangeMap: Record<Timeframe, { range: string; interval: string }> = {
       "1m": { range: "7d", interval: "1m" },
       "5m": { range: "60d", interval: "5m" },
@@ -107,18 +120,19 @@ export class MarketDataService {
 
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) QuantFlow/1.0",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "application/json",
       },
     });
 
     if (!res.ok) {
-      throw new Error(`Yahoo Finance API error (${res.status}): Symbol '${targetSymbol}' not found`);
+      throw new Error(`Yahoo Finance API returned ${res.status}: Symbol '${targetSymbol}' not found or rate-limited`);
     }
 
     const data = await res.json();
     const result = data?.chart?.result?.[0];
     if (!result || !result.timestamp || !result.indicators?.quote?.[0]) {
-      throw new Error("No market data candles returned for symbol");
+      throw new Error(`No historical candles found for symbol '${targetSymbol}'`);
     }
 
     const timestamps: number[] = result.timestamp;
@@ -131,17 +145,17 @@ export class MarketDataService {
       const high = quote.high[i];
       const low = quote.low[i];
       const close = quote.close[i];
-      const volume = quote.volume[i] ?? 1000;
+      const volume = quote.volume?.[i] ?? 1000;
 
       if (open != null && high != null && low != null && close != null) {
         const ts = new Date(timestamps[i] * 1000).toISOString().replace("T", " ").substring(0, 16);
         rows.push([
           ts,
-          open.toFixed(4),
-          high.toFixed(4),
-          low.toFixed(4),
-          close.toFixed(4),
-          Math.round(volume).toString(),
+          Number(open).toFixed(4),
+          Number(high).toFixed(4),
+          Number(low).toFixed(4),
+          Number(close).toFixed(4),
+          Math.round(Number(volume)).toString(),
         ]);
       }
     }
@@ -217,6 +231,19 @@ export class MarketDataService {
           },
         },
       });
+
+      // Automatically trigger a persistent database notification
+      try {
+        await NotificationService.createNotification({
+          userId,
+          title: `Market Feed Synced: ${cleanSymbol}`,
+          message: `Ingested ${rowCount.toLocaleString()} historical candles (${input.timeframe}) from ${input.provider || "API Provider"}.`,
+          type: "sync",
+          link: "/data",
+        });
+      } catch (notifErr) {
+        console.error("Failed to create sync notification:", notifErr);
+      }
 
       return {
         success: true,

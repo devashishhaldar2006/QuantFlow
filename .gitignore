@@ -13,12 +13,10 @@ lib/
 .env
 .env.local
 
-# Dynamic Uploads and Market Datasets
+# Dynamic Uploads, Datasets & CSV files
 uploads/
 public/uploads/
 backend/uploads/
-backend/data/market_*.csv
-backend/data/sample_*.csv
-backend/data/uploads/
+backend/data/
 *.csv
-!backend/data/sample.csv
+**/*.csv

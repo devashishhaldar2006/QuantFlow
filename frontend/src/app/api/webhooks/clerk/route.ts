@@ -1,5 +1,6 @@
 import { verifyWebhook } from "@clerk/backend/webhooks";
 import { prisma } from "@/lib/prisma";
+import { sendWelcomeEmail } from "@/services/email/emailService";
 
 export async function POST(request: Request) {
   try {
@@ -52,6 +53,12 @@ export async function POST(request: Request) {
         console.log(
           `QuantFlow user created: ${event.data.id}`,
         );
+
+        // Send Welcome Email via Resend
+        await sendWelcomeEmail({
+          to: email,
+          name,
+        });
 
         break;
       }

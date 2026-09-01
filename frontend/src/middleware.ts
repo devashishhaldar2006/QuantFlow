@@ -23,8 +23,8 @@ const isAuthRoute = createRouteMatcher([
 export default clerkMiddleware(async (auth, req) => {
   const { userId } = await auth();
 
-  // If user is already logged in and navigates to sign-in or sign-up, redirect to dashboard
-  if (userId && isAuthRoute(req)) {
+  // If user is already logged in and navigates to landing page (/), sign-in or sign-up, redirect to dashboard
+  if (userId && (isAuthRoute(req) || req.nextUrl.pathname === "/")) {
     const dashboardUrl = new URL("/dashboard", req.url);
     return NextResponse.redirect(dashboardUrl);
   }

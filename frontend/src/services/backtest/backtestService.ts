@@ -1,6 +1,7 @@
 import type { BacktestConfig } from "@/features/backtest/schema";
 import { HttpQuantEngineClient } from "../quantEngine/HttpQuantEngineClient";
 import { prisma } from "@/lib/prisma";
+import { NotificationService } from "@/services/notifications/notificationService";
 import type {
   BacktestStatus,
   BacktestSummary,
@@ -78,6 +79,20 @@ export async function createBacktest(
 
     return createdBacktest;
   });
+
+  // Automatically trigger a persistent database notification
+  try {
+    const returnSign = result.totalReturnPercent >= 0 ? "+" : "";
+    await NotificationService.createNotification({
+      userId,
+      title: `Backtest Completed: ${config.strategy}`,
+      message: `Finished with ${returnSign}${result.totalReturnPercent.toFixed(2)}% Return (Sharpe: ${result.sharpeRatio.toFixed(2)}, Max DD: ${result.maximumDrawdown.toFixed(2)}%).`,
+      type: "backtest",
+      link: `/backtests/${backtest.id}`,
+    });
+  } catch (notifErr) {
+    console.error("Failed to create backtest completion notification:", notifErr);
+  }
 
   return {
     ...result,

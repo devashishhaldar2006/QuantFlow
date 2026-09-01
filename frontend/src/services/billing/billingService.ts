@@ -186,23 +186,25 @@ export async function activateProSubscription(
   razorpayPaymentId?: string,
   razorpaySignature?: string,
 ) {
-  if (razorpayPaymentId && razorpaySubscriptionId && razorpaySignature) {
-    const keySecret = getRequiredEnv("RAZORPAY_KEY_SECRET");
-    const payload = `${razorpayPaymentId}|${razorpaySubscriptionId}`;
-    const expectedSignature = crypto
-      .createHmac("sha256", keySecret)
-      .update(payload)
-      .digest("hex");
+  if (!razorpayPaymentId || !razorpaySubscriptionId || !razorpaySignature) {
+    throw new Error("Missing required payment verification parameters.");
+  }
 
-    const expectedBuf = Buffer.from(expectedSignature, "utf8");
-    const receivedBuf = Buffer.from(razorpaySignature, "utf8");
+  const keySecret = getRequiredEnv("RAZORPAY_KEY_SECRET");
+  const payload = `${razorpayPaymentId}|${razorpaySubscriptionId}`;
+  const expectedSignature = crypto
+    .createHmac("sha256", keySecret)
+    .update(payload)
+    .digest("hex");
 
-    if (
-      expectedBuf.length !== receivedBuf.length ||
-      !crypto.timingSafeEqual(expectedBuf, receivedBuf)
-    ) {
-      throw new Error("Invalid Razorpay payment signature.");
-    }
+  const expectedBuf = Buffer.from(expectedSignature, "utf8");
+  const receivedBuf = Buffer.from(razorpaySignature, "utf8");
+
+  if (
+    expectedBuf.length !== receivedBuf.length ||
+    !crypto.timingSafeEqual(expectedBuf, receivedBuf)
+  ) {
+    throw new Error("Invalid Razorpay payment signature.");
   }
 
   let sub = razorpaySubscriptionId

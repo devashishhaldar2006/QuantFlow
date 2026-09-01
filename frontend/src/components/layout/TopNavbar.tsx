@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { Bell, Search, Menu, Zap } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { UserButton, useAuth } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 import { navigation } from "../navigation/navigation";
 import { GlobalSearchModal } from "../navigation/GlobalSearchModal";
+import { NotificationPopover } from "./NotificationPopover";
 
 type TopNavbarProps = {
   isCollapsed: boolean;
@@ -98,23 +99,7 @@ export default function TopNavbar({ isCollapsed, setIsCollapsed }: TopNavbarProp
 
           {/* Right Section */}
           <div className="ml-auto flex items-center gap-3 shrink-0">
-            <button
-              type="button"
-              className="relative flex size-8 items-center justify-center rounded-lg text-slate-400 transition-all hover:bg-white/5 hover:text-slate-200"
-              aria-label="Notifications"
-            >
-              <Bell className="size-4" />
-              <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-indigo-500 animate-ping" />
-              <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-indigo-500" />
-            </button>
-
-            <UserButton
-              appearance={{
-                elements: {
-                  userButtonAvatarBox: "size-8 rounded-full border border-indigo-500/30",
-                },
-              }}
-            />
+            <NotificationPopover />
           </div>
         </div>
       </header>

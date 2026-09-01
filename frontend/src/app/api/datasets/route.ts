@@ -30,6 +30,11 @@ export async function POST(request: Request) {
       return Response.json({ error: "Missing required fields (name, symbol, filePath)" }, { status: 400 });
     }
 
+    // Reject path traversal attempts
+    if (typeof filePath !== "string" || filePath.includes("..") || filePath.startsWith("/") || filePath.startsWith("\\")) {
+      return Response.json({ error: "Invalid file path format" }, { status: 400 });
+    }
+
     const dataset = await DatasetService.createDataset(user.id, {
       name,
       symbol,

@@ -36,16 +36,20 @@ export function DatasetLibrary({ onNewDatasetClick }: DatasetLibraryProps) {
   const [activeFilter, setActiveFilter] = useState<"ALL" | "USER" | "SYSTEM">("ALL");
 
   const allDatasets = useMemo<Dataset[]>(() => {
-    const apiSystemIds = new Set(
-      apiDatasets.filter((d) => d.source === "SYSTEM_LIBRARY").map((d) => d.id)
+    // Collect user synced datasets
+    const userSymbolsTimeframes = new Set(
+      apiDatasets.map((d) => `${d.symbol.toUpperCase()}_${d.timeframe}`)
     );
+
+    // Filter out default static system entries if user has a synced live version of the same symbol and timeframe
     const dedupedSystemDatasets = CLIENT_SYSTEM_DATASETS.filter(
-      (d) => !apiSystemIds.has(d.id)
+      (d) => !userSymbolsTimeframes.has(`${d.symbol.toUpperCase()}_${d.timeframe}`)
     );
+
     return [...apiDatasets, ...dedupedSystemDatasets];
   }, [apiDatasets]);
 
-  const userCount = allDatasets.filter((d) => d.source === "CSV_UPLOAD").length;
+  const userCount = allDatasets.filter((d) => d.source !== "SYSTEM_LIBRARY").length;
   const systemCount = allDatasets.filter((d) => d.source === "SYSTEM_LIBRARY").length;
 
   const handleDelete = async (id: string) => {
@@ -158,6 +162,7 @@ export function DatasetLibrary({ onNewDatasetClick }: DatasetLibraryProps) {
             <DatasetCard
               key={dataset.id}
               dataset={dataset}
+              onSyncSuccess={refresh}
               onDelete={dataset.source !== "SYSTEM_LIBRARY" ? handleDelete : undefined}
             />
           ))}

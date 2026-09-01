@@ -17,8 +17,17 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     let csvContent = rawText;
 
     if (!csvContent && filePath) {
+      // Validate that filePath is safe and does not traverse parent directories
+      if (typeof filePath !== "string" || filePath.includes("..") || filePath.startsWith("/") || filePath.startsWith("\\")) {
+        return Response.json({ error: "Invalid or unauthorized file path." }, { status: 400 });
+      }
+
       const fullPath = join(process.cwd(), "..", "backend", filePath);
-      csvContent = await readFile(fullPath, "utf-8");
+      try {
+        csvContent = await readFile(fullPath, "utf-8");
+      } catch {
+        return Response.json({ error: "Dataset file not found or inaccessible." }, { status: 404 });
+      }
     }
 
     if (!csvContent) {
