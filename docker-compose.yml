@@ -1,0 +1,64 @@
+services:
+  # ── C++ Quant Engine REST API Server ───────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: quantflow-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend/data:/app/data
+      - ./backend/config:/app/config
+    networks:
+      - quantflow-network
+
+  # ── PostgreSQL Database ───────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: quantflow-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-quantflow_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Devashish@196}
+      POSTGRES_DB: ${POSTGRES_DB:-quantflow}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U quantflow_app -d quantflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - quantflow-network
+
+  # ── Next.js Frontend Web Application ──────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: quantflow-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./frontend/.env
+    environment:
+      - QUANT_ENGINE_URL=http://backend:8080
+    depends_on:
+      - backend
+    volumes:
+      - ./backend/data:/backend/data
+    networks:
+      - quantflow-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  quantflow-network:
+    driver: bridge

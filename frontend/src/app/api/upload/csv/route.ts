@@ -2,6 +2,7 @@ import { getCurrentUser } from "@/services/auth/currentUser";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import { existsSync } from "fs";
+import { R2StorageService } from "@/lib/r2Storage";
 
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
 const ALLOWED_MIME_TYPES = ["text/csv", "text/plain", "application/csv", "application/vnd.ms-excel"];
@@ -109,16 +110,13 @@ export async function POST(request: Request) {
       );
     }
 
-    // ── Save file ────────────────────────────────────────────────────────
-    if (!existsSync(UPLOAD_DIR)) {
-      await mkdir(UPLOAD_DIR, { recursive: true });
-    }
-
-    const destPath = join(UPLOAD_DIR, uniqueName);
-    await writeFile(destPath, Buffer.from(buffer));
-
-    // Return relative path from backend working directory
-    const relativePath = `data/uploads/${uniqueName}`;
+    // ── Save file to Cloudflare R2 / S3 (with local fallback) ────────────
+    const r2Key = `uploads/${uniqueName}`;
+    const relativePath = await R2StorageService.uploadFile({
+      key: r2Key,
+      content: Buffer.from(buffer),
+      contentType: "text/csv",
+    });
 
     return Response.json(
       {

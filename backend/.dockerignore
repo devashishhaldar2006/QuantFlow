@@ -1,0 +1,6 @@
+build/
+bin/
+lib/
+.git
+.vscode/
+.idea/

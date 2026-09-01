@@ -46,6 +46,7 @@ export default function ProfileHeader({
               alt={displayName}
               width={80}
               height={80}
+              unoptimized
               className="size-20 rounded-2xl border-2 border-indigo-500/30 object-cover shadow-xl"
             />
           ) : (

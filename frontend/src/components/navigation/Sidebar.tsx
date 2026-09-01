@@ -83,21 +83,23 @@ export default function Sidebar({ isCollapsed }: SidebarProps) {
               <span className="font-medium text-emerald-400">Engine Online</span>
             </div>
 
-            <Link
-              href="/profile"
-              className="mt-1 flex items-center justify-between gap-2 rounded-xl border border-white/5 bg-white/[0.03] p-2 hover:bg-white/[0.08] hover:border-indigo-500/30 transition-all group"
-            >
-              <div className="flex min-w-0 flex-1 items-center gap-2.5">
+            <div className="mt-1 flex items-center justify-between gap-1 rounded-xl border border-white/5 bg-white/[0.03] p-1.5 hover:border-indigo-500/30 transition-all">
+              <Link
+                href="/profile"
+                className="flex min-w-0 flex-1 items-center gap-2 p-1 hover:bg-white/[0.05] rounded-lg transition-colors group"
+                title="Go to Account & Usage Profile"
+              >
                 {user?.imageUrl ? (
                   <Image
                     src={user.imageUrl}
                     alt={displayName}
-                    width={32}
-                    height={32}
-                    className="size-8 shrink-0 rounded-full object-cover border border-indigo-500/30"
+                    width={30}
+                    height={30}
+                    unoptimized
+                    className="size-7.5 shrink-0 rounded-full object-cover border border-indigo-500/30"
                   />
                 ) : (
-                  <div className="size-8 shrink-0 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white shadow-md">
+                  <div className="size-7.5 shrink-0 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white shadow-md">
                     {initials || "QF"}
                   </div>
                 )}
@@ -105,8 +107,18 @@ export default function Sidebar({ isCollapsed }: SidebarProps) {
                   <p className="truncate text-xs font-semibold text-slate-200 group-hover:text-indigo-300 transition-colors">{displayName}</p>
                   <p className="truncate text-[10px] text-slate-400">{displayEmail || "View Profile"}</p>
                 </div>
-              </div>
-            </Link>
+              </Link>
+
+              <SignOutButton redirectUrl="/sign-in">
+                <button
+                  type="button"
+                  title="Sign Out of QuantFlow"
+                  className="flex size-7 shrink-0 items-center justify-center rounded-lg text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-colors"
+                >
+                  <LogOut className="size-3.5" />
+                </button>
+              </SignOutButton>
+            </div>
           </div>
         ) : (
           <div className="flex flex-col items-center gap-3 w-full">
@@ -126,6 +138,7 @@ export default function Sidebar({ isCollapsed }: SidebarProps) {
                   alt={displayName}
                   width={32}
                   height={32}
+                  unoptimized
                   className="size-8 shrink-0 rounded-full object-cover border border-slate-600 hover:border-indigo-400 transition-colors"
                 />
               ) : (

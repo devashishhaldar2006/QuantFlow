@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, Suspense } from "react";
 
 import AnimatedPage, {
   AnimatedItem,
@@ -46,9 +46,11 @@ export default function NewBacktest() {
 
         <AnimatedItem>
           <div className="w-full rounded-2xl glass-panel p-6">
-            <BacktestForm
-              onBacktestCreated={handleBacktestCreated}
-            />
+            <Suspense fallback={<div className="h-64 flex items-center justify-center text-xs text-muted-foreground">Loading backtest form...</div>}>
+              <BacktestForm
+                onBacktestCreated={handleBacktestCreated}
+              />
+            </Suspense>
           </div>
         </AnimatedItem>
       </div>

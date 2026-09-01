@@ -20,33 +20,34 @@ export type AnalyticsSummary = {
 };
 
 export async function getAnalyticsSummary(): Promise<AnalyticsSummary> {
-  const backtests = await prisma.backtest.findMany({
-    where: {
-      status: "completed",
-    },
-    select: {
-      strategy: true,
-      totalReturnPercent: true,
-      sharpeRatio: true,
-      maximumDrawdown: true,
-      totalTrades: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  try {
+    const backtests = await prisma.backtest.findMany({
+      where: {
+        status: "completed",
+      },
+      select: {
+        strategy: true,
+        totalReturnPercent: true,
+        sharpeRatio: true,
+        maximumDrawdown: true,
+        totalTrades: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
-  if (backtests.length === 0) {
-    return {
-      totalBacktests: 0,
-      averageReturn: 0,
-      bestReturn: 0,
-      averageSharpe: 0,
-      bestSharpe: 0,
-      bestMaxDrawdown: 0,
-      strategies: [],
-    };
-  }
+    if (!backtests || backtests.length === 0) {
+      return {
+        totalBacktests: 0,
+        averageReturn: 0,
+        bestReturn: 0,
+        averageSharpe: 0,
+        bestSharpe: 0,
+        bestMaxDrawdown: 0,
+        strategies: [],
+      };
+    }
 
   const totalReturn = backtests.reduce(
     (sum, backtest) => sum + backtest.totalReturnPercent,
@@ -132,13 +133,25 @@ export async function getAnalyticsSummary(): Promise<AnalyticsSummary> {
     (a, b) => b.averageReturn - a.averageReturn,
   );
 
-  return {
-    totalBacktests: backtests.length,
-    averageReturn: totalReturn / backtests.length,
-    bestReturn,
-    averageSharpe: totalSharpe / backtests.length,
-    bestSharpe,
-    bestMaxDrawdown,
-    strategies,
-  };
+    return {
+      totalBacktests: backtests.length,
+      averageReturn: totalReturn / backtests.length,
+      bestReturn,
+      averageSharpe: totalSharpe / backtests.length,
+      bestSharpe,
+      bestMaxDrawdown,
+      strategies,
+    };
+  } catch (err) {
+    console.error("getAnalyticsSummary error:", err);
+    return {
+      totalBacktests: 0,
+      averageReturn: 0,
+      bestReturn: 0,
+      averageSharpe: 0,
+      bestSharpe: 0,
+      bestMaxDrawdown: 0,
+      strategies: [],
+    };
+  }
 }

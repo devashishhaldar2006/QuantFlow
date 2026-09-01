@@ -39,12 +39,12 @@ export default function ProfileAccountCard({
           <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">
             Primary Email
           </span>
-          <div className="flex items-center justify-between">
-            <p className="font-mono text-xs text-slate-300 truncate max-w-[200px]">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="font-mono text-xs text-slate-300 break-all">
               {primaryEmail}
             </p>
             {isEmailVerified && (
-              <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400">
+              <span className="inline-flex shrink-0 items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md">
                 <CheckCircle2 className="size-3" />
                 Verified
               </span>
@@ -54,11 +54,12 @@ export default function ProfileAccountCard({
 
         <div className="space-y-1">
           <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">
-            Clerk User ID
+            Account ID
           </span>
-          <p className="font-mono text-[11px] text-slate-400 truncate bg-white/[0.03] p-2 rounded-lg border border-white/5">
-            {userId}
-          </p>
+          <div className="flex items-center justify-between bg-white/[0.03] p-2.5 rounded-xl border border-white/5 font-mono text-xs text-slate-400">
+            <span>{userId ? `QF-${userId.slice(-8).toUpperCase()}` : "Active"}</span>
+            <span className="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">Standard</span>
+          </div>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, FlaskConical, CalendarDays, ChevronRight } from "lucide-react";
+import { ArrowLeft, FlaskConical, CalendarDays, ChevronRight, FileDown, Printer } from "lucide-react";
 
 import type { PersistedBacktest } from "../types";
 import AnimatedPage, { AnimatedItem } from "@/components/common/AnimatedPage";
@@ -10,6 +10,7 @@ import BacktestRiskMetrics from "./BacktestRiskMetrics";
 import BacktestTradeHistory from "./BacktestTradeHistory";
 import BacktestTradeStats from "./BacktestTradeStats";
 import { formatDate } from "@/lib/format";
+import { exportBacktestCSV, exportBacktestPDF } from "@/lib/exportUtils";
 
 type BacktestDetailsProps = {
   backtest: PersistedBacktest;
@@ -62,17 +63,37 @@ export default function BacktestDetails({ backtest }: BacktestDetailsProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => exportBacktestCSV(backtest)}
+              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900/80 px-3 text-xs font-semibold text-slate-300 transition hover:border-slate-600 hover:bg-slate-800 hover:text-white shadow-sm"
+              title="Export Full Backtest Data to CSV"
+            >
+              <FileDown className="size-3.5 text-emerald-400" />
+              Export CSV
+            </button>
+
+            <button
+              type="button"
+              onClick={() => exportBacktestPDF(backtest)}
+              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-indigo-500/30 bg-indigo-600/10 px-3 text-xs font-semibold text-indigo-300 transition hover:bg-indigo-600/20 hover:border-indigo-500/50 shadow-sm"
+              title="Print / Download PDF Tear Sheet"
+            >
+              <Printer className="size-3.5 text-indigo-400" />
+              Export PDF
+            </button>
+
             <Link
               href="/backtests"
-              className="inline-flex h-9 items-center gap-1.5 rounded-md border border-slate-700 bg-slate-900 px-3.5 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-slate-100"
+              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3.5 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-slate-100"
             >
               <ArrowLeft className="size-3.5" />
               All Backtests
             </Link>
             <Link
               href="/backtests/new"
-              className="inline-flex h-9 items-center gap-1.5 rounded-md bg-indigo-500 px-3.5 text-sm font-medium text-white transition-colors hover:bg-indigo-600"
+              className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-indigo-500 px-3.5 text-xs font-medium text-white transition-colors hover:bg-indigo-600 shadow-md shadow-indigo-500/20"
             >
               Run Again
             </Link>

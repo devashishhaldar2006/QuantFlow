@@ -1,0 +1,62 @@
+name: QuantFlow CI/CD
+
+on:
+  push:
+    branches: [ "main", "dev" ]
+  pull_request:
+    branches: [ "main", "dev" ]
+
+jobs:
+  validate-frontend:
+    name: Build & Validate Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Generate Prisma Client
+        working-directory: ./frontend
+        run: npx prisma generate
+
+      - name: Next.js Production Build Test
+        working-directory: ./frontend
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+          NODE_ENV: production
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres?sslmode=no-verify"
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_placeholder"
+          CLERK_SECRET_KEY: "sk_test_placeholder"
+        run: npm run build
+
+  validate-backend:
+    name: Build & Test C++ Quant Engine
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install C++ Build Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ nlohmann-json3-dev libasio-dev libboost-all-dev libssl-dev
+
+      - name: Configure CMake
+        working-directory: ./backend
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Compile C++ Engine
+        working-directory: ./backend
+        run: cmake --build build --config Release -j$(nproc)
