@@ -51,7 +51,7 @@ jobs:
       - name: Install C++ Build Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ libasio-dev libboost-all-dev libssl-dev
+          sudo apt-get install -y cmake g++ nlohmann-json3-dev libasio-dev libboost-all-dev libssl-dev
 
       - name: Configure CMake
         working-directory: ./backend
