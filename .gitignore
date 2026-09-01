@@ -2,7 +2,11 @@
 build/
 /build
 bin/
-lib/
+/bin
+/lib/
+backend/build/
+frontend/.next/
+frontend/src/generated/
 
 # OS and IDE files
 .DS_Store
