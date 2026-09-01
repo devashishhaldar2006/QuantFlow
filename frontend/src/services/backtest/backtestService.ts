@@ -88,42 +88,47 @@ export async function createBacktest(
 export async function getBacktests(
   userId: string,
 ): Promise<PersistedBacktest[]> {
-  const backtests = await prisma.backtest.findMany({
-    where: {
-      userId,
-    },
+  try {
+    const backtests = await prisma.backtest.findMany({
+      where: {
+        userId,
+      },
 
-    orderBy: {
-      createdAt: "desc",
-    },
+      orderBy: {
+        createdAt: "desc",
+      },
 
-    include: {
-      trades: true,
-      equityCurve: true,
-    },
-  });
+      include: {
+        trades: true,
+        equityCurve: true,
+      },
+    });
 
-  return backtests.map((backtest) => ({
-    ...backtest,
+    return backtests.map((backtest) => ({
+      ...backtest,
 
-    status: backtest.status as PersistedBacktest["status"],
+      status: backtest.status as PersistedBacktest["status"],
 
-    createdAt: backtest.createdAt.toISOString(),
+      createdAt: backtest.createdAt.toISOString(),
 
-    trades: backtest.trades.map((trade) => ({
-      timestamp: trade.timestamp.toISOString(),
-      side: trade.side as "BUY" | "SELL",
-      quantity: trade.quantity,
-      executionPrice: trade.executionPrice,
-      commission: trade.commission,
-      cashFlow: trade.cashFlow,
-    })),
+      trades: backtest.trades.map((trade) => ({
+        timestamp: trade.timestamp.toISOString(),
+        side: trade.side as "BUY" | "SELL",
+        quantity: trade.quantity,
+        executionPrice: trade.executionPrice,
+        commission: trade.commission,
+        cashFlow: trade.cashFlow,
+      })),
 
-    equityCurve: backtest.equityCurve.map((point) => ({
-      timestamp: point.timestamp.toISOString(),
-      equity: point.equity,
-    })),
-  }));
+      equityCurve: backtest.equityCurve.map((point) => ({
+        timestamp: point.timestamp.toISOString(),
+        equity: point.equity,
+      })),
+    }));
+  } catch (error) {
+    console.error("Error fetching backtests for user:", error);
+    return [];
+  }
 }
 
 export async function getBacktestById(
@@ -177,72 +182,83 @@ export async function getBacktestSummaries(
   status?: BacktestStatus,
   strategy?: string,
 ): Promise<BacktestSummaryPage> {
-  const where = {
-    userId,
+  try {
+    const where = {
+      userId,
 
-    ...(search
-      ? {
-          strategy: {
-            contains: search,
-            mode: "insensitive" as const,
-          },
-        }
-      : {}),
+      ...(search
+        ? {
+            strategy: {
+              contains: search,
+              mode: "insensitive" as const,
+            },
+          }
+        : {}),
 
-    ...(status
-      ? {
-          status,
-        }
-      : {}),
+      ...(status
+        ? {
+            status,
+          }
+        : {}),
 
-    ...(strategy
-      ? {
-          strategy,
-        }
-      : {}),
-  };
+      ...(strategy
+        ? {
+            strategy,
+          }
+        : {}),
+    };
 
-  const [backtests, total] = await prisma.$transaction([
-    prisma.backtest.findMany({
-      where,
+    const [backtests, total] = await prisma.$transaction([
+      prisma.backtest.findMany({
+        where,
 
-      orderBy: {
-        createdAt: "desc",
-      },
+        orderBy: {
+          createdAt: "desc",
+        },
 
-      skip: (page - 1) * pageSize,
-      take: pageSize,
+        skip: (page - 1) * pageSize,
+        take: pageSize,
 
-      select: {
-        id: true,
-        strategy: true,
-        initialCapital: true,
-        totalReturnPercent: true,
-        sharpeRatio: true,
-        maximumDrawdown: true,
-        status: true,
-        createdAt: true,
-      },
-    }),
+        select: {
+          id: true,
+          strategy: true,
+          initialCapital: true,
+          totalReturnPercent: true,
+          sharpeRatio: true,
+          maximumDrawdown: true,
+          status: true,
+          createdAt: true,
+        },
+      }),
 
-    prisma.backtest.count({
-      where,
-    }),
-  ]);
+      prisma.backtest.count({
+        where,
+      }),
+    ]);
 
-  const data = backtests.map((backtest) => ({
-    ...backtest,
+    const data = backtests.map((backtest) => ({
+      ...backtest,
 
-    status: backtest.status as BacktestSummary["status"],
+      status: backtest.status as BacktestSummary["status"],
 
-    createdAt: backtest.createdAt.toISOString(),
-  }));
+      createdAt: backtest.createdAt.toISOString(),
+    }));
 
-  return {
-    data,
-    total,
-    page,
-    pageSize,
-    totalPages: Math.ceil(total / pageSize),
-  };
+    return {
+      data,
+      total,
+      page,
+      pageSize,
+      totalPages: Math.ceil(total / pageSize) || 1,
+    };
+  } catch (error) {
+    console.error("Error fetching backtest summaries:", error);
+    return {
+      data: [],
+      total: 0,
+      page,
+      pageSize,
+      totalPages: 1,
+    };
+  }
 }

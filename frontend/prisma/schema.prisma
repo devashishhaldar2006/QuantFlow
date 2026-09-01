@@ -25,6 +25,7 @@ model User {
 
   plan Plan @default(FREE)
 
+  datasets  Dataset[]
   backtests Backtest[]
   usage     BacktestUsage[]
 
@@ -32,6 +33,41 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum DatasetStatus {
+  UNVALIDATED
+  VALIDATED
+  ERROR
+}
+
+model Dataset {
+  id          String   @id @default(cuid())
+  name        String
+  symbol      String
+  assetClass  String   @default("EQUITY") // EQUITY, CRYPTO, FOREX, INDEX
+  timeframe   String   @default("1d")     // 1m, 5m, 15m, 1h, 1d
+  source      String   @default("CSV_UPLOAD") // CSV_UPLOAD, SYSTEM_LIBRARY, API_PROVIDER
+  filePath    String
+  fileSize    Int
+  rowCount    Int      @default(0)
+  startDate   DateTime?
+  endDate     DateTime?
+  version     String   @default("v1.0.0")
+  status      DatasetStatus @default(VALIDATED)
+  columnMap   Json?    // Serialized mapping e.g. { timestamp: "date", open: "open", ... }
+  validation  Json?    // Detailed validation report
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  backtests   Backtest[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([userId, symbol])
 }
 
 model Backtest {
@@ -61,6 +97,9 @@ model Backtest {
   sharpeRatio          Float
 
   status String
+
+  datasetId String?
+  dataset   Dataset? @relation(fields: [datasetId], references: [id], onDelete: SetNull)
 
   userId String
   user   User   @relation(fields: [userId], references: [id])

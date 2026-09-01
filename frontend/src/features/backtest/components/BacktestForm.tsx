@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import {
   ArrowRight,
@@ -32,6 +32,7 @@ import {
 
 import type { QuantEngineStrategy } from "@/services/quantEngine/types";
 import { HttpQuantEngineClient } from "@/services/quantEngine/HttpQuantEngineClient";
+import { SYSTEM_DATASET_LIBRARY } from "@/features/data/constants";
 
 const quantEngine = new HttpQuantEngineClient(
   process.env.NEXT_PUBLIC_QUANT_ENGINE_URL ??
@@ -183,6 +184,7 @@ function NumberField({
   );
 }
 
+
 type BacktestFormProps = {
   onBacktestCreated?: () => void;
 };
@@ -191,6 +193,8 @@ export default function BacktestForm({
   onBacktestCreated,
 }: BacktestFormProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const datasetId = searchParams.get("datasetId");
 
   const [form, setForm] =
     useState<BacktestConfig>(initialForm);
@@ -217,6 +221,48 @@ export default function BacktestForm({
 
   const [uploadedFile, setUploadedFile] =
     useState<{ name: string; rows: number } | null>(null);
+
+  useEffect(() => {
+    async function loadDataset() {
+      if (!datasetId) return;
+
+      // 1. Instant resolution for system library datasets
+      const sysItem = SYSTEM_DATASET_LIBRARY.find((item) => item.id === datasetId);
+      if (sysItem) {
+        setForm((current) => ({
+          ...current,
+          csvFile: sysItem.samplePath,
+        }));
+        setUploadedFile({
+          name: `${sysItem.name} (${sysItem.symbol})`,
+          rows: sysItem.rowCount,
+        });
+        return;
+      }
+
+      // 2. Resolution for user uploaded datasets from API
+      try {
+        const res = await fetch(`/api/datasets/${datasetId}`);
+        if (res.ok) {
+          const body = await res.json();
+          const dataset = body.dataset || body;
+          if (dataset && dataset.filePath) {
+            setForm((current) => ({
+              ...current,
+              csvFile: dataset.filePath,
+            }));
+            setUploadedFile({
+              name: `${dataset.name} (${dataset.symbol})`,
+              rows: dataset.rowCount,
+            });
+          }
+        }
+      } catch (e) {
+        console.error("Failed to load dataset details:", e);
+      }
+    }
+    loadDataset();
+  }, [datasetId]);
 
   useEffect(() => {
     async function loadStrategies() {
@@ -536,22 +582,17 @@ export default function BacktestForm({
               </p>
             )}
 
-            {/* Manual path override */}
-            <div className="mt-2">
-              <p className="mb-1 text-[10px] text-slate-600">Or specify path manually:</p>
-              <div className="flex items-center gap-2">
-                <FileText className="size-3.5 shrink-0 text-slate-600" />
-                <FieldInput
-                  id="csvFile"
-                  placeholder="data/sample.csv"
-                  value={form.csvFile}
-                  disabled={limitReached}
-                  onChange={(e) => {
-                    updateField("csvFile", e.target.value);
-                    setUploadedFile(null);
-                  }}
-                />
-              </div>
+            {/* Quick link to Data Platform */}
+            <div className="mt-3 flex items-center justify-between text-xs text-slate-400 bg-slate-950/40 p-2.5 rounded-lg border border-slate-800/80">
+              <span className="text-[11px] text-slate-400">Want to use system benchmarks or saved datasets?</span>
+              <button
+                type="button"
+                onClick={() => router.push("/data")}
+                aria-label="Browse Dataset Library"
+                className="text-[11px] text-indigo-400 hover:text-indigo-300 font-medium hover:underline flex items-center gap-1 shrink-0"
+              >
+                Browse Library →
+              </button>
             </div>
           </div>
         </div>

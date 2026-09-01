@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1123.0",
     "@base-ui/react": "^1.7.0",
     "@clerk/backend": "^3.16.13",
     "@clerk/nextjs": "^7.8.3",

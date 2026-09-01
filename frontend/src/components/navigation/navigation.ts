@@ -8,6 +8,7 @@ import {
   CreditCard,
   User,
   Info,
+  Database,
 } from "lucide-react";
 
 import type { LucideIcon } from "lucide-react";
@@ -34,6 +35,13 @@ export const navigation: NavItem[] = [
     section: "Trading",
     icon: FlaskConical,
     shortcut: "⌘B",
+  },
+  {
+    label: "Data",
+    href: "/data",
+    section: "Trading",
+    icon: Database,
+    shortcut: "⌘E",
   },
   {
     label: "Strategies",

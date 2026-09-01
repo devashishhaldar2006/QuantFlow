@@ -1,0 +1,24 @@
+# Build and binary output directories
+build/
+/build
+bin/
+lib/
+
+# OS and IDE files
+.DS_Store
+.vscode/
+.idea/
+
+# Environment and local files
+.env
+.env.local
+
+# Dynamic Uploads and Market Datasets
+uploads/
+public/uploads/
+backend/uploads/
+backend/data/market_*.csv
+backend/data/sample_*.csv
+backend/data/uploads/
+*.csv
+!backend/data/sample.csv
