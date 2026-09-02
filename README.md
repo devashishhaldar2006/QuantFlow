@@ -1,330 +1,224 @@
-# QuantFlow
+# QuantFlow — Institutional Quantitative Backtesting Terminal & C++ Engine
 
-A production-grade quantitative trading backtesting engine, built with modern C++20.
-QuantFlow lets traders and developers backtest trading strategies against historical market data, analyze performance with institutional-grade metrics, and simulate realistic trading conditions — via a CLI tool or a REST API for automated, programmatic strategy evaluation.
+<p align="center">
+  <img src="frontend/public/logo.svg" alt="QuantFlow Logo" width="90" height="90" />
+</p>
 
----
+<p align="center">
+  <strong>An institutional-grade algorithmic backtesting platform with sub-millisecond compiled C++20 execution, multi-agent AI (LangGraph + Mistral Small 2506), real-time portfolio risk analytics, and cloud dataset virtualization.</strong>
+</p>
 
-📌 Overview
-
-QuantFlow is designed for anyone who wants to validate a trading idea before risking real capital. It replays historical price data through a configurable strategy engine and reports back exactly how that strategy would have performed — including realistic frictions like slippage and commissions.
-
-Core capabilities:
-
-Historical strategy backtesting with realistic execution modeling
-
-Slippage & commission simulation
-
-Risk management via stop-loss / take-profit rules
-
-A library of built-in technical indicators
-
-A pluggable, factory-based strategy engine
-
-Both CLI and REST API workflows
-
-Use it as a local CLI tool for one-off research, or run the REST API server to integrate backtesting into a larger pipeline, dashboard, or automated research workflow.
+<p align="center">
+  <a href="https://quantflow-jade.vercel.app"><img src="https://img.shields.io/badge/Live%20Terminal-quantflow.is--a.dev-blue?style=for-the-badge&logo=vercel" alt="Live Demo" /></a>
+  <a href="https://github.com/devashishhaldar2006/QuantFlow"><img src="https://img.shields.io/badge/Engine-Modern%20C%2B%2B20-00599C?style=for-the-badge&logo=c%2B%2B" alt="C++20" /></a>
+  <a href="https://github.com/devashishhaldar2006/QuantFlow/actions"><img src="https://img.shields.io/badge/CI%2FCD-Automated%20EC2%20%2B%20GHCR-2088FF?style=for-the-badge&logo=github-actions" alt="CI/CD" /></a>
+  <a href="https://github.com/devashishhaldar2006/QuantFlow/blob/master/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License" /></a>
+</p>
 
 ---
 
-## Project Structure
+## 🏛️ Executive Architecture Overview
+
+QuantFlow is engineered with strict separation of concerns, decoupling ultra-high-throughput deterministic numerical processing from modern web orchestration:
+
+```
+                                  +-------------------------------------------------------+
+                                  |                     CLIENT LAYER                      |
+                                  |   Next.js 16 (Turbopack) + React 19 + Framer Motion   |
+                                  +-------------------------------------------------------+
+                                                              |
+                                           HTTPS / REST       |  OAuth2 / JWT Sessions
+                                                              v
++-------------------------------------------------------------------------------------------------------------------------+
+|                                                   ORCHESTRATION & AGENTIC AI                                            |
+|                                                                                                                         |
+|   +--------------------------------------------+                   +------------------------------------------------+   |
+|   |         Agentic AI (LangGraph)             |                   |            Platform Infrastructure             |   |
+|   | • Strategy Architect (Hypothesis ➔ Config) |                   | • Clerk Authentication & RBAC Tiering          |   |
+|   | • Risk Officer (Outlier & Regime Audit)    |                   | • Razorpay Payment Verification (HMAC SHA-256) |   |
+|   | • Model: Mistral Small 2506 (Serverless)   |                   | • Prisma ORM + Supabase PostgreSQL Cloud       |   |
+|   +--------------------------------------------+                   | • S3 Object Storage (Tick Dataset Syncing)     |   |
+|                                                                    +------------------------------------------------+   |
++-------------------------------------------------------------------------------------------------------------------------+
+                                                              |
+                                           Internal REST API  |  Binary Stream / JSON DTOs
+                                                              v
++-------------------------------------------------------------------------------------------------------------------------+
+|                                           HIGH-PERFORMANCE C++20 QUANT ENGINE                                           |
+|                                       Deployed on AWS EC2 (t3.micro, ap-south-1)                                        |
+|                                                                                                                         |
+|   +-------------------+    +---------------------+    +--------------------+    +-----------------------------------+   |
+|   |  Market Data IO   | ➔ | Technical Indicators| ➔ | Strategy Factory   | ➔  | Backtesting Engine                |   |
+|   |  Fast CSV Parser  |    | SMA, EMA, RSI, MACD |    | 7 Execution Models |    | Intrabar Slips & Conservative SL  |   |
+|   +-------------------+    +---------------------+    +--------------------+    +-----------------------------------+   |
+|                                                                                           |                             |
+|                                                                                           v                             |
+|                                                                                 +-----------------------------------+   |
+|                                                                                 | Risk Management & Analytics Core  |   |
+|                                                                                 | Sharpe, Sortino, Drawdown, Equity |   |
+|                                                                                 +-----------------------------------+   |
++-------------------------------------------------------------------------------------------------------------------------+
+```
+
+---
+
+## ✨ Key Platform Highlights
+
+### 1. ⚡ Compiled C++20 Execution Engine
+- **Deterministic Throughput**: Evaluates tick-level and minute OHLCV price series at **1.48M+ ticks/sec** with sub-millisecond execution times.
+- **Realistic Friction Simulation**: Models user-defined broker commission structures and proportional tick-level bid/ask slippage.
+- **Intrabar Risk Execution**: Enforces conservative execution assumptions — when both Stop-Loss and Take-Profit bounds are breached within the same candle, the Stop-Loss executes first to eliminate survivorship and over-optimism bias.
+- **7 Built-in Strategy Paradigms**:
+  1. `MovingAverageCross` (Dual SMA crossover)
+  2. `EMACross` (Exponential moving average breakout)
+  3. `RSI` (Mean-reversion momentum)
+  4. `MACD` (Moving Average Convergence Divergence)
+  5. `Bollinger` (Volatility envelope breakout/mean-reversion)
+  6. `ATRFilter` (Average True Range volatility expansion)
+  7. `CompositeMultiIndicator` (Confluence model)
+
+### 2. 🤖 Autonomous Multi-Agent AI (LangGraph + Mistral Small 2506)
+- **Strategy Architect Agent**:
+  - Translates unstructured trader hypotheses into strict mathematical parameter matrices.
+  - Formally validates engine boundaries (`fast < slow`, `oversold < overbought`).
+  - Autonomously executes trial backtests via tool calling, reflects on the Sharpe and Drawdown metrics, and performs iterative parameter recalibrations before outputting an Executive Strategy Brief.
+- **Risk Officer Committee Agent**:
+  - Performs post-backtest anomaly audits detecting curve-fitting and single-trade profit concentration.
+  - Stress-tests strategy performance against simulated macroeconomic shocks (flash crashes, volatility whipsaws, liquidity squeezes).
+  - Synthesizes an Institutional Health Score (0–100) and mandates concrete portfolio risk limits.
+
+### 3. 🛡️ Production Security & Cloud Data Fabric
+- **Full Cloud S3 Virtualization**: Datasets are stored and streamed securely from Supabase S3 / Cloudflare R2 object storage with local filesystem fallbacks.
+- **Zero Secrets Drift**: All sensitive cryptographic keys (Razorpay HMAC secrets, S3 access keys, Clerk tokens, Mistral keys) are shielded behind server-side Next.js route handlers.
+- **Dynamic SEO & Compliance**: Automated `sitemap.xml`, `robots.txt`, and OpenGraph metadata formatted for institutional presentation.
+
+---
+
+## 📁 Repository Structure
 
 ```
 QuantFlow/
-├── backend/               # C++ engine + REST API server
+├── backend/                  # Compiled Modern C++20 Core
+│   ├── CMakeLists.txt        # Modular CMake build specification
+│   ├── Dockerfile            # Multi-stage release build (Alpine + Ninja)
+│   ├── include/              # Public engine header interfaces
+│   │   ├── analytics/        # Performance, drawdown, and statistical metrics
+│   │   ├── api/              # Crow-based HTTP controllers & JSON DTOs
+│   │   ├── engine/           # Backtest iteration loop & event dispatch
+│   │   ├── execution/        # Order book fill simulation & slippage
+│   │   ├── indicators/       # SMA, EMA, RSI, MACD, ATR, Bollinger
+│   │   ├── io/               # Streaming CSV parser & synthetic candle fallback
+│   │   ├── market/           # OHLCV Market candle abstractions
+│   │   ├── portfolio/        # Cash balance, position accounting, and margin
+│   │   ├── risk/             # Stop-loss, take-profit, and position sizing
+│   │   └── strategy/         # Strategy interface and polymorphic factory
+│   ├── src/                  # Concrete implementation source files
+│   └── tests/                # Comprehensive GoogleTest suite (197 unit & integration tests)
+│
+├── frontend/                 # Institutional Quantitative Workstation
 │   ├── src/
-│   │   ├── api/           # HTTP server, controllers, services, DTOs, validation
-│   │   ├── analytics/     # Performance metrics & statistics
-│   │   ├── config/        # JSON config parser
-│   │   ├── engine/        # Backtest engine & market iterator
-│   │   ├── execution/     # Order execution engine
-│   │   ├── indicators/    # SMA, EMA, RSI, MACD, ATR, Bollinger Bands
-│   │   ├── io/            # CSV parser
-│   │   ├── market/        # Candle & market data types
-│   │   ├── portfolio/     # Portfolio state management
-│   │   ├── risk/          # Position sizer & risk manager
-│   │   ├── strategy/      # Strategy implementations & factory
-│   │   ├── trade/         # Trade record
-│   │   ├── main.cpp       # CLI entry point
-│   │   └── server_main.cpp # REST API server entry point
-│   ├── include/           # Public headers (mirrors src/ layout)
-│   ├── tests/             # GoogleTest unit & integration tests (197 tests)
-│   ├── data/              # Sample CSV market data
-│   ├── config/            # Default config.json
-│   └── CMakeLists.txt
-└── frontend/              # (in progress)
+│   │   ├── app/              # Next.js 16 App Router (37 static & dynamic routes)
+│   │   │   ├── api/          # Serverless route handlers (AI agents, billing, datasets)
+│   │   │   ├── backtests/    # Backtest configuration, lists, and tear-sheets
+│   │   │   ├── analytics/    # Portfolio return and alpha attribution charts
+│   │   │   └── data/         # Cloud dataset manager & CSV inspector
+│   │   ├── features/         # Feature-first modular UI domains
+│   │   │   ├── ai/           # Strategy Architect Copilot & Risk Officer Card
+│   │   │   ├── auth/         # Institutional Clerk auth screens & OAuth callbacks
+│   │   │   └── backtest/     # Backtest form, interactive tables, and charts
+│   │   └── services/         # Decoupled backend clients and data adapters
+│   │       ├── ai/           # LangGraph workflows and Mistral AI client
+│   │       ├── backtest/     # Backtest execution and summary queries
+│   │       └── quantEngine/  # Resilient HTTP client for C++ engine on EC2
+│   ├── prisma/               # PostgreSQL schema definitions & migrations
+│   └── public/               # Institutional vector assets & brand logo
+│
+├── .github/workflows/        # Automated CI/CD Pipelines
+│   └── ci.yml                # Automated test verification, GHCR build, & AWS EC2 CD
+└── docker-compose.yml        # Local full-stack cluster orchestration
 ```
 
 ---
 
-## Features
-Category  |  Details
-|--------|--------|
-|Execution modeling	|  Commission and slippage applied per trade for realistic P&L|
-|Risk management  |  Configurable stop-loss and take-profit thresholds|
-|Indicators	|  SMA, EMA, RSI, MACD, ATR, Bollinger Bands|
-|Strategies	 |  7 built-in strategies, extensible via factory pattern|
-|Interfaces  |	CLI binary + REST API server|
-|Performance analytics |  Return %, win rate, Sharpe ratio, and more|
-|Validation & security  |  Input validation, path traversal protection, error sanitization|
-|Testing |  197 unit and integration tests|
+## 🚀 Quickstart Guide
 
-----
+### Prerequisites
+- **C++ Compiler**: GCC 11+ or Clang 13+ (supporting C++20)
+- **CMake**: Version 3.20 or newer
+- **Node.js**: v20.x or newer & npm
+- **Docker & Docker Compose** (optional for containerized deployment)
 
-## Prerequisites
+### 1. Running the Full Stack with Docker Compose
+To launch the entire platform (PostgreSQL database, compiled C++ engine, and Next.js frontend) locally:
+```bash
+docker compose up --build
+```
+- Frontend: `http://localhost:3000`
+- C++ Engine API: `http://localhost:8080`
 
-| Tool | Minimum Version |
-|------|----------------|
-| CMake | 3.20 |
-| GCC or Clang | C++20 support |
-| nlohmann/json | system-installed (`apt install nlohmann-json3-dev`) |
-| Internet access (first build only) | Downloads GoogleTest & cpp-httplib via FetchContent |
+### 2. Manual Native Setup
 
----
-
-## Building
-
+#### Backend (C++ Engine)
 ```bash
 cd backend
-
-# Configure (Debug build by default — includes ASan + UBSan)
-cmake -B build -S .
-
-# Build everything
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j$(nproc)
+
+# Run full test suite (197 tests)
+ctest --test-dir build --output-on-failure
+
+# Launch the REST API server on port 8080
+./build/quantflow_server --port 8080
 ```
 
-This produces three binaries in `backend/build/`:
+#### Frontend (Next.js Terminal)
+```bash
+cd frontend
+npm install
 
-| Binary | Purpose |
-|--------|---------|
-| `QuantFlow` | CLI backtesting tool (reads `config/config.json`) |
-| `QuantFlowServer` | REST API server (listens on port 8080) |
-| `tests/QuantFlowTests` | Full unit + integration test suite |
+# Configure environment variables
+cp .env.example .env
+
+# Generate Prisma database client & run migrations
+npx prisma generate
+npx prisma db push
+
+# Start development workstation
+npm run dev
+```
 
 ---
 
-## Running the CLI Tool
+## ⚙️ Environment Configuration
+
+Refer to [`frontend/.env.example`](frontend/.env.example) for the complete reference:
+
+| Key | Description | Required |
+| :--- | :--- | :--- |
+| `DATABASE_URL` | PostgreSQL connection string (Supabase / local) | **Yes** |
+| `QUANT_ENGINE_URL` | URL of the C++ Quant Engine (`http://3.6.68.152:8080` in prod) | **Yes** |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk Authentication publishable key | **Yes** |
+| `CLERK_SECRET_KEY` | Clerk Authentication secret key | **Yes** |
+| `MISTRAL_API_KEY` | Mistral AI API key (for LangGraph Strategy & Risk Agents) | Optional |
+| `RAZORPAY_KEY_ID` | Razorpay Merchant key ID for Pro subscriptions | Optional |
+| `RAZORPAY_KEY_SECRET` | Razorpay Merchant secret for HMAC verification | Optional |
+| `S3_ENDPOINT` | Supabase / AWS S3 endpoint for dataset storage | Optional |
+
+---
+
+## 🧪 Testing & Verification
+
+QuantFlow maintains rigorous automated testing across both application tiers:
 
 ```bash
-cd backend
-./build/QuantFlow
-```
+# C++ Core Unit & Integration Tests (197 automated test cases)
+ctest --test-dir backend/build --output-on-failure
 
-Edit `config/config.json` to configure the run:
-
-```json
-{
-    "strategy": "MovingAverageCross",
-    "csvFile": "data/sample.csv",
-    "initialCash": 10000,
-    "commission": 0.001,
-    "stopLossPercent": 0.05,
-    "takeProfitPercent": 0.10,
-    "slippage": 0.001,
-    "shortMAPeriod": 10,
-    "longMAPeriod": 20
-}
+# Next.js TypeScript Type-Check & Production Build Validation
+cd frontend && npm run build
 ```
 
 ---
 
-## Running the REST API Server
-
-```bash
-cd backend
-./build/QuantFlowServer
-# QuantFlow REST API listening on http://localhost:8080
-```
-
-The server binds to `0.0.0.0:8080` by default (configurable via `Server::start(port)`).
-
----
-
-## REST API Reference
-
-### `GET /health`
-
-Health check — always returns 200 when the server is up.
-
-**Response**
-```json
-{ "status": "ok" }
-```
-
----
-
-### `POST /backtest`
-
-Runs a full backtest and returns performance metrics.
-
-**Headers**
-```
-Content-Type: application/json
-```
-
-**Request Body**
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `strategy` | string | ✅ | Strategy name (see supported strategies below) |
-| `csvFile` | string | ✅ | Relative path to OHLCV CSV file (e.g. `data/sample.csv`) |
-| `initialCash` | number | ✅ | Starting capital (must be > 0) |
-| `commission` | number | ✅ | Commission per trade as decimal (e.g. `0.001` = 0.1%) |
-| `stopLossPercent` | number | ✅ | Stop-loss as decimal (e.g. `0.05` = 5%), `0` to disable |
-| `takeProfitPercent` | number | ✅ | Take-profit as decimal (e.g. `0.10` = 10%), `0` to disable |
-| `shortMAPeriod` | integer | ❌ | Short MA period for `MovingAverageCross` (default: 10) |
-| `longMAPeriod` | integer | ❌ | Long MA period for `MovingAverageCross` (default: 20) |
-
-**Example Request**
-
-```bash
-curl -X POST http://localhost:8080/backtest \
-  -H "Content-Type: application/json" \
-  -d '{
-    "strategy": "MovingAverageCross",
-    "csvFile": "data/sample.csv",
-    "initialCash": 10000,
-    "commission": 0.001,
-    "stopLossPercent": 0.05,
-    "takeProfitPercent": 0.10,
-    "shortMAPeriod": 10,
-    "longMAPeriod": 20
-  }'
-```
-
-**Response (200 OK)**
-
-```json
-{
-    "initialCapital": 10000.0,
-    "finalEquity": 9980.02,
-    "netProfit": -19.98,
-    "totalReturnPercent": -0.1998,
-    "totalTrades": 1,
-    "winningTrades": 0,
-    "losingTrades": 1,
-    "winRatePercent": 0.0,
-    "averageWin": 0.0,
-    "averageLoss": -19.98,
-    "largestWin": 0.0,
-    "largestLoss": -19.98,
-    "maximumDrawdown": 8.36,
-    "profitFactor": 0.0,
-    "expectancy": -19.98,
-    "annualizedReturn": -0.0063,
-    "annualizedVolatility": 0.088,
-    "sharpeRatio": -0.071
-}
-```
-
-**Error Responses**
-
-| Status | Condition |
-|--------|-----------|
-| 400 | Missing/invalid field, path traversal attempt, bad MA periods |
-| 415 | `Content-Type` is not `application/json` |
-| 500 | File not found, unknown strategy, engine failure |
-
----
-
-## Supported Strategies
-
-| Strategy name | Description | Key parameters (from `config.json`) |
-|---------------|-------------|-------------------------------------|
-| `MovingAverageCross` | Buy/sell on SMA crossover | `shortMAPeriod`, `longMAPeriod` |
-| `AlwaysHold` | Never trades — benchmark baseline | — |
-| `RSI` | Buy on oversold, sell on overbought | `rsiPeriod`, `oversold`, `overbought` |
-| `EMACross` | EMA fast/slow crossover | `fastEMAPeriod`, `slowEMAPeriod` |
-| `MACD` | MACD signal line crossover | `macdFastPeriod`, `macdSlowPeriod`, `macdSignalPeriod` |
-| `Bollinger` | Trade on Bollinger Band breakouts | `bollingerPeriod`, `bollingerMultiplier` |
-| `ATRFilter` | Signal filtered by ATR threshold | `atrPeriod`, `minimumATR` |
-
-> **Note:** Only `MovingAverageCross` exposes its parameters through the API (`shortMAPeriod` / `longMAPeriod`). All other strategy parameters currently use the defaults defined in `Config.hpp` — this is a planned extension.
-
----
-
-## CSV Data Format
-
-The CSV file must have exactly 6 columns with a header row:
-
-```
-Timestamp,Open,High,Low,Close,Volume
-2024-01-01 09:15,120,121,119,120,1000
-2024-01-01 09:16,119,120,118,119,1000
-...
-```
-
-- **Timestamp** — any string (currently unused by the engine)
-- **Open, High, Low, Close** — floating-point prices
-- **Volume** — integer
-
-CSV files must be placed in a location accessible relative to the working directory from which the server is launched. Absolute paths and paths containing `..` are rejected for security.
-
----
-
-## Running Tests
-
-```bash
-cd backend
-
-# Run all 197 tests
-cd build && ctest --output-on-failure -j$(nproc)
-
-# Or run the test binary directly for verbose output
-./build/tests/QuantFlowTests --gtest_color=yes
-```
-
-Test coverage includes:
-
-- All 6 technical indicators (SMA, EMA, RSI, MACD, ATR, Bollinger Bands)
-- All 7 strategy implementations
-- Portfolio state management
-- Execution engine (slippage, commissions)
-- Risk manager (stop-loss, take-profit)
-- Position sizer
-- Config parser
-- Market iterator
-- Full end-to-end integration tests
-
----
-
-## Security
-
-The API enforces the following protections:
-
-- **Content-Type validation** — rejects non-JSON bodies with `415`
-- **Empty body detection** — returns `400` before attempting parse
-- **Path traversal prevention** — `..` sequences and absolute paths in `csvFile` are rejected
-- **Path length cap** — `csvFile` capped at 256 characters
-- **Type safety** — all JSON fields are type-checked before extraction
-- **Error message sanitisation** — internal file paths and stack details are not echoed to clients; `500` responses return only `{"error":"Internal server error"}`
-- **CORS headers** — `Access-Control-Allow-Origin: *` set for browser frontend compatibility
-
----
-
-## Architecture
-
-```
-Request
-  │
-  ▼
-Server::start()        ← binds 0.0.0.0:8080, registers routes
-  │
-  ├── GET  /health     ← HealthController (inline lambda)
-  │
-  └── POST /backtest   ← BacktestController::handleBacktest()
-        │
-        ├── Phase 1: Parse + Validate (400 on failure)
-        │     ├── json::parse(req.body)
-        │     ├── RequestValidator::validateBacktestRequest()
-        │     └── BacktestRequest::fromJson()
-        │
-        └── Phase 2: Execute (500 on failure)
-              └── BacktestService::run()
-                    ├── CSVParser::parse(csvFile)
-                    ├── StrategyFactory::create(config)
-                    ├── BacktestEngine::run()
-                    ├── PerformanceAnalyzer::analyze()
-                    └── BacktestResult::toJson()  ──► 200
-```
+## 📄 License
+QuantFlow is released under the [MIT License](LICENSE). Built for quantitative researchers and algorithmic traders.
