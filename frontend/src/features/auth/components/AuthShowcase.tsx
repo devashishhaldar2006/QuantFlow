@@ -11,6 +11,7 @@ import {
   Activity,
   Layers,
 } from "lucide-react";
+import { QuantFlowLogo } from "@/components/common/QuantFlowLogo";
 
 export default function AuthShowcase() {
   const metrics = [
@@ -62,17 +63,10 @@ export default function AuthShowcase() {
       {/* Brand Header */}
       <div className="relative z-10 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 shadow-lg shadow-indigo-500/30">
-            <Zap className="size-5 text-white fill-current" />
-          </div>
-          <div>
-            <span className="text-xl font-extrabold tracking-tight text-white">
-              Quant<span className="text-indigo-400">Flow</span>
-            </span>
-            <span className="ml-2.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-0.5 text-[10px] font-semibold text-indigo-400 uppercase tracking-wider">
-              Terminal v2.4
-            </span>
-          </div>
+          <QuantFlowLogo className="size-9" textClassName="text-xl font-extrabold" />
+          <span className="rounded-full border border-blue-500/20 bg-blue-500/10 px-2.5 py-0.5 text-[10px] font-semibold text-blue-400 uppercase tracking-wider">
+            Terminal v2.4
+          </span>
         </div>
 
         <div className="flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">

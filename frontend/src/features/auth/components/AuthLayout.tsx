@@ -3,8 +3,9 @@
 import { ReactNode } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Zap, ArrowLeft, Shield } from "lucide-react";
+import { ArrowLeft, Shield } from "lucide-react";
 import AuthShowcase from "./AuthShowcase";
+import { QuantFlowLogo } from "@/components/common/QuantFlowLogo";
 
 type AuthLayoutProps = {
   children: ReactNode;
@@ -42,28 +43,23 @@ export default function AuthLayout({
           </Link>
 
           {/* Unified Brand Logo for Mobile */}
-          <div className="flex items-center gap-2.5 lg:hidden">
-            <div className="flex size-7 items-center justify-center rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-500 shadow-md shadow-indigo-500/20">
-              <Zap className="size-3.5 text-white fill-current" />
-            </div>
-            <span className="text-sm font-extrabold tracking-tight text-white">
-              Quant<span className="text-indigo-400">Flow</span>
-            </span>
+          <div className="flex items-center lg:hidden">
+            <QuantFlowLogo className="size-7" textClassName="text-sm font-extrabold" />
           </div>
         </div>
 
         {/* Center Clerk Form Wrapper with Framer Motion */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="relative z-10 my-auto flex w-full flex-col items-center justify-center py-8"
+          transition={{ duration: 0.4 }}
+          className="relative z-10 my-auto flex w-full flex-col items-center justify-center py-6"
         >
           <div className="w-full max-w-md space-y-6">
             <div className="text-center space-y-2.5">
               {/* Unified Brand Logo */}
-              <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 shadow-lg shadow-indigo-500/30">
-                <Zap className="size-6 text-white fill-current" />
+              <div className="flex justify-center">
+                <QuantFlowLogo className="size-12" withText={false} />
               </div>
               <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
                 {title}
