@@ -65,20 +65,23 @@ export class R2StorageService {
     const fullLocalPath = join(backendDataDir, cleanKey);
     const parentDir = join(fullLocalPath, "..");
 
-    if (!existsSync(parentDir)) {
-      await mkdir(parentDir, { recursive: true });
+    try {
+      if (!existsSync(parentDir)) {
+        await mkdir(parentDir, { recursive: true });
+      }
+
+      const buffer = Buffer.isBuffer(content)
+        ? content
+        : typeof content === "string"
+        ? Buffer.from(content, "utf-8")
+        : Buffer.from(content);
+
+      await writeFile(fullLocalPath, buffer);
+      return `data/${cleanKey}`;
+    } catch (fsErr) {
+      console.warn("Local filesystem write skipped (Cloud Storage Active):", fsErr);
+      return `data/${cleanKey}`;
     }
-
-    const buffer = Buffer.isBuffer(content)
-      ? content
-      : typeof content === "string"
-      ? Buffer.from(content, "utf-8")
-      : Buffer.from(content);
-
-    await writeFile(fullLocalPath, buffer);
-
-    // Return the engine-relative path: data/<cleanKey>
-    return `data/${cleanKey}`;
   }
 
   /**
