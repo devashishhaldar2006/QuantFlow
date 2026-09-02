@@ -9,6 +9,7 @@ import BacktestPerformance from "./BacktestPerformance";
 import BacktestRiskMetrics from "./BacktestRiskMetrics";
 import BacktestTradeHistory from "./BacktestTradeHistory";
 import BacktestTradeStats from "./BacktestTradeStats";
+import { RiskOfficerCard } from "@/features/ai/components/RiskOfficerCard";
 import { formatDate } from "@/lib/format";
 import { exportBacktestCSV, exportBacktestPDF } from "@/lib/exportUtils";
 
@@ -103,6 +104,11 @@ export default function BacktestDetails({ backtest }: BacktestDetailsProps) {
 
       {/* Content */}
       <div className="space-y-8">
+        {/* Autonomous Risk Officer Audit (LangGraph + Mistral) */}
+        <AnimatedItem>
+          <RiskOfficerCard backtestId={backtest.id} />
+        </AnimatedItem>
+
         <AnimatedItem>
           <BacktestPerformance backtest={backtest} />
         </AnimatedItem>

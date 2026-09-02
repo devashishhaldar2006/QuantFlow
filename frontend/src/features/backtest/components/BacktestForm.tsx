@@ -15,7 +15,10 @@ import {
   FileText,
   CheckCircle2,
   X,
+  Sparkles,
+  Bot,
 } from "lucide-react";
+import { StrategyCopilotModal } from "@/features/ai/components/StrategyCopilotModal";
 
 import {
   Select,
@@ -221,6 +224,8 @@ export default function BacktestForm({
 
   const [uploadedFile, setUploadedFile] =
     useState<{ name: string; rows: number } | null>(null);
+
+  const [copilotOpen, setCopilotOpen] = useState(false);
 
   useEffect(() => {
     async function loadDataset() {
@@ -452,6 +457,29 @@ export default function BacktestForm({
       )}
 
       {/* STRATEGY & DATA */}
+      <div className="flex items-center justify-between">
+        <span className="text-[11px] font-mono uppercase text-slate-400">Institutional Strategy Builder</span>
+        <button
+          type="button"
+          onClick={() => setCopilotOpen(true)}
+          className="inline-flex items-center gap-1.5 rounded-xl border border-blue-500/30 bg-blue-600/15 px-3 py-1.5 text-xs font-semibold text-blue-300 hover:bg-blue-600/25 hover:border-blue-400 transition shadow-sm"
+        >
+          <Sparkles className="size-3.5 text-blue-400" />
+          <span>AI Strategy Architect (LangGraph)</span>
+        </button>
+      </div>
+
+      <StrategyCopilotModal
+        isOpen={copilotOpen}
+        onClose={() => setCopilotOpen(false)}
+        onApplyConfig={(cfg) => {
+          setForm((curr) => ({
+            ...curr,
+            ...cfg,
+          }));
+        }}
+      />
+
       <FormSection
         title="Strategy & Data"
         icon={Cpu}
