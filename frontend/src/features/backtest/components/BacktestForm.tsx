@@ -267,19 +267,22 @@ export default function BacktestForm({
   useEffect(() => {
     async function loadStrategies() {
       try {
-        const result =
-          await quantEngine.getStrategies();
-
-        setStrategies(result);
-        setEngineOnline(result.length > 0);
+        const res = await fetch("/api/strategies");
+        if (res.ok) {
+          const result = (await res.json()) as QuantEngineStrategy[];
+          if (Array.isArray(result) && result.length > 0) {
+            setStrategies(result);
+            setEngineOnline(true);
+            setError("");
+            return;
+          }
+        }
+        setEngineOnline(false);
+        setError("Unable to connect to the QuantFlow engine. Please check C++ engine connectivity.");
       } catch (err) {
         console.error(err);
-
         setEngineOnline(false);
-
-        setError(
-          "Unable to connect to the QuantFlow engine. Please ensure it is running on port 8080.",
-        );
+        setError("Unable to connect to the QuantFlow engine. Please check C++ engine connectivity.");
       }
     }
 
