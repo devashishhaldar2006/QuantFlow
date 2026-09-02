@@ -99,8 +99,10 @@ void BacktestController::handleBacktest(
 
         res.status = 500;
 
-        res.set_content(
-            R"({"error":"Internal server error"})",
-            "application/json");
+        json error;
+        error["error"]  = "Engine execution error";
+        error["detail"] = ex.what();
+
+        res.set_content(error.dump(), "application/json");
     }
 }
