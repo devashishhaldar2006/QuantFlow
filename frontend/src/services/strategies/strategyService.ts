@@ -8,10 +8,13 @@ import type {
 import type { QuantEngineStrategy } from "@/services/quantEngine/types";
 import { HttpQuantEngineClient } from "@/services/quantEngine/HttpQuantEngineClient";
 
-const quantEngine = new HttpQuantEngineClient(
-  process.env.QUANT_ENGINE_URL ??
-    "http://localhost:8080",
-);
+function getEngineClient(): HttpQuantEngineClient {
+  const url =
+    process.env.QUANT_ENGINE_URL ||
+    process.env.NEXT_PUBLIC_QUANT_ENGINE_URL ||
+    "http://3.6.68.152:8080";
+  return new HttpQuantEngineClient(url);
+}
 
 function toDisplayName(name: string) {
   switch (name) {
@@ -74,8 +77,9 @@ export async function getStrategies(): Promise<
   }[] = [];
 
   try {
+    const client = getEngineClient();
     const results = await Promise.all([
-      quantEngine.getStrategies(),
+      client.getStrategies(),
       prisma.backtest.findMany({
         where: {
           status: "completed",
@@ -93,7 +97,8 @@ export async function getStrategies(): Promise<
   } catch (err) {
     console.error("getStrategies error:", err);
     try {
-      engineStrategies = await quantEngine.getStrategies();
+      const client = getEngineClient();
+      engineStrategies = await client.getStrategies();
     } catch {
       engineStrategies = [];
     }
