@@ -84,6 +84,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set Lowercase Repository Name
+        run: |
+          echo "IMAGE_REPO=ghcr.io/$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')/backend" >> $GITHUB_ENV
+
       - name: Build and Push C++ Backend Docker Image
         uses: docker/build-push-action@v5
         with:
@@ -91,8 +95,8 @@ jobs:
           file: ./backend/Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/backend:latest
-            ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
+            ${{ env.IMAGE_REPO }}:latest
+            ${{ env.IMAGE_REPO }}:${{ github.sha }}
 
       - name: Deploy to AWS EC2 via SSH
         if: env.EC2_HOST != ''
@@ -103,13 +107,14 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER || 'ubuntu' }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          envs: IMAGE_REPO
           script: |
             mkdir -p ~/quantflow
             cd ~/quantflow
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker pull ghcr.io/${{ github.repository }}/backend:latest
+            docker pull ${{ env.IMAGE_REPO }}:latest
             docker stop quantflow-backend || true
             docker rm quantflow-backend || true
-            docker run -d --restart always -p 8080:8080 --name quantflow-backend ghcr.io/${{ github.repository }}/backend:latest
+            docker run -d --restart always -p 8080:8080 --name quantflow-backend ${{ env.IMAGE_REPO }}:latest
             docker system prune -f
 
