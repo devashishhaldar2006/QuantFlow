@@ -84,18 +84,11 @@ export default function CustomSignInForm() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.96 }}
+      initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.4 }}
-      className="relative w-full max-w-md space-y-6 rounded-2xl border border-indigo-500/20 bg-[#090D18]/90 p-8 backdrop-blur-2xl shadow-[0_0_50px_rgba(99,102,241,0.15)]"
+      transition={{ duration: 0.3 }}
+      className="relative w-full max-w-md space-y-6 rounded-2xl border border-slate-800 bg-[#0B1120] p-8 shadow-xl"
     >
-      {/* Top Ambient Glow */}
-      <motion.div
-        animate={{ opacity: [0.15, 0.3, 0.15] }}
-        transition={{ duration: 4, repeat: Infinity }}
-        className="absolute -top-12 left-1/2 -translate-x-1/2 size-40 rounded-full bg-indigo-500/20 blur-2xl pointer-events-none"
-      />
-
       {/* Social OAuth Buttons */}
       <div className="grid grid-cols-2 gap-3.5">
         <motion.button

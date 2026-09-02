@@ -7,6 +7,7 @@ import { useAuth } from "@clerk/nextjs";
 import { navigation } from "../navigation/navigation";
 import { GlobalSearchModal } from "../navigation/GlobalSearchModal";
 import { NotificationPopover } from "./NotificationPopover";
+import { QuantFlowLogo } from "../common/QuantFlowLogo";
 
 type TopNavbarProps = {
   isCollapsed: boolean;
@@ -65,13 +66,8 @@ export default function TopNavbar({ isCollapsed, setIsCollapsed }: TopNavbarProp
           </button>
 
           {/* Brand */}
-          <div className="flex shrink-0 items-center gap-2 mr-4">
-            <div className="flex size-7 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 shadow-md shadow-indigo-500/20">
-              <Zap className="size-3.5 text-white fill-current" />
-            </div>
-            <span className="text-sm font-extrabold tracking-tight text-white select-none hidden sm:block">
-              Quant<span className="text-indigo-400">Flow</span>
-            </span>
+          <div className="flex shrink-0 items-center mr-4">
+            <QuantFlowLogo className="size-7" textClassName="text-sm font-extrabold hidden sm:inline-block" />
           </div>
 
           {/* Search Trigger */}
