@@ -22,6 +22,7 @@ import {
   Scale,
   TrendingUp,
 } from "lucide-react";
+import { QuantFlowLogo } from "@/components/common/QuantFlowLogo";
 
 export default function LandingPage() {
   const { isSignedIn } = useUser();
@@ -44,49 +45,25 @@ export default function LandingPage() {
   const projectedPortfolio = Math.round(initialCapital * (1 + simulatedReturn / 100));
 
   return (
-    <div className="relative min-h-screen bg-[#030712] text-slate-100 selection:bg-indigo-500 selection:text-white overflow-hidden">
-      {/* Dynamic Background Mesh & Ambient Glows */}
-      <div className="absolute inset-0 bg-[radial-gradient(#6366f1_1px,transparent_1px)] [background-size:32px_32px] opacity-15 pointer-events-none" />
-      <motion.div
-        animate={{ scale: [1, 1.15, 1], opacity: [0.15, 0.25, 0.15] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -top-40 left-1/2 -translate-x-1/2 size-[650px] rounded-full bg-indigo-600/20 blur-[150px] pointer-events-none"
-      />
-      <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute top-[700px] -left-40 size-[550px] rounded-full bg-violet-600/15 blur-[150px] pointer-events-none"
-      />
-      <motion.div
-        animate={{ scale: [1, 1.15, 1], opacity: [0.1, 0.18, 0.1] }}
-        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-        className="absolute top-[1400px] -right-40 size-[550px] rounded-full bg-cyan-600/15 blur-[150px] pointer-events-none"
-      />
+    <div className="relative min-h-screen bg-[#070B14] text-slate-100 selection:bg-blue-600 selection:text-white">
+      {/* Subtle Institutional Grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1E293B0A_1px,transparent_1px),linear-gradient(to_bottom,#1E293B0A_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#030712]/80 backdrop-blur-2xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <motion.div
-              whileHover={{ rotate: 180 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="flex size-8 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 shadow-lg shadow-indigo-500/30"
-            >
-              <Zap className="size-4 text-white fill-current" />
-            </motion.div>
-            <span className="text-lg font-extrabold tracking-tight text-white">
-              Quant<span className="text-indigo-400">Flow</span>
-            </span>
+      <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-[#070B14]/90 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5">
+          <Link href="/" className="flex items-center">
+            <QuantFlowLogo className="size-8" textClassName="text-lg font-extrabold" />
           </Link>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-300">
-            <a href="#features" className="hover:text-indigo-400 transition-colors">Features</a>
-            <a href="#strategies" className="hover:text-indigo-400 transition-colors">C++ Engines</a>
-            <a href="#simulation" className="hover:text-indigo-400 transition-colors">Simulator</a>
-            <a href="#pricing" className="hover:text-indigo-400 transition-colors">Pricing</a>
-            <Link href="/about" className="hover:text-indigo-400 transition-colors text-indigo-300">About</Link>
-            <Link href="/terms" className="hover:text-indigo-400 transition-colors">Legal</Link>
+          <nav className="hidden md:flex items-center gap-7 text-xs font-semibold text-slate-300">
+            <a href="#features" className="hover:text-blue-400 transition-colors">Platform</a>
+            <a href="#strategies" className="hover:text-blue-400 transition-colors">C++ Engine</a>
+            <a href="#simulation" className="hover:text-blue-400 transition-colors">Interactive Simulator</a>
+            <a href="#pricing" className="hover:text-blue-400 transition-colors">Pricing</a>
+            <Link href="/about" className="hover:text-blue-400 transition-colors text-blue-300">About</Link>
+            <Link href="/terms" className="hover:text-blue-400 transition-colors">Legal</Link>
           </nav>
 
           {/* Header CTA Buttons */}
@@ -94,10 +71,10 @@ export default function LandingPage() {
             {isSignedIn ? (
               <Link
                 href="/dashboard"
-                className="group flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-2.5 text-xs font-bold text-white shadow-lg shadow-indigo-500/25 hover:from-indigo-500 hover:to-violet-500 transition-all hover:scale-[1.02]"
+                className="group flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-blue-500 transition-all"
               >
                 <span>Enter Terminal</span>
-                <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
               </Link>
             ) : (
               <>
@@ -109,10 +86,10 @@ export default function LandingPage() {
                 </Link>
                 <Link
                   href="/sign-up"
-                  className="group flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-2.5 text-xs font-bold text-white shadow-lg shadow-indigo-500/25 hover:from-indigo-500 hover:to-violet-500 transition-all hover:scale-[1.02]"
+                  className="group flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-blue-500 transition-all"
                 >
                   <span>Start Free</span>
-                  <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </>
             )}
@@ -121,23 +98,23 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative mx-auto max-w-7xl px-6 pt-16 sm:pt-24 pb-20 text-center">
+      <section className="relative mx-auto max-w-7xl px-6 pt-16 sm:pt-20 pb-20 text-center">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5 }}
         >
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-xs font-semibold text-indigo-300 shadow-inner mb-8 backdrop-blur-xl">
-            <Sparkles className="size-3.5 text-indigo-400" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-3.5 py-1 text-xs font-medium text-blue-300 shadow-sm mb-6">
+            <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
             <span>C++ Strategy Engine v2.4 Active & Connected</span>
-            <ChevronRight className="size-3.5 text-slate-500" />
+            <ChevronRight className="size-3.5 text-slate-400" />
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-5xl mx-auto leading-[1.1]">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-5xl mx-auto leading-[1.15]">
             High-Frequency <br />
-            <span className="bg-gradient-to-r from-indigo-400 via-violet-300 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">
               Compiled C++ Backtesting Platform
             </span>
           </h1>
@@ -560,14 +537,7 @@ export default function LandingPage() {
       <footer className="border-t border-white/10 bg-[#02050E] pt-16 pb-12">
         <div className="mx-auto max-w-7xl px-6 grid grid-cols-1 md:grid-cols-4 gap-10 text-xs">
           <div className="space-y-4 md:col-span-1">
-            <div className="flex items-center gap-2.5">
-              <div className="flex size-8 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 shadow-lg shadow-indigo-500/30">
-                <Zap className="size-4 text-white fill-current" />
-              </div>
-              <span className="text-lg font-extrabold tracking-tight text-white">
-                Quant<span className="text-indigo-400">Flow</span>
-              </span>
-            </div>
+            <QuantFlowLogo className="size-8" textClassName="text-lg font-extrabold" />
             <p className="text-slate-400 leading-relaxed">
               Institutional quantitative backtesting platform powered by compiled C++ backend compilation.
             </p>
