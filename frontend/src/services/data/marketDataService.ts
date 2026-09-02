@@ -203,7 +203,7 @@ export class MarketDataService {
       const endDate = rows[rows.length - 1][0];
 
       // Save dataset metadata in Database via DatasetService
-      const dataset = await DatasetService.createDataset(userId, {
+      const dataset = await DatasetService.upsertDataset(userId, {
         name: input.name || `${cleanSymbol} Market Feed`,
         symbol: cleanSymbol,
         assetClass: input.assetClass,

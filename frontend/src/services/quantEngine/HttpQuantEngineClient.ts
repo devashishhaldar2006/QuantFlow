@@ -26,10 +26,13 @@ export class HttpQuantEngineClient
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        throw new Error(
-          error.response.data.error ??
-            "QuantFlow engine failed to run backtest.",
-        );
+        const data = error.response.data as { error?: string; detail?: string };
+        const msg = data.detail ? `${data.error}: ${data.detail}` : (data.error ?? "QuantFlow engine returned an error.");
+        throw new Error(msg);
+      }
+
+      if (axios.isAxiosError(error) && error.code) {
+        throw new Error(`Cannot connect to C++ Quant Engine at ${this.baseUrl} (${error.code}).`);
       }
 
       throw error;
