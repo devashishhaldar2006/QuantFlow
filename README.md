@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://quantflow-jade.vercel.app"><img src="https://img.shields.io/badge/Live%20Terminal-quantflow.hackcentral.me-0A84FF?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" /></a>
+  <a href="https://quantflow.hackcentral.me"><img src="https://img.shields.io/badge/Live%20Terminal-quantflow.hackcentral.me-0A84FF?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" /></a>
   <a href="https://youtu.be/your-demo-video"><img src="https://img.shields.io/badge/YouTube%20Walkthrough-Watch%20Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Video Demo" /></a>
   <a href="https://github.com/devashishhaldar2006/QuantFlow"><img src="https://img.shields.io/badge/Core%20Engine-Modern%20C%2B%2B20-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="C++20" /></a>
   <a href="https://github.com/devashishhaldar2006/QuantFlow/actions"><img src="https://img.shields.io/badge/CI%2FCD-Automated%20GHCR%20%2B%20EC2-2088FF?style=for-the-badge&logo=github-actions&logoColor=white" alt="CI/CD" /></a>
@@ -22,7 +22,7 @@
 
 | Resource | URL / Endpoint | Infrastructure | Description |
 | :--- | :--- | :--- | :--- |
-| **🌐 Production Web Terminal** | [**quantflow-jade.vercel.app**](https://quantflow-jade.vercel.app) *(Custom: `quantflow.hackcentral.me`)* | Vercel Edge Serverless | Institutional Next.js 16 Quantitative Workstation |
+| **🌐 Production Web Terminal** | [**quantflow.hackcentral.me**](https://quantflow.hackcentral.me) | Vercel Edge Serverless | Institutional Next.js 16 Quantitative Workstation |
 | **🎥 Video Walkthrough & Architecture** | [**Watch QuantFlow Demonstration**](https://youtu.be/your-demo-video) | YouTube HD Video | Complete architectural walkthrough & agentic execution demo |
 | **⚡ High-Performance Core** | `http://3.6.68.152:8080` | AWS EC2 (t3.micro, ap-south-1 Mumbai) | Compiled C++20 REST API Execution Server |
 | **🗄️ Cloud Database & Storage** | Supabase Cloud (Tokyo ap-northeast-1) | PostgreSQL + S3 Object Store | Tick datasets, backtest ledgers, and trade accounting |
