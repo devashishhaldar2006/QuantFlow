@@ -252,9 +252,11 @@ The GitHub Actions workflow (`.github/workflows/ci.yml`) automatically builds th
 ## 👨‍💻 Author & Contributions
 
 **Devashish Haldar**
+- **Institution**: PSIT KANPUR, BHAUTI, 209305
 - **GitHub**: [@devashishhaldar2006](https://github.com/devashishhaldar2006)
 - **LinkedIn**: [Devashish Haldar](https://www.linkedin.com/in/devashish-haldar/)
 - **Email**: `workfordevashishhaldar@gmail.com`
+- **Phone**: `+91 9336009951`
 
 Pull requests and issues are welcome! Please follow conventional commits and ensure all tests pass before submitting PRs.
 
@@ -262,3 +264,4 @@ Pull requests and issues are welcome! Please follow conventional commits and ens
 
 ## 📄 License
 QuantFlow is open-source software licensed under the [MIT License](LICENSE).
+
