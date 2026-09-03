@@ -1,7 +1,7 @@
 # QuantFlow — Institutional Quantitative Backtesting Terminal & C++ Engine
 
 <p align="center">
-  <img src="frontend/public/logo.svg" alt="QuantFlow Institutional Logo" width="100" height="100" />
+  <img src="frontend/public/logo.svg" alt="QuantFlow Institutional Logo" width="110" height="110" />
 </p>
 
 <p align="center">
@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://quantflow-jade.vercel.app"><img src="https://img.shields.io/badge/Live%20Terminal-quantflow.is--a.dev-0A84FF?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" /></a>
+  <a href="https://quantflow-jade.vercel.app"><img src="https://img.shields.io/badge/Live%20Terminal-quantflow.hackcentral.me-0A84FF?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" /></a>
   <a href="https://youtu.be/your-demo-video"><img src="https://img.shields.io/badge/YouTube%20Walkthrough-Watch%20Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Video Demo" /></a>
   <a href="https://github.com/devashishhaldar2006/QuantFlow"><img src="https://img.shields.io/badge/Core%20Engine-Modern%20C%2B%2B20-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="C++20" /></a>
   <a href="https://github.com/devashishhaldar2006/QuantFlow/actions"><img src="https://img.shields.io/badge/CI%2FCD-Automated%20GHCR%20%2B%20EC2-2088FF?style=for-the-badge&logo=github-actions&logoColor=white" alt="CI/CD" /></a>
@@ -18,20 +18,34 @@
 
 ---
 
-## 📌 Executive Summary & Live Links
+## 📌 Executive Summary & Live Endpoints
 
-| Resource | Direct Link | Description |
-| :--- | :--- | :--- |
-| **🌐 Production Web Terminal** | [**quantflow-jade.vercel.app**](https://quantflow-jade.vercel.app) *(Pending DNS: `quantflow.is-a.dev`)* | Institutional Next.js 16 Quantitative Workstation |
-| **🎥 Video Walkthrough & Demo** | [**Watch QuantFlow Demonstration**](https://youtu.be/your-demo-video) | End-to-end walkthrough of C++ engine & LangGraph AI agents |
-| **⚡ High-Performance Core** | `http://3.6.68.152:8080` (AWS EC2, ap-south-1 Mumbai) | Compiled C++20 REST API Execution Server |
-| **📜 Open Source License** | [MIT License](LICENSE) | Permissive open-source license for developers & researchers |
+| Resource | URL / Endpoint | Infrastructure | Description |
+| :--- | :--- | :--- | :--- |
+| **🌐 Production Web Terminal** | [**quantflow-jade.vercel.app**](https://quantflow-jade.vercel.app) *(Custom: `quantflow.hackcentral.me`)* | Vercel Edge Serverless | Institutional Next.js 16 Quantitative Workstation |
+| **🎥 Video Walkthrough & Architecture** | [**Watch QuantFlow Demonstration**](https://youtu.be/your-demo-video) | YouTube HD Video | Complete architectural walkthrough & agentic execution demo |
+| **⚡ High-Performance Core** | `http://3.6.68.152:8080` | AWS EC2 (t3.micro, ap-south-1 Mumbai) | Compiled C++20 REST API Execution Server |
+| **🗄️ Cloud Database & Storage** | Supabase Cloud (Tokyo ap-northeast-1) | PostgreSQL + S3 Object Store | Tick datasets, backtest ledgers, and trade accounting |
+| **📜 Open Source License** | [MIT License](LICENSE) | GitHub Repository | Permissive open-source license for researchers & devs |
 
 ---
 
-## 🏛️ System Architecture
+## 🛑 Problem Statement: The Quantitative Backtesting Gap
 
-QuantFlow decouples heavy numerical execution from client orchestration. The C++20 core runs on dedicated cloud compute, while the web terminal handles interactive visualizations, agentic reasoning, and authenticated data pipelines:
+Most retail and enterprise algorithmic trading tools suffer from three fundamental architectural flaws:
+
+1. **The Python/Interpreted Bottleneck**: Python backtesting libraries (Backtrader, Zipline) introduce high memory overhead, garbage collection pauses, and execution times exceeding tens of seconds on multi-gigabyte tick data.
+2. **Look-Ahead & Intrabar Double-Trigger Flaw**: Conventional backtesters model orders on bar closes or assume Stop-Loss and Take-Profit execution simultaneously, yielding artificially inflated Sharpe ratios and unrealistic equity curves that fail in live production.
+3. **Black-Box Overfitting & Luck Concentration**: Traders unknowingly optimize parameters against historical market regimes without detecting whether 80%+ of their returns were driven by a single lucky outlier trade or if the strategy will collapse during volatility shocks.
+
+### 💡 The QuantFlow Solution
+QuantFlow bridges this gap by marrying a **deterministic, sub-millisecond compiled C++20 engine (1.48M+ ticks/sec)** with an **autonomous LangGraph multi-agent AI system (Mistral Small 2506)** that stress-tests trade distributions, audits luck bias, and optimizes risk boundaries before real capital is deployed.
+
+---
+
+## 🏛️ Comprehensive System Architecture
+
+QuantFlow follows a decoupled, asynchronous multi-tier architecture with strict domain boundaries:
 
 ```
                                   +-------------------------------------------------------+
@@ -80,13 +94,13 @@ QuantFlow decouples heavy numerical execution from client orchestration. The C++
 
 ---
 
-## ⚡ Technical Capabilities Breakdown
+## ⚡ Core Technical Pillars
 
-### 1. High-Performance C++20 Execution Core
-- **Sub-Millisecond Latency**: Processes **1.48M+ ticks/sec** with zero runtime heap fragmentation during evaluation loops.
-- **Conservative Intrabar Execution**: Solves the classic backtest look-ahead flaw. When both a **Stop-Loss** and a **Take-Profit** target fall inside the same candle's high/low range, QuantFlow executes the Stop-Loss first to prevent artificially inflated returns.
-- **Realistic Friction Simulation**: Incorporates proportional basis-point broker commissions and customizable bid/ask slippage modeling.
-- **7 Native Algorithmic Strategies**:
+### 1. Ultra-Low Latency C++20 Core
+- **Throughput & Speed**: Evaluates market tick data at **1.48M+ ticks/sec** with sub-millisecond execution times.
+- **Intrabar Conservative Execution**: If both a Stop-Loss and Take-Profit condition trigger inside the same candle's high/low boundary, the engine assumes the **Stop-Loss executes first** to prevent curve-fitting and unrealistic survivorship bias.
+- **Slippage & Commission Modeling**: Simulates bid/ask spreads, liquidity slippage, and basis-point exchange commissions.
+- **7 Built-in Quantitative Models**:
   1. `MovingAverageCross` — Dual SMA trend-following crossover
   2. `EMACross` — Exponential moving average momentum breakout
   3. `RSI` — Relative Strength Index mean-reversion with overbought/oversold boundaries
@@ -96,21 +110,46 @@ QuantFlow decouples heavy numerical execution from client orchestration. The C++
   7. `CompositeMultiIndicator` — Multi-signal confluence model
 
 ### 2. Autonomous Multi-Agent AI (LangGraph + Mistral Small 2506)
-- **Autonomous Strategy Architect Agent**:
-  - Accepts raw trader hypotheses in natural language (e.g. *"Design an intraday momentum breakout on NIFTY with low drawdown"*).
-  - Validates mathematical constraints and engine boundaries (`shortPeriod < longPeriod`, `oversold < overbought`).
-  - Calls the compiled C++ engine tool to run trial backtests.
-  - Inspects the Sharpe ratio and maximum drawdown. If sub-optimal, it triggers an iterative parameter recalibration loop (up to 2 iterations).
-  - Synthesizes an **Executive Quantitative Strategy Brief** for the user.
-- **Autonomous Risk Officer Committee Agent**:
-  - Analyzes the full trade ledger to compute single-trade luck concentration (detecting whether 80%+ of profit came from a single lucky outlier).
+- **Strategy Architect Agent**:
+  - Accepts raw trader hypotheses in natural language.
+  - Enforces mathematical boundaries (`shortPeriod < longPeriod`, `oversold < overbought`).
+  - Executes trial backtests via tool calls to the C++ core on EC2.
+  - Reflects on the Sharpe ratio and maximum drawdown. If sub-optimal, it triggers an iterative parameter recalibration loop before generating an Executive Strategy Brief.
+- **Risk Officer Committee Agent**:
+  - Analyzes the full trade ledger to compute single-trade luck concentration (detecting whether profit came from an abnormal outlier).
   - Simulates performance against macroeconomic shock regimes (liquidity freezes, rate shocks, high-volatility chop).
-  - Calculates an **Institutional Health Score (0–100)** and mandates concrete risk limits (maximum capital allocation, kill-switches).
+  - Calculates an **Institutional Health Score (0–100)** and mandates concrete risk limits.
 
-### 3. Institutional Workstation & Cloud Data Fabric
-- **Interactive Recharts Visualizations**: Time-series equity curve simulation and trade ledger inspection with side, price, and net cash flow attribution.
-- **Dataset Virtualization**: Upload, inspect, and sync multi-megabyte CSV tick files directly to Supabase S3 / Cloudflare R2 object storage with automatic client-side schema validation.
-- **Payment & Entitlement Infrastructure**: Tiered subscription model (Free vs. Pro) verified using cryptographic HMAC SHA-256 signatures via Razorpay.
+### 3. Enterprise Security & Architecture
+- **Cryptographic Payment Integrity**: All Razorpay webhooks and subscriptions are verified using **HMAC SHA-256 signatures** before provisioning Pro quotas.
+- **Data Virtualization**: Datasets are streamed securely from Supabase S3 / Cloudflare R2 object storage with automatic client-side schema validation.
+- **Zero Secrets Exposure**: All sensitive credentials (Clerk secret keys, Razorpay secrets, S3 access keys, Mistral tokens) remain strictly server-side.
+
+---
+
+## 📸 Platform Interface & User Flow
+
+```
++----------------------------------------------------------------------------------------------------+
+|  QUANTFLOW TERMINAL                                                         [C++ Core: Active]     |
++----------------------------------------------------------------------------------------------------+
+|                                                                                                    |
+|  [ New Backtest ]  [ Portfolio ]  [ Strategy Library ]  [ Datasets ]  [ Risk Analytics ]           |
+|                                                                                                    |
+|  +----------------------------------------------------+  +--------------------------------------+  |
+|  |  AI Strategy Architect (LangGraph)                 |  |  Autonomous Risk Committee Audit     |  |
+|  |  • Hypothesis: Dual EMA Breakout on NIFTY          |  |  • Institutional Score: 88/100       |  |
+|  |  • Boundary Validator: PASSED (fast < slow)        |  |  • Overfitting Check: ROBUST         |  |
+|  |  • Iterative Reflection: Sharpe 1.84, Max DD 6.2%  |  |  • Tail Risk: Volatility Shock Tested|  |
+|  +----------------------------------------------------+  +--------------------------------------+  |
+|                                                                                                    |
+|  +----------------------------------------------------------------------------------------------+  |
+|  |  Interactive Equity Curve Simulation & Trade History Ledger (Recharts)                       |  |
+|  |  $100,000 ─────────/\────────/\──────/\───────────────────────────► $118,420 (+18.42%)      |  |
+|  +----------------------------------------------------------------------------------------------+  |
+|                                                                                                    |
++----------------------------------------------------------------------------------------------------+
+```
 
 ---
 
@@ -264,4 +303,3 @@ Pull requests and issues are welcome! Please follow conventional commits and ens
 
 ## 📄 License
 QuantFlow is open-source software licensed under the [MIT License](LICENSE).
-
