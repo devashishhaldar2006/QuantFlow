@@ -38,7 +38,7 @@ export default function RefundPage() {
       <section className="space-y-3">
         <h2 className="text-lg font-bold text-white">5. How to Request a Refund</h2>
         <p>
-          To request a refund, please send an email to support@quantflow.io with your registered account email address, subscription transaction ID, and a brief description of your request.
+          To request a refund, please send an email to workfordevashishhaldar@gmail.com with your registered account email address, subscription transaction ID, and a brief description of your request.
         </p>
       </section>
     </LegalPageLayout>

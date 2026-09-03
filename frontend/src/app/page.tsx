@@ -569,10 +569,10 @@ export default function LandingPage() {
 
           <div className="space-y-3">
             <p className="font-semibold text-white uppercase tracking-wider text-[11px]">Customer Support</p>
-            <p className="text-slate-400">Email: support@quantflow.io</p>
-            <p className="text-slate-400">Phone: +91 (080) 4920-8800</p>
+            <p className="text-slate-400">Email: workfordevashishhaldar@gmail.com</p>
+            <p className="text-slate-400">Phone: +91 9336009951</p>
             <p className="text-slate-400">Hours: Mon-Fri 9:00 AM – 7:00 PM IST</p>
-            <p className="text-slate-500 text-[11px]">Outer Ring Road, Bengaluru, KA 560103</p>
+            <p className="text-slate-500 text-[11px]">PSIT KANPUR , BHAUTI , 209305</p>
           </div>
         </div>
 

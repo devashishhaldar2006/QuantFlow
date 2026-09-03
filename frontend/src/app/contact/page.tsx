@@ -20,7 +20,7 @@ export default function ContactPage() {
               <Mail className="size-4 text-indigo-400 shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold text-white">Customer Support Email</p>
-                <p className="text-slate-400">support@quantflow.io</p>
+                <p className="text-slate-400">workfordevashishhaldar@gmail.com</p>
               </div>
             </div>
 
@@ -28,7 +28,7 @@ export default function ContactPage() {
               <Phone className="size-4 text-indigo-400 shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold text-white">Telephone Contact</p>
-                <p className="text-slate-400">+91 (080) 4920-8800</p>
+                <p className="text-slate-400">+91 9336009951</p>
               </div>
             </div>
 
@@ -45,9 +45,7 @@ export default function ContactPage() {
               <div>
                 <p className="font-semibold text-white">Registered Merchant Address</p>
                 <p className="text-slate-400">
-                  QuantFlow Technologies India Pvt. Ltd.<br />
-                  Tech Park Tower 4, Outer Ring Road<br />
-                  Bengaluru, Karnataka 560103, India
+                  PSIT KANPUR , BHAUTI , 209305
                 </p>
               </div>
             </div>
