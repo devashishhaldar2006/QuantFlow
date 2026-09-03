@@ -18,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://quantflow-jade.vercel.app"),
+  metadataBase: new URL("https://quantflow.hackcentral.me"),
   title: {
     default: "QuantFlow | Institutional Quantitative Research Terminal",
     template: "%s | QuantFlow",

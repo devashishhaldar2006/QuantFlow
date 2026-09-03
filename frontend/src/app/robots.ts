@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://quantflow-jade.vercel.app";
+  const baseUrl = "https://quantflow.hackcentral.me";
 
   return {
     rules: [
