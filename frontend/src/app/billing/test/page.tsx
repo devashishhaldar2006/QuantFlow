@@ -61,7 +61,7 @@ export default async function BillingTestPage() {
 
                   <div className="mt-8 flex items-baseline gap-2">
                     <span className="font-mono text-4xl font-bold tracking-tight text-slate-100">
-                      ₹499
+                      ₹9
                     </span>
 
                     <span className="text-sm text-slate-500">

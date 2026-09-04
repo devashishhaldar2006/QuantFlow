@@ -55,7 +55,7 @@ export default function RazorpayCheckout() {
           name: "QuantFlow",
 
           description:
-            "QuantFlow Pro - Monthly",
+            "QuantFlow Pro - ₹9 / month",
 
           prefill: {
             name:
