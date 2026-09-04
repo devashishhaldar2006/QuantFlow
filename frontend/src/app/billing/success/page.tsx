@@ -4,23 +4,18 @@ import { CheckCircle2, ArrowRight, ShieldCheck } from "lucide-react";
 import AnimatedPage, { AnimatedItem } from "@/components/common/AnimatedPage";
 
 import { getUserByClerkId } from "@/services/auth/userService";
-import { activateProSubscription } from "@/services/billing/billingService";
-
 export default async function BillingSuccessPage() {
   const { userId: clerkUserId } = await auth();
+  let isPro = false;
 
   if (clerkUserId) {
     try {
       const user = await getUserByClerkId(clerkUserId);
-
-      if (user) {
-        await activateProSubscription(user.id);
+      if (user?.plan === "PRO") {
+        isPro = true;
       }
     } catch (err) {
-      console.error(
-        "Failed to auto-sync subscription on success page:",
-        err,
-      );
+      console.error("Failed to fetch user plan status on success page:", err);
     }
   }
 

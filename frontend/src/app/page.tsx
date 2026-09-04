@@ -430,7 +430,7 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Pricing Section — Exact ₹499 / month Pricing */}
+      {/* Pricing Section — Exact ₹9 / month Pricing */}
       <section id="pricing" className="mx-auto max-w-7xl px-6 py-20 border-t border-white/10">
         <div className="text-center space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-3.5 py-1 text-xs font-semibold text-indigo-400">
@@ -441,7 +441,7 @@ export default function LandingPage() {
             Transparent Subscription Plans
           </h2>
           <p className="text-slate-400 max-w-xl mx-auto text-sm">
-            Integrated directly with Razorpay Subscription Plan (`plan_TVZsFngyhIUrLc`). 7-day money-back guarantee.
+            Integrated directly with Razorpay Subscription Plan (`plan_TXyJgz1fKGqKIy`). 7-day money-back guarantee.
           </p>
 
           <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-slate-900/80 p-1.5 mt-4">
@@ -498,7 +498,7 @@ export default function LandingPage() {
             </Link>
           </motion.div>
 
-          {/* PRO PLAN — ₹499/mo */}
+          {/* PRO PLAN — ₹9/mo */}
           <motion.div
             whileHover={{ y: -6 }}
             className="relative rounded-2xl border-2 border-indigo-500 bg-[#090D1A] p-8 flex flex-col justify-between space-y-6 shadow-2xl shadow-indigo-500/20"
@@ -511,7 +511,7 @@ export default function LandingPage() {
               <p className="text-xs text-slate-400">Full institutional access to low-latency C++ compilation engine.</p>
               <div className="space-y-1">
                 <span className="text-4xl font-extrabold text-white">
-                  {billingCycle === "monthly" ? "₹499" : "₹399"}
+                  {billingCycle === "monthly" ? "₹9" : "₹7"}
                 </span>
                 <span className="text-xs text-slate-400"> / month</span>
               </div>
