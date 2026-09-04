@@ -21,8 +21,10 @@ export async function sendWelcomeEmail({
   const recipientName = name || "Quantitative Trader";
 
   try {
+    const fromEmail = process.env.RESEND_FROM_EMAIL || "QuantFlow Terminal <onboarding@resend.dev>";
+
     const data = await resend.emails.send({
-      from: "QuantFlow Terminal <onboarding@resend.dev>",
+      from: fromEmail,
       to: [to],
       subject: "Welcome to QuantFlow — Quantitative Backtesting Terminal",
       html: `
