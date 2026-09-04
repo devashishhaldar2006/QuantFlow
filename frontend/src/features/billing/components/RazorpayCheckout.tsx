@@ -6,7 +6,10 @@ import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 
 type CheckoutResponse = {
-  subscriptionId: string;
+  subscriptionId?: string;
+  orderId?: string;
+  amount?: number;
+  currency?: string;
   keyId: string;
 };
 
@@ -35,6 +38,7 @@ export default function RazorpayCheckout() {
     try {
       const response = await axios.post<CheckoutResponse>(
         "/api/billing/checkout",
+        { mode: "order" },
       );
 
       const checkout = response.data;
@@ -45,66 +49,66 @@ export default function RazorpayCheckout() {
         );
       }
 
-      const razorpay =
-        new window.Razorpay({
-          key: checkout.keyId,
-
-          subscription_id:
-            checkout.subscriptionId,
-
-          name: "QuantFlow",
-
-          description:
-            "QuantFlow Pro - ₹9 / month",
-
-          prefill: {
-            name:
-              user?.fullName ||
-              user?.username ||
-              "QuantFlow Trader",
-            email:
-              user?.primaryEmailAddress
-                ?.emailAddress || "",
-            contact: "9999999999",
-          },
-
-          theme: {
-            color: "#6366f1",
-          },
-
-          handler: async function (
-            response: Record<string, unknown>,
-          ) {
-            console.log(
-              "Razorpay Payment Success:",
-              response,
+      const options: Record<string, unknown> = {
+        key: checkout.keyId,
+        name: "QuantFlow",
+        description: "QuantFlow Pro - 30 Days Access (₹9)",
+        theme: {
+          color: "#6366f1",
+        },
+        prefill: {
+          name:
+            user?.fullName ||
+            user?.username ||
+            "QuantFlow Trader",
+          email:
+            user?.primaryEmailAddress
+              ?.emailAddress || "",
+          contact: "9999999999",
+        },
+        handler: async function (
+          response: Record<string, unknown>,
+        ) {
+          console.log(
+            "Razorpay Payment Success:",
+            response,
+          );
+          try {
+            await axios.post("/api/billing/verify", {
+              razorpay_payment_id:
+                response.razorpay_payment_id,
+              razorpay_order_id:
+                response.razorpay_order_id || checkout.orderId,
+              razorpay_subscription_id:
+                response.razorpay_subscription_id || checkout.subscriptionId,
+              razorpay_signature:
+                response.razorpay_signature,
+            });
+          } catch (err) {
+            console.error(
+              "Failed to activate subscription via API:",
+              err,
             );
-            try {
-              await axios.post("/api/billing/verify", {
-                razorpay_payment_id:
-                  response.razorpay_payment_id,
-                razorpay_subscription_id:
-                  response.razorpay_subscription_id,
-                razorpay_signature:
-                  response.razorpay_signature,
-              });
-            } catch (err) {
-              console.error(
-                "Failed to activate subscription via API:",
-                err,
-              );
-            } finally {
-              router.push("/billing/success");
-            }
+          } finally {
+            router.push("/billing/success");
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            setLoading(false);
           },
+        },
+      };
 
-          modal: {
-            ondismiss: function () {
-              setLoading(false);
-            },
-          },
-        });
+      if (checkout.orderId) {
+        options.order_id = checkout.orderId;
+        options.amount = checkout.amount || 900;
+        options.currency = checkout.currency || "INR";
+      } else if (checkout.subscriptionId) {
+        options.subscription_id = checkout.subscriptionId;
+      }
 
+      const razorpay = new window.Razorpay(options);
       razorpay.open();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data?.error) {

@@ -25,6 +25,7 @@ export async function POST(request: Request) {
     const body = (await request.json().catch(() => ({}))) as {
       razorpay_payment_id?: string;
       razorpay_subscription_id?: string;
+      razorpay_order_id?: string;
       razorpay_signature?: string;
     };
 
@@ -33,6 +34,7 @@ export async function POST(request: Request) {
       body.razorpay_subscription_id,
       body.razorpay_payment_id,
       body.razorpay_signature,
+      body.razorpay_order_id,
     );
 
     return Response.json(

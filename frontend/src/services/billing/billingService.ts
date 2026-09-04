@@ -153,6 +153,71 @@ export async function createProSubscription(
   };
 }
 
+type CreateProOrderResult = {
+  orderId: string;
+  amount: number;
+  currency: string;
+  keyId: string;
+};
+
+export async function createProOrder(
+  userId: string,
+): Promise<CreateProOrderResult> {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new Error("User not found.");
+  }
+
+  if (user.plan === "PRO") {
+    throw new Error("User already has a Pro plan.");
+  }
+
+  const razorpay = getRazorpayClient();
+  const razorpayKeyId = getRazorpayKeyId();
+
+  const order = await new Promise<{ id: string; amount: number; currency: string }>(
+    (resolve, reject) => {
+      razorpay.orders.create(
+        {
+          amount: 900, // ₹9.00 INR (in paise)
+          currency: "INR",
+          receipt: `rcpt_${userId.slice(-6)}_${Date.now().toString().slice(-6)}`,
+          notes: {
+            quantflow_user_id: user.id,
+            plan: "PRO_MONTHLY",
+          },
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (error: unknown, result: any) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          if (!result?.id) {
+            reject(new Error("Razorpay did not return an order ID."));
+            return;
+          }
+          resolve({
+            id: String(result.id),
+            amount: Number(result.amount) || 900,
+            currency: String(result.currency || "INR"),
+          });
+        },
+      );
+    },
+  );
+
+  return {
+    orderId: order.id,
+    amount: order.amount,
+    currency: order.currency,
+    keyId: razorpayKeyId,
+  };
+}
+
 export async function getProviderSubscription(
   subscriptionId: string,
 ) {
@@ -185,17 +250,31 @@ export async function activateProSubscription(
   razorpaySubscriptionId?: string,
   razorpayPaymentId?: string,
   razorpaySignature?: string,
+  razorpayOrderId?: string,
 ) {
-  if (!razorpayPaymentId || !razorpaySubscriptionId || !razorpaySignature) {
+  if (!razorpayPaymentId || !razorpaySignature) {
     throw new Error("Missing required payment verification parameters.");
   }
 
   const keySecret = getRequiredEnv("RAZORPAY_KEY_SECRET");
-  const payload = `${razorpayPaymentId}|${razorpaySubscriptionId}`;
-  const expectedSignature = crypto
-    .createHmac("sha256", keySecret)
-    .update(payload)
-    .digest("hex");
+
+  // Support both Order payments (paymentId|orderId) and Subscriptions (paymentId|subscriptionId)
+  let expectedSignature: string;
+  if (razorpayOrderId) {
+    const payload = `${razorpayOrderId}|${razorpayPaymentId}`;
+    expectedSignature = crypto
+      .createHmac("sha256", keySecret)
+      .update(payload)
+      .digest("hex");
+  } else if (razorpaySubscriptionId) {
+    const payload = `${razorpayPaymentId}|${razorpaySubscriptionId}`;
+    expectedSignature = crypto
+      .createHmac("sha256", keySecret)
+      .update(payload)
+      .digest("hex");
+  } else {
+    throw new Error("Either razorpaySubscriptionId or razorpayOrderId must be provided.");
+  }
 
   const expectedBuf = Buffer.from(expectedSignature, "utf8");
   const receivedBuf = Buffer.from(razorpaySignature, "utf8");
@@ -206,6 +285,8 @@ export async function activateProSubscription(
   ) {
     throw new Error("Invalid Razorpay payment signature.");
   }
+
+  const providerIdentifier = razorpaySubscriptionId || razorpayOrderId || razorpayPaymentId;
 
   let sub = razorpaySubscriptionId
     ? await prisma.subscription.findFirst({
