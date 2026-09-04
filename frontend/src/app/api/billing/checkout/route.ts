@@ -1,9 +1,12 @@
 import { auth } from "@clerk/nextjs/server";
 
 import { getUserByClerkId } from "@/services/auth/userService";
-import { createProSubscription } from "@/services/billing/billingService";
+import {
+  createProSubscription,
+  createProOrder,
+} from "@/services/billing/billingService";
 
-export async function POST() {
+export async function POST(request: Request) {
   try {
     const { userId: clerkUserId } = await auth();
 
@@ -27,10 +30,18 @@ export async function POST() {
       );
     }
 
-    const subscription =
-      await createProSubscription(user.id);
+    const body = (await request.json().catch(() => ({}))) as {
+      mode?: "order" | "subscription";
+    };
 
-    return Response.json(subscription, {
+    // Default to standard one-time order for 100% instant UPI / QR / Netbanking / Card support without eMandate limits
+    if (body.mode === "subscription") {
+      const subscription = await createProSubscription(user.id);
+      return Response.json(subscription, { status: 201 });
+    }
+
+    const order = await createProOrder(user.id);
+    return Response.json(order, {
       status: 201,
     });
   } catch (error) {
