@@ -10,6 +10,7 @@ import { Menu, X, LogOut } from "lucide-react";
 
 import NavSection from "./NavSection";
 import { navigation } from "./navigation";
+import { QuantFlowLogo } from "../common/QuantFlowLogo";
 
 /**
  * Sidebar — Main navigation sidebar for the QuantFlow terminal.
@@ -20,13 +21,22 @@ import { navigation } from "./navigation";
 
 type SidebarProps = {
   isCollapsed: boolean;
+  mobileOpen?: boolean;
+  setMobileOpen?: (open: boolean) => void;
 };
 
-export default function Sidebar({ isCollapsed }: SidebarProps) {
+export default function Sidebar({
+  isCollapsed,
+  mobileOpen: controlledMobileOpen,
+  setMobileOpen: controlledSetMobileOpen,
+}: SidebarProps) {
   const pathname = usePathname();
   const { isSignedIn, isLoaded } = useAuth();
   const { user } = useUser();
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [internalMobileOpen, setInternalMobileOpen] = useState(false);
+
+  const mobileOpen = controlledMobileOpen ?? internalMobileOpen;
+  const setMobileOpen = controlledSetMobileOpen ?? setInternalMobileOpen;
 
   const isPublicRoute =
     pathname === "/" ||
@@ -58,22 +68,63 @@ export default function Sidebar({ isCollapsed }: SidebarProps) {
     .substring(0, 2)
     .toUpperCase();
 
-  const sidebarContent = (
-    <>
-      {/* Brand (Moved to TopNavbar) */}
-      <div className="pt-4" />
+  const renderContent = (isDrawer = false) => (
+    <div className="flex h-full flex-col justify-between">
+      {isDrawer && (
+        <div className="flex items-center justify-between border-b border-white/5 px-4 py-3.5">
+          <Link
+            href="/dashboard"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center"
+          >
+            <QuantFlowLogo className="size-7" textClassName="text-sm font-extrabold" />
+          </Link>
+          <button
+            type="button"
+            onClick={() => setMobileOpen(false)}
+            className="flex size-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200"
+            aria-label="Close navigation"
+          >
+            <X className="size-4.5" />
+          </button>
+        </div>
+      )}
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-4 overflow-y-auto px-2 pb-4 scrollbar-hide">
-        <NavSection title="Overview" items={overviewItems} pathname={pathname} isCollapsed={isCollapsed} />
-        <NavSection title="Trading" items={tradingItems} pathname={pathname} isCollapsed={isCollapsed} />
-        <NavSection title="Analysis" items={analysisItems} pathname={pathname} isCollapsed={isCollapsed} />
-        <NavSection title="System" items={systemItems} pathname={pathname} isCollapsed={isCollapsed} />
+      <nav className="flex-1 space-y-4 overflow-y-auto px-2 py-4 scrollbar-hide">
+        <NavSection
+          title="Overview"
+          items={overviewItems}
+          pathname={pathname}
+          isCollapsed={isDrawer ? false : isCollapsed}
+          onNavigate={isDrawer ? () => setMobileOpen(false) : undefined}
+        />
+        <NavSection
+          title="Trading"
+          items={tradingItems}
+          pathname={pathname}
+          isCollapsed={isDrawer ? false : isCollapsed}
+          onNavigate={isDrawer ? () => setMobileOpen(false) : undefined}
+        />
+        <NavSection
+          title="Analysis"
+          items={analysisItems}
+          pathname={pathname}
+          isCollapsed={isDrawer ? false : isCollapsed}
+          onNavigate={isDrawer ? () => setMobileOpen(false) : undefined}
+        />
+        <NavSection
+          title="System"
+          items={systemItems}
+          pathname={pathname}
+          isCollapsed={isDrawer ? false : isCollapsed}
+          onNavigate={isDrawer ? () => setMobileOpen(false) : undefined}
+        />
       </nav>
 
       {/* Engine Status & User Profile */}
       <div className="shrink-0 border-t border-slate-800/80 bg-slate-900/60 p-3 backdrop-blur-md">
-        {!isCollapsed ? (
+        {(!isCollapsed || isDrawer) ? (
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs text-slate-400 bg-white/[0.02] border border-white/5">
               <span className="relative flex size-2 shrink-0">
@@ -86,6 +137,7 @@ export default function Sidebar({ isCollapsed }: SidebarProps) {
             <div className="mt-1 flex items-center justify-between gap-1 rounded-xl border border-white/5 bg-white/[0.03] p-1.5 hover:border-indigo-500/30 transition-all">
               <Link
                 href="/profile"
+                onClick={isDrawer ? () => setMobileOpen(false) : undefined}
                 className="flex min-w-0 flex-1 items-center gap-2 p-1 hover:bg-white/[0.05] rounded-lg transition-colors group"
                 title="Go to Account & Usage Profile"
               >
@@ -160,9 +212,7 @@ export default function Sidebar({ isCollapsed }: SidebarProps) {
           </div>
         )}
       </div>
-      
-      {/* Removed Collapse Toggle, now in TopNavbar */}
-    </>
+    </div>
   );
 
   return (
@@ -173,13 +223,10 @@ export default function Sidebar({ isCollapsed }: SidebarProps) {
           isCollapsed ? "w-[64px]" : "w-[240px]"
         }`}
       >
-        {sidebarContent}
+        {renderContent(false)}
       </aside>
 
-      {/* Mobile Toggle (rendered by TopNavbar visually, but state managed here) */}
-      <MobileToggle isOpen={mobileOpen} onToggle={() => setMobileOpen(!mobileOpen)} />
-
-      {/* Mobile Overlay */}
+      {/* Mobile Overlay & Slide-in Drawer */}
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -187,48 +234,23 @@ export default function Sidebar({ isCollapsed }: SidebarProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-              className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm md:hidden"
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm md:hidden"
               onClick={() => setMobileOpen(false)}
             />
 
             <motion.aside
-              initial={{ x: -240 }}
+              initial={{ x: -260 }}
               animate={{ x: 0 }}
-              exit={{ x: -240 }}
-              transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-              className="fixed left-0 top-0 z-50 flex h-screen w-[240px] flex-col border-r border-slate-700 bg-[#0F1520] md:hidden shadow-xl"
+              exit={{ x: -260 }}
+              transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+              className="fixed left-0 top-0 z-50 flex h-full w-[260px] max-w-[85vw] flex-col border-r border-slate-800 bg-[#0B1120] md:hidden shadow-2xl"
             >
-              <button
-                type="button"
-                onClick={() => setMobileOpen(false)}
-                className="absolute right-3 top-4 flex size-8 items-center justify-center rounded-md text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200"
-                aria-label="Close sidebar"
-              >
-                <X className="size-4.5" />
-              </button>
-
-              {sidebarContent}
+              {renderContent(true)}
             </motion.aside>
           </>
         )}
       </AnimatePresence>
     </>
-  );
-}
-
-/**
- * MobileToggle — Hamburger button for mobile sidebar.
- */
-function MobileToggle({ isOpen, onToggle }: { isOpen: boolean; onToggle: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onToggle}
-      className="fixed left-4 top-4 z-40 flex size-9 items-center justify-center rounded-md border border-slate-700 bg-slate-900/50 text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200 md:hidden"
-      aria-label={isOpen ? "Close navigation" : "Open navigation"}
-    >
-      <Menu className="size-4.5" />
-    </button>
   );
 }

@@ -65,15 +65,15 @@ export function StrategyCopilotModal({ isOpen, onClose, onApplyConfig }: Strateg
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-blue-500/30 bg-[#0B1120] p-6 shadow-2xl space-y-5 text-slate-100"
+        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-blue-500/30 bg-[#0B1120] p-4 sm:p-6 shadow-2xl space-y-4 sm:space-y-5 text-slate-100 scrollbar-hide"
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-3 sm:pb-4">
           <div className="flex items-center gap-2.5">
             <div className="flex size-9 items-center justify-center rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400">
               <Bot className="size-5" />

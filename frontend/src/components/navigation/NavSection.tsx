@@ -8,6 +8,7 @@ type NavSectionProps = {
   items: NavItem[];
   pathname: string;
   isCollapsed: boolean;
+  onNavigate?: () => void;
 };
 
 export default function NavSection({
@@ -15,6 +16,7 @@ export default function NavSection({
   items,
   pathname,
   isCollapsed,
+  onNavigate,
 }: NavSectionProps) {
   return (
     <section className="mb-6">
@@ -33,6 +35,7 @@ export default function NavSection({
             const linkContent = (
               <Link
                 href={item.href}
+                onClick={onNavigate}
                 className={[
                   "group relative flex h-9 items-center rounded-md transition-all duration-300 ease-in-out overflow-hidden",
                   isCollapsed ? "w-9 px-0 justify-center mx-auto" : "w-full px-3",

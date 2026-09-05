@@ -12,9 +12,16 @@ import { QuantFlowLogo } from "../common/QuantFlowLogo";
 type TopNavbarProps = {
   isCollapsed: boolean;
   setIsCollapsed: (collapsed: boolean) => void;
+  mobileOpen?: boolean;
+  setMobileOpen?: (open: boolean | ((prev: boolean) => boolean)) => void;
 };
 
-export default function TopNavbar({ isCollapsed, setIsCollapsed }: TopNavbarProps) {
+export default function TopNavbar({
+  isCollapsed,
+  setIsCollapsed,
+  mobileOpen,
+  setMobileOpen,
+}: TopNavbarProps) {
   const pathname = usePathname();
   const { isSignedIn, isLoaded } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
@@ -51,23 +58,35 @@ export default function TopNavbar({ isCollapsed, setIsCollapsed }: TopNavbarProp
     (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
   );
 
+  const handleToggle = () => {
+    // On mobile (< 768px), toggle the mobile drawer overlay
+    if (window.innerWidth < 768) {
+      if (setMobileOpen) {
+        setMobileOpen((prev) => !prev);
+      }
+    } else {
+      // On desktop (>= 768px), collapse/expand the left fixed sidebar
+      setIsCollapsed(!isCollapsed);
+    }
+  };
+
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 h-[60px] border-b border-white/5 bg-[#050A12]/95 backdrop-blur-2xl">
-        <div className="flex h-full items-center px-4 gap-3">
-          {/* Hamburger */}
+        <div className="flex h-full items-center px-3 sm:px-4 gap-2.5 sm:gap-3">
+          {/* Hamburger (Mobile: opens drawer; Desktop: collapses sidebar) */}
           <button
             type="button"
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="flex size-8 shrink-0 items-center justify-center rounded-lg text-slate-500 transition-all hover:bg-white/5 hover:text-slate-200"
-            aria-label="Toggle sidebar"
+            onClick={handleToggle}
+            className="flex size-9 shrink-0 items-center justify-center rounded-lg text-slate-400 hover:text-slate-100 hover:bg-white/10 active:scale-95 transition-all"
+            aria-label="Toggle navigation menu"
           >
-            <Menu className="size-4" />
+            <Menu className="size-5" />
           </button>
 
           {/* Brand */}
-          <div className="flex shrink-0 items-center mr-4">
-            <QuantFlowLogo className="size-7" textClassName="text-sm font-extrabold hidden sm:inline-block" />
+          <div className="flex shrink-0 items-center mr-2 sm:mr-4">
+            <QuantFlowLogo className="size-6 sm:size-7" textClassName="text-sm font-extrabold hidden sm:inline-block" />
           </div>
 
           {/* Search Trigger */}
