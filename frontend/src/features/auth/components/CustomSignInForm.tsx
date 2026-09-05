@@ -1,6 +1,6 @@
 "use client";
 
-import { useClerk, useAuth } from "@clerk/nextjs";
+import { useClerk, useAuth, useSignIn } from "@clerk/nextjs";
 import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -17,6 +17,7 @@ import {
 
 export default function CustomSignInForm() {
   const clerk = useClerk();
+  const { signIn } = useSignIn();
   const { isLoaded: authLoaded, isSignedIn } = useAuth();
   const router = useRouter();
 
@@ -34,14 +35,20 @@ export default function CustomSignInForm() {
 
   // Social SSO authentication
   const handleSocialAuth = async (strategy: "oauth_google" | "oauth_github") => {
-    if (!clerk.client) return;
+    setError("");
     try {
-      await clerk.client.signIn.authenticateWithRedirect({
-        strategy,
-        redirectUrl: "/sso-callback",
-        redirectUrlComplete: "/dashboard",
-      });
+      if (signIn) {
+        const res = await signIn.sso({
+          strategy,
+          redirectUrl: "/dashboard",
+          redirectCallbackUrl: "/sso-callback",
+        });
+        if (res?.error) {
+          setError(res.error.message || "Failed to initiate social login.");
+        }
+      }
     } catch (err: unknown) {
+      console.error("[SSO Error]:", err);
       if (err instanceof Error) {
         setError(err.message);
       } else {
