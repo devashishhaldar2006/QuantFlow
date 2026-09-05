@@ -127,29 +127,15 @@ QuantFlow follows a decoupled, asynchronous multi-tier architecture with strict 
 
 ---
 
-## 📸 Platform Interface & User Flow
+## 📸 Screenshots
 
-```
-+----------------------------------------------------------------------------------------------------+
-|  QUANTFLOW TERMINAL                                                         [C++ Core: Active]     |
-+----------------------------------------------------------------------------------------------------+
-|                                                                                                    |
-|  [ New Backtest ]  [ Portfolio ]  [ Strategy Library ]  [ Datasets ]  [ Risk Analytics ]           |
-|                                                                                                    |
-|  +----------------------------------------------------+  +--------------------------------------+  |
-|  |  AI Strategy Architect (LangGraph)                 |  |  Autonomous Risk Committee Audit     |  |
-|  |  • Hypothesis: Dual EMA Breakout on NIFTY          |  |  • Institutional Score: 88/100       |  |
-|  |  • Boundary Validator: PASSED (fast < slow)        |  |  • Overfitting Check: ROBUST         |  |
-|  |  • Iterative Reflection: Sharpe 1.84, Max DD 6.2%  |  |  • Tail Risk: Volatility Shock Tested|  |
-|  +----------------------------------------------------+  +--------------------------------------+  |
-|                                                                                                    |
-|  +----------------------------------------------------------------------------------------------+  |
-|  |  Interactive Equity Curve Simulation & Trade History Ledger (Recharts)                       |  |
-|  |  $100,000 ─────────/\────────/\──────/\───────────────────────────► $118,420 (+18.42%)      |  |
-|  +----------------------------------------------------------------------------------------------+  |
-|                                                                                                    |
-+----------------------------------------------------------------------------------------------------+
-```
+![Landing Page](<https://i.postimg.cc/dtD8JFHk/Screenshot-(1754).png>)
+![Dashboard](<https://i.postimg.cc/sxxZfPJp/Screenshot-(1748).png>)
+![Portfolio](<https://i.postimg.cc/05XwW38t/Screenshot-(1749).png>)
+![Backtests](<https://i.postimg.cc/VL3b1C07/Screenshot-(1750).png>)
+![Data Platform](<https://i.postimg.cc/3wh40QBv/Screenshot-(1751).png>)
+![Strategies](<https://i.postimg.cc/prmpMW2K/Screenshot-(1752).png>)
+![Analytics](<https://i.postimg.cc/FzY7XrrN/Screenshot-(1753).png>)
 
 ---
 
