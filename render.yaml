@@ -1,0 +1,14 @@
+services:
+  # C++ Quant Engine REST API Server
+  - type: web
+    name: quantflow-backend
+    runtime: docker
+    dockerContext: ./backend
+    dockerfilePath: ./backend/Dockerfile
+    plan: free
+    region: singapore
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 10000

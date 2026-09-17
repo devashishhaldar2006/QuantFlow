@@ -22,7 +22,7 @@ COPY include/ ./include/
 COPY src/ ./src/
 COPY tests/ ./tests/
 COPY config/ ./config/
-RUN mkdir -p /app/data
+COPY data/ ./data/
 
 # Configure and compile in Release mode with Ninja
 RUN cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release
@@ -37,13 +37,13 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
-# Copy compiled binaries from builder
+# Copy compiled binaries and configurations from builder
 COPY --from=builder /app/build/QuantFlowServer ./QuantFlowServer
 COPY --from=builder /app/build/QuantFlow ./QuantFlow
 COPY --from=builder /app/config ./config
-RUN mkdir -p /app/data
+COPY --from=builder /app/data ./data
 
-# Expose QuantFlow REST API Port
+# Expose default port (Render will bind to $PORT dynamically, or 8080 by default)
 EXPOSE 8080
 
 # Run QuantFlowServer by default

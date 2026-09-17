@@ -61,11 +61,11 @@ jobs:
         working-directory: ./backend
         run: cmake --build build --config Release -j$(nproc)
 
-  deploy-backend-ec2:
-    name: Build Docker Image & Deploy to AWS EC2
+  publish-backend-image:
+    name: Build Docker Image & Trigger Render Deploy
     needs: [validate-frontend, validate-backend]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
     permissions:
       contents: read
       packages: write
@@ -98,23 +98,11 @@ jobs:
             ${{ env.IMAGE_REPO }}:latest
             ${{ env.IMAGE_REPO }}:${{ github.sha }}
 
-      - name: Deploy to AWS EC2 via SSH
-        if: env.EC2_HOST != ''
+      - name: Trigger Render Deploy Hook (Optional)
+        if: env.RENDER_DEPLOY_HOOK_URL != ''
         env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER || 'ubuntu' }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          envs: IMAGE_REPO
-          script: |
-            mkdir -p ~/quantflow
-            cd ~/quantflow
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker pull ${{ env.IMAGE_REPO }}:latest
-            docker stop quantflow-backend || true
-            docker rm quantflow-backend || true
-            docker run -d --restart always -p 8080:8080 --name quantflow-backend ${{ env.IMAGE_REPO }}:latest
-            docker system prune -f
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          curl -X POST -s -S -o /dev/null -w "%{http_code}" "$RENDER_DEPLOY_HOOK_URL"
+
 
