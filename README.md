@@ -24,7 +24,7 @@
 | :--- | :--- | :--- | :--- |
 | **🌐 Production Web Terminal** | [**quantflow.hackcentral.me**](https://quantflow.hackcentral.me) | Vercel Edge Serverless | Institutional Next.js 16 Quantitative Workstation |
 | **🎥 Video Walkthrough & Architecture** | [**Watch QuantFlow Demonstration**](https://youtu.be/your-demo-video) | YouTube HD Video | Complete architectural walkthrough & agentic execution demo |
-| **⚡ High-Performance Core** | `http://3.6.68.152:8080` | AWS EC2 (t3.micro, ap-south-1 Mumbai) | Compiled C++20 REST API Execution Server |
+| **⚡ High-Performance Core** | Render Web Service (Docker) | Render Cloud Platform | Compiled C++20 REST API Execution Engine |
 | **🗄️ Cloud Database & Storage** | Supabase Cloud (Tokyo ap-northeast-1) | PostgreSQL + S3 Object Store | Tick datasets, backtest ledgers, and trade accounting |
 | **📜 Open Source License** | [MIT License](LICENSE) | GitHub Repository | Permissive open-source license for researchers & devs |
 
@@ -77,7 +77,7 @@ QuantFlow follows a decoupled, asynchronous multi-tier architecture with strict 
                                                               v
 +-------------------------------------------------------------------------------------------------------------------------+
 |                                           HIGH-PERFORMANCE C++20 QUANT ENGINE                                           |
-|                                     Deployed on AWS EC2 (t3.micro, ap-south-1 Mumbai)                                   |
+|                                     Deployed on Render Cloud (Docker Web Service)                                       |
 |                                                                                                                         |
 |   +-------------------+    +---------------------+    +--------------------+    +-----------------------------------+   |
 |   |  Market Data IO   | ➔ | Technical Indicators| ➔ | Strategy Factory   | ➔  | Backtest Engine Core              |   |

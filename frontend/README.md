@@ -81,7 +81,7 @@ cp .env.example .env
 ```
 Ensure you have:
 - `DATABASE_URL` (Supabase PostgreSQL)
-- `QUANT_ENGINE_URL` (`http://3.6.68.152:8080` in production or `http://localhost:8080` locally)
+- `QUANT_ENGINE_URL` (Render Web Service URL e.g. `https://quantflow-backend.onrender.com` in production or `http://localhost:8080` locally)
 - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` & `CLERK_SECRET_KEY`
 - `MISTRAL_API_KEY` (for LangGraph AI agents)
 

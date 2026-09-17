@@ -13,7 +13,7 @@ function getEngineClient(): HttpQuantEngineClient {
   const url =
     process.env.QUANT_ENGINE_URL ||
     process.env.NEXT_PUBLIC_QUANT_ENGINE_URL ||
-    "http://3.6.68.152:8080";
+    "http://localhost:8080";
   return new HttpQuantEngineClient(url);
 }
 
