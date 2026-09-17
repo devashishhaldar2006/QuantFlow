@@ -10,6 +10,7 @@
 
 <p align="center">
   <a href="https://quantflow.hackcentral.me"><img src="https://img.shields.io/badge/Live%20Terminal-quantflow.hackcentral.me-0A84FF?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" /></a>
+  <a href="https://quantflow-backend-7gxi.onrender.com/health"><img src="https://img.shields.io/badge/C%2B%2B%20Engine-Render%20Cloud-46E3B7?style=for-the-badge&logo=render&logoColor=white" alt="Render Engine" /></a>
   <a href="https://youtu.be/your-demo-video"><img src="https://img.shields.io/badge/YouTube%20Walkthrough-Watch%20Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Video Demo" /></a>
   <a href="https://github.com/devashishhaldar2006/QuantFlow"><img src="https://img.shields.io/badge/Core%20Engine-Modern%20C%2B%2B20-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="C++20" /></a>
   <a href="https://github.com/devashishhaldar2006/QuantFlow/actions"><img src="https://img.shields.io/badge/CI%2FCD-Automated%20GHCR%20%2B%20EC2-2088FF?style=for-the-badge&logo=github-actions&logoColor=white" alt="CI/CD" /></a>
@@ -77,7 +78,7 @@ QuantFlow follows a decoupled, asynchronous multi-tier architecture with strict 
                                                               v
 +-------------------------------------------------------------------------------------------------------------------------+
 |                                           HIGH-PERFORMANCE C++20 QUANT ENGINE                                           |
-|                                     Deployed on Render Cloud (Docker Web Service)                                       |
+|                             Deployed on Render Cloud (Docker Web Service) & AWS EC2 Container Architecture              |
 |                                                                                                                         |
 |   +-------------------+    +---------------------+    +--------------------+    +-----------------------------------+   |
 |   |  Market Data IO   | ➔ | Technical Indicators| ➔ | Strategy Factory   | ➔  | Backtest Engine Core              |   |
@@ -248,7 +249,7 @@ Refer to [`frontend/.env.example`](frontend/.env.example) for configuration deta
 | Variable | Description | Required |
 | :--- | :--- | :--- |
 | `DATABASE_URL` | PostgreSQL connection URL (Supabase Cloud / local) | **Yes** |
-| `QUANT_ENGINE_URL` | Endpoint of the compiled C++ engine (`http://3.6.68.152:8080` in prod) | **Yes** |
+| `QUANT_ENGINE_URL` | Endpoint of the compiled C++ engine (`https://quantflow-backend-7gxi.onrender.com` in prod) | **Yes** |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk Authentication client key | **Yes** |
 | `CLERK_SECRET_KEY` | Clerk Authentication backend API secret | **Yes** |
 | `MISTRAL_API_KEY` | Mistral AI API key (for LangGraph AI agents) | Optional |
@@ -270,7 +271,7 @@ ctest --test-dir backend/build --output-on-failure
 cd frontend && npm run build
 ```
 
-The GitHub Actions workflow (`.github/workflows/ci.yml`) automatically builds the multi-stage Docker container, tags it in GitHub Container Registry (GHCR), and deploys it cleanly to AWS EC2 via SSH.
+The GitHub Actions workflow (`.github/workflows/ci.yml`) automatically builds and tests both the Next.js frontend and C++ engine, packages the multi-stage Docker container, tags it in GitHub Container Registry (GHCR), and triggers automated deployment to Render and AWS EC2. Additionally, an automated keepalive cron schedule ensures the high-performance C++ execution engine stays warm and ready 24/7.
 
 ---
 
