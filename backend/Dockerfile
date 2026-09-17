@@ -22,7 +22,7 @@ COPY include/ ./include/
 COPY src/ ./src/
 COPY tests/ ./tests/
 COPY config/ ./config/
-COPY data/ ./data/
+RUN mkdir -p /app/data
 
 # Configure and compile in Release mode with Ninja
 RUN cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release
@@ -41,7 +41,7 @@ WORKDIR /app
 COPY --from=builder /app/build/QuantFlowServer ./QuantFlowServer
 COPY --from=builder /app/build/QuantFlow ./QuantFlow
 COPY --from=builder /app/config ./config
-COPY --from=builder /app/data ./data
+RUN mkdir -p /app/data
 
 # Expose default port (Render will bind to $PORT dynamically, or 8080 by default)
 EXPOSE 8080
