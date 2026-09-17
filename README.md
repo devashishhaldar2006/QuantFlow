@@ -24,7 +24,7 @@
 | :--- | :--- | :--- | :--- |
 | **🌐 Production Web Terminal** | [**quantflow.hackcentral.me**](https://quantflow.hackcentral.me) | Vercel Edge Serverless | Institutional Next.js 16 Quantitative Workstation |
 | **🎥 Video Walkthrough & Architecture** | [**Watch QuantFlow Demonstration**](https://youtu.be/your-demo-video) | YouTube HD Video | Complete architectural walkthrough & agentic execution demo |
-| **⚡ High-Performance Core** | Render Web Service (Docker) | Render Cloud Platform | Compiled C++20 REST API Execution Engine |
+| **⚡ High-Performance Core** | [**quantflow-backend-7gxi.onrender.com**](https://quantflow-backend-7gxi.onrender.com) | Render Web Service (Docker) | Compiled C++20 REST API Execution Engine |
 | **🗄️ Cloud Database & Storage** | Supabase Cloud (Tokyo ap-northeast-1) | PostgreSQL + S3 Object Store | Tick datasets, backtest ledgers, and trade accounting |
 | **📜 Open Source License** | [MIT License](LICENSE) | GitHub Repository | Permissive open-source license for researchers & devs |
 
