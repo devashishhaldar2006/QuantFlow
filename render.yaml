@@ -4,7 +4,7 @@ services:
     name: quantflow-backend
     runtime: docker
     dockerContext: ./backend
-    dockerfilePath: ./backend/Dockerfile
+    dockerfilePath: Dockerfile
     plan: free
     region: singapore
     healthCheckPath: /health

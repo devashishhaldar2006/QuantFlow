@@ -11,6 +11,12 @@ services:
     volumes:
       - ./backend/data:/app/data
       - ./backend/config:/app/config
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8080/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
     networks:
       - quantflow-network
 
@@ -21,14 +27,14 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-quantflow_app}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Devashish@196}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD environment variable is required}
       POSTGRES_DB: ${POSTGRES_DB:-quantflow}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U quantflow_app -d quantflow"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-quantflow_app} -d ${POSTGRES_DB:-quantflow}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -48,8 +54,12 @@ services:
       - ./frontend/.env
     environment:
       - QUANT_ENGINE_URL=http://backend:8080
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-quantflow_app}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-quantflow}?schema=public
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     volumes:
       - ./backend/data:/backend/data
     networks:
@@ -62,3 +72,4 @@ volumes:
 networks:
   quantflow-network:
     driver: bridge
+

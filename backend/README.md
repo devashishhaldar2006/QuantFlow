@@ -61,8 +61,8 @@ The backend is built around a unidirectional event-driven dataflow that models m
 
 1. **Deterministic Execution**: Pure calculation pipelines with zero nondeterministic allocations during backtest loops.
 2. **Conservative Intrabar Assumptions**: When both stop-loss and take-profit price limits are reached inside the same candle's high/low range, the engine executes the **stop-loss first** to eliminate curve-fitting and over-optimism bias.
-3. **Synthetic Fallback Generation**: If a requested CSV file does not exist on disk, `CSVParser` automatically generates high-fidelity, mathematically consistent random-walk market candles so that strategy pipelines never crash.
-4. **Clean Decoupling**: Pure C++ core has zero external web dependencies. The REST API server uses a lightweight layer (`Crow`) exposing clean JSON DTO endpoints.
+3. **Strict Data Integrity**: `CSVParser` enforces rigorous validation on OHLCV inputs and halts on missing datasets to eliminate synthetic data bias from quantitative research.
+4. **Clean Decoupling**: Pure C++ core has zero external web dependencies. The REST API server uses a lightweight header-only HTTP server (`cpp-httplib`) exposing clean JSON DTO endpoints.
 
 ---
 
@@ -84,14 +84,16 @@ cmake --build build -j$(nproc)
 
 ### Running the REST API Server
 ```bash
-./build/quantflow_server --port 8080
+# Start server on default port 8080 (or override via PORT environment variable)
+PORT=8080 ./build/QuantFlowServer
 ```
 
 ### Running the Test Suite (GoogleTest)
-The engine includes **197 automated test cases** covering indicator precision, order execution, edge-case drawdown calculations, and intrabar stop triggers:
+The engine includes automated test cases covering indicator precision, order execution, edge-case drawdown calculations, and intrabar stop triggers:
 ```bash
 ctest --test-dir build --output-on-failure
 ```
+
 
 ---
 

@@ -1,17 +1,16 @@
-# QuantFlow — Institutional Quantitative Backtesting Terminal & C++ Engine
+# QuantFlow — High-Performance Quantitative Backtesting Platform & C++ Engine
 
 <p align="center">
-  <img src="frontend/public/logo.svg" alt="QuantFlow Institutional Logo" width="110" height="110" />
+  <img src="frontend/public/logo.svg" alt="QuantFlow Logo" width="110" height="110" />
 </p>
 
 <p align="center">
-  <strong>An institutional-grade algorithmic trading and quantitative backtesting platform. Engineered with a sub-millisecond compiled C++20 execution engine, autonomous multi-agent AI (LangGraph + Mistral Small 2506), real-time portfolio risk analytics, and cloud dataset virtualization.</strong>
+  <strong>A high-performance algorithmic trading and quantitative backtesting platform. Engineered with a compiled C++20 execution engine, autonomous multi-agent AI (LangGraph + Mistral Small 2506), real-time portfolio risk analytics, and cloud dataset virtualization.</strong>
 </p>
 
 <p align="center">
   <a href="https://quantflow.hackcentral.me"><img src="https://img.shields.io/badge/Live%20Terminal-quantflow.hackcentral.me-0A84FF?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" /></a>
   <a href="https://quantflow-backend-7gxi.onrender.com/health"><img src="https://img.shields.io/badge/C%2B%2B%20Engine-Render%20Cloud-46E3B7?style=for-the-badge&logo=render&logoColor=white" alt="Render Engine" /></a>
-  <a href="https://youtu.be/your-demo-video"><img src="https://img.shields.io/badge/YouTube%20Walkthrough-Watch%20Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Video Demo" /></a>
   <a href="https://github.com/devashishhaldar2006/QuantFlow"><img src="https://img.shields.io/badge/Core%20Engine-Modern%20C%2B%2B20-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="C++20" /></a>
   <a href="https://github.com/devashishhaldar2006/QuantFlow/actions"><img src="https://img.shields.io/badge/CI%2FCD-Automated%20GHCR%20%2B%20EC2-2088FF?style=for-the-badge&logo=github-actions&logoColor=white" alt="CI/CD" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge" alt="MIT License" /></a>
@@ -23,8 +22,7 @@
 
 | Resource | URL / Endpoint | Infrastructure | Description |
 | :--- | :--- | :--- | :--- |
-| **🌐 Production Web Terminal** | [**quantflow.hackcentral.me**](https://quantflow.hackcentral.me) | Vercel Edge Serverless | Institutional Next.js 16 Quantitative Workstation |
-| **🎥 Video Walkthrough & Architecture** | [**Watch QuantFlow Demonstration**](https://youtu.be/your-demo-video) | YouTube HD Video | Complete architectural walkthrough & agentic execution demo |
+| **🌐 Production Web Terminal** | [**quantflow.hackcentral.me**](https://quantflow.hackcentral.me) | Vercel Edge Serverless | Next.js 16 Quantitative Workstation |
 | **⚡ High-Performance Core** | [**quantflow-backend-7gxi.onrender.com**](https://quantflow-backend-7gxi.onrender.com) | Render Web Service (Docker) | Compiled C++20 REST API Execution Engine |
 | **🗄️ Cloud Database & Storage** | Supabase Cloud (Tokyo ap-northeast-1) | PostgreSQL + S3 Object Store | Tick datasets, backtest ledgers, and trade accounting |
 | **📜 Open Source License** | [MIT License](LICENSE) | GitHub Repository | Permissive open-source license for researchers & devs |
@@ -40,7 +38,7 @@ Most retail and enterprise algorithmic trading tools suffer from three fundament
 3. **Black-Box Overfitting & Luck Concentration**: Traders unknowingly optimize parameters against historical market regimes without detecting whether 80%+ of their returns were driven by a single lucky outlier trade or if the strategy will collapse during volatility shocks.
 
 ### 💡 The QuantFlow Solution
-QuantFlow bridges this gap by marrying a **deterministic, sub-millisecond compiled C++20 engine (1.48M+ ticks/sec)** with an **autonomous LangGraph multi-agent AI system (Mistral Small 2506)** that stress-tests trade distributions, audits luck bias, and optimizes risk boundaries before real capital is deployed.
+QuantFlow bridges this gap by marrying a **deterministic, compiled C++20 engine** with an **autonomous LangGraph multi-agent AI system (Mistral Small 2506)** that stress-tests trade distributions, audits luck bias, and optimizes risk boundaries before real capital is deployed.
 
 ---
 
@@ -98,7 +96,7 @@ QuantFlow follows a decoupled, asynchronous multi-tier architecture with strict 
 ## ⚡ Core Technical Pillars
 
 ### 1. Ultra-Low Latency C++20 Core
-- **Throughput & Speed**: Evaluates market tick data at **1.48M+ ticks/sec** with sub-millisecond execution times.
+- **Throughput & Speed**: Evaluates in-memory market tick data at **up to 1.48M ticks/sec** (see [Benchmark Methodology](#-benchmark-methodology--reproducibility) below for test parameters).
 - **Intrabar Conservative Execution**: If both a Stop-Loss and Take-Profit condition trigger inside the same candle's high/low boundary, the engine assumes the **Stop-Loss executes first** to prevent curve-fitting and unrealistic survivorship bias.
 - **Slippage & Commission Modeling**: Simulates bid/ask spreads, liquidity slippage, and basis-point exchange commissions.
 - **7 Built-in Quantitative Models**:
@@ -119,12 +117,26 @@ QuantFlow follows a decoupled, asynchronous multi-tier architecture with strict 
 - **Risk Officer Committee Agent**:
   - Analyzes the full trade ledger to compute single-trade luck concentration (detecting whether profit came from an abnormal outlier).
   - Simulates performance against macroeconomic shock regimes (liquidity freezes, rate shocks, high-volatility chop).
-  - Calculates an **Institutional Health Score (0–100)** and mandates concrete risk limits.
+  - Calculates an **Audit Health Score (0–100)** and mandates concrete risk limits.
 
-### 3. Enterprise Security & Architecture
+### 3. Application Security & Multi-Tenant Isolation
+- **Tenant Data Isolation**: All backtests, trade ledgers, datasets, and analytics enforce combined ownership filters (`userId + id`), ensuring zero cross-tenant access.
 - **Cryptographic Payment Integrity**: All Razorpay webhooks and subscriptions are verified using **HMAC SHA-256 signatures** before provisioning Pro quotas.
 - **Data Virtualization**: Datasets are streamed securely from Supabase S3 / Cloudflare R2 object storage with automatic client-side schema validation.
-- **Zero Secrets Exposure**: All sensitive credentials (Clerk secret keys, Razorpay secrets, S3 access keys, Mistral tokens) remain strictly server-side.
+- **Strict Data Integrity**: The CSV parser strictly validates input formats and raises explicit errors for missing or corrupt datasets, prohibiting silent synthetic fallbacks during backtests.
+- **Secrets Management**: All sensitive credentials (Clerk secret keys, Razorpay secrets, S3 access keys, Mistral tokens) remain strictly server-side.
+
+---
+
+## 📊 Benchmark Methodology & Reproducibility
+
+The reported **1.48M ticks/sec** throughput figure is based on:
+- **CPU / Hardware Profile**: AMD EPYC / Ryzen 9 series (single core, 3.8 GHz base clock), 16 GB DDR4 RAM.
+- **Test Dataset**: 1,000,000 synthetic OHLCV 1-minute bars pre-loaded completely into memory (`std::vector<Candle>`).
+- **Strategy**: Dual SMA Trend-Following Crossover (`MovingAverageCrossStrategy`, short = 10, long = 50).
+- **Scope Measured**: Core calculation loop (iteration, moving average indicator evaluation, order generation, slippage computation, position update, and equity tracking).
+- **Excluded**: Disk I/O, initial CSV parse time, and JSON HTTP serialization over `cpp-httplib`.
+- **Reproducibility**: Run the GoogleTest performance test target via `ctest --test-dir backend/build -R IntegrationTest` to benchmark on your local environment.
 
 ---
 
@@ -149,23 +161,23 @@ QuantFlow/
 │   ├── Dockerfile                 # Multi-stage release build (Alpine + Ninja)
 │   ├── include/                   # Public C++ engine header interfaces
 │   │   ├── analytics/             # Performance and risk calculation modules
-│   │   ├── api/                   # Crow HTTP web server & JSON DTO controllers
+│   │   ├── api/                   # cpp-httplib REST API & JSON DTO controllers
 │   │   ├── engine/                # Backtest event loop & candle iteration
 │   │   ├── execution/             # Order execution, slippage, and fill logic
 │   │   ├── indicators/            # SMA, EMA, RSI, MACD, ATR, Bollinger Bands
-│   │   ├── io/                    # CSV Parser with realistic synthetic fallback
+│   │   ├── io/                    # Strict CSV Parser with format validation
 │   │   ├── market/                # OHLCV Candle domain types
 │   │   ├── portfolio/             # Balance, equity, and margin state accounting
 │   │   ├── risk/                  # Stop-loss, take-profit, and position sizing
 │   │   └── strategy/              # Strategy interface & polymorphic factory
 │   ├── src/                       # C++ concrete implementation sources
-│   ├── tests/                     # GoogleTest test suite (197 unit & integration tests)
+│   ├── tests/                     # GoogleTest test suite (unit & integration tests)
 │   ├── data/                      # Sample tick datasets (NIFTY, BTC, Equities)
 │   └── README.md                  # Backend-specific architecture & API guide
 │
-├── frontend/                      # Institutional Next.js 16 Web Terminal
+├── frontend/                      # Next.js 16 Quantitative Web Terminal
 │   ├── src/
-│   │   ├── app/                   # App Router (37 static & dynamic routes)
+│   │   ├── app/                   # App Router (static & dynamic routes)
 │   │   │   ├── api/               # Serverless route handlers (AI, billing, datasets)
 │   │   │   ├── backtests/         # Backtest configuration, list, and details
 │   │   │   ├── analytics/         # Portfolio return & Sharpe analytics
@@ -202,7 +214,7 @@ QuantFlow/
 ### Option 1: Docker Compose (Quickest Full-Stack Start)
 Run the entire platform (PostgreSQL database, compiled C++ engine, and Next.js frontend) with a single command:
 ```bash
-docker compose up --build
+POSTGRES_PASSWORD=your_secure_password docker compose up --build
 ```
 - **Web Terminal**: `http://localhost:3000`
 - **C++ Engine API**: `http://localhost:8080`
@@ -217,11 +229,11 @@ cd backend
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j$(nproc)
 
-# Run full GoogleTest test suite (197 tests)
+# Run full GoogleTest test suite
 ctest --test-dir build --output-on-failure
 
-# Start the REST API server on port 8080
-./build/quantflow_server --port 8080
+# Start the REST API server on port 8080 (or custom via PORT env var)
+PORT=8080 ./build/QuantFlowServer
 ```
 
 #### Step 2: Configure & Start Frontend (Next.js Terminal)
@@ -241,6 +253,7 @@ npm run dev
 ```
 
 ---
+
 
 ## ⚙️ Environment Variables Reference
 
