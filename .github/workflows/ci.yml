@@ -61,6 +61,11 @@ jobs:
         working-directory: ./backend
         run: cmake --build build --config Release -j$(nproc)
 
+      - name: Run C++ Unit & Integration Tests
+        working-directory: ./backend
+        run: ctest --test-dir build --output-on-failure
+
+
   publish-backend-image:
     name: Build Docker Image & Trigger Render Deploy
     needs: [validate-frontend, validate-backend]

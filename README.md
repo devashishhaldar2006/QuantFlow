@@ -25,7 +25,9 @@
 | **🌐 Production Web Terminal** | [**quantflow.hackcentral.me**](https://quantflow.hackcentral.me) | Vercel Edge Serverless | Next.js 16 Quantitative Workstation |
 | **⚡ High-Performance Core** | [**quantflow-backend-7gxi.onrender.com**](https://quantflow-backend-7gxi.onrender.com) | Render Web Service (Docker) | Compiled C++20 REST API Execution Engine |
 | **🗄️ Cloud Database & Storage** | Supabase Cloud (Tokyo ap-northeast-1) | PostgreSQL + S3 Object Store | Tick datasets, backtest ledgers, and trade accounting |
+| **⚠️ Model Limitations & Disclosures** | [**LIMITATIONS.md**](LIMITATIONS.md) | Technical Specification | Statistical assumptions, intrabar heuristics & scope limits |
 | **📜 Open Source License** | [MIT License](LICENSE) | GitHub Repository | Permissive open-source license for researchers & devs |
+
 
 ---
 

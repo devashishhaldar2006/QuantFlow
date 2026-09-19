@@ -1,6 +1,6 @@
-# QuantFlow Frontend — Institutional Quantitative Terminal
+# QuantFlow Frontend — Quantitative Research Terminal
 
-The QuantFlow frontend is an institutional quantitative research and strategy evaluation workstation built with **Next.js 16 (Turbopack)**, **React 19**, **LangGraph**, and **Vanilla CSS / Tailwind v4**.
+The QuantFlow frontend is a quantitative research and strategy evaluation workstation built with **Next.js 16 (Turbopack)**, **React 19**, **LangGraph**, and modern CSS.
 
 ---
 
@@ -16,12 +16,13 @@ The QuantFlow frontend is an institutional quantitative research and strategy ev
   - Located on the backtest results tear-sheet (`/backtests/[id]`).
   - Evaluates trade logs for curve-fitting, statistical significance (< 30 trades warning), and single-trade profit outlier concentration.
   - Simulates macroeconomic regime shocks (flash crashes, liquidity freezes, volatile chop).
-  - Produces an Institutional Health Score (0–100) and mandates concrete execution risk limits.
+  - Produces an Audit Health Score (0–100) and mandates concrete execution risk limits.
 
 ### 2. 📊 Interactive Visualizations & Tear-Sheets
 - **Equity Curve & Drawdown Charts**: Built with Recharts for responsive, high-fidelity time-series inspection.
 - **Trade History Ledger**: Interactive tables displaying entry timestamp, execution price, side (BUY/SELL), commission paid, and net cash flow.
-- **Institutional Metric Gauges**: Annualized Return, Sharpe Ratio, Sortino Ratio, Maximum Drawdown, Win Rate, and Profit Factor.
+- **Performance Metric Gauges**: Annualized Return, Sharpe Ratio, Sortino Ratio, Maximum Drawdown, Win Rate, and Profit Factor.
+
 
 ### 3. 🛡️ Data Virtualization & Security
 - **Cloud S3 Dataset Manager**: Upload and manage CSV tick datasets synced to Supabase S3 / Cloudflare R2 object storage with automatic client-side schema validation.
