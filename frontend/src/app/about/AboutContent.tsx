@@ -9,6 +9,7 @@ import DeveloperProfileCard from "@/features/about/components/DeveloperProfileCa
 import InspirationCard from "@/features/about/components/InspirationCard";
 import HackCentralCard from "@/features/about/components/HackCentralCard";
 import SkillsMatrixCard from "@/features/about/components/SkillsMatrixCard";
+import EducationAchievementsCard from "@/features/about/components/EducationAchievementsCard";
 import SystemPillarsCard from "@/features/about/components/SystemPillarsCard";
 import { QuantFlowLogo } from "@/components/common/QuantFlowLogo";
 
@@ -108,6 +109,8 @@ export default function AboutContent() {
         <HackCentralCard />
 
         <SkillsMatrixCard />
+
+        <EducationAchievementsCard />
 
         <SystemPillarsCard />
 
