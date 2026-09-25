@@ -123,22 +123,22 @@ export default function Sidebar({
       </nav>
 
       {/* Engine Status & User Profile */}
-      <div className="shrink-0 border-t border-slate-800/80 bg-slate-900/60 p-3 backdrop-blur-md">
+      <div className="shrink-0 border-t border-zinc-200 bg-white p-3">
         {(!isCollapsed || isDrawer) ? (
           <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs text-slate-400 bg-white/[0.02] border border-white/5">
+            <div className="flex items-center gap-2.5 rounded px-2.5 py-1.5 text-xs text-zinc-600 bg-zinc-50 border border-zinc-200">
               <span className="relative flex size-2 shrink-0">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-50" />
                 <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
               </span>
-              <span className="font-medium text-emerald-400">Engine Online</span>
+              <span className="font-mono text-[11px] font-medium text-emerald-700">ENGINE_ONLINE</span>
             </div>
 
-            <div className="mt-1 flex items-center justify-between gap-1 rounded-xl border border-white/5 bg-white/[0.03] p-1.5 hover:border-indigo-500/30 transition-all">
+            <div className="mt-1 flex items-center justify-between gap-1 rounded border border-zinc-200 bg-zinc-50 p-1.5 transition-all">
               <Link
                 href="/profile"
                 onClick={isDrawer ? () => setMobileOpen(false) : undefined}
-                className="flex min-w-0 flex-1 items-center gap-2 p-1 hover:bg-white/[0.05] rounded-lg transition-colors group"
+                className="flex min-w-0 flex-1 items-center gap-2 p-1 hover:bg-zinc-100 rounded transition-colors group"
                 title="Go to Account & Usage Profile"
               >
                 {user?.imageUrl ? (
@@ -148,16 +148,16 @@ export default function Sidebar({
                     width={30}
                     height={30}
                     unoptimized
-                    className="size-7.5 shrink-0 rounded-full object-cover border border-indigo-500/30"
+                    className="size-7.5 shrink-0 rounded-full object-cover border border-zinc-200"
                   />
                 ) : (
-                  <div className="size-7.5 shrink-0 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white shadow-md">
+                  <div className="size-7.5 shrink-0 rounded-full bg-zinc-900 flex items-center justify-center text-xs font-mono font-bold text-white shadow-sm">
                     {initials || "QF"}
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs font-semibold text-slate-200 group-hover:text-indigo-300 transition-colors">{displayName}</p>
-                  <p className="truncate text-[10px] text-slate-400">{displayEmail || "View Profile"}</p>
+                  <p className="truncate text-xs font-semibold text-zinc-900 group-hover:text-black transition-colors">{displayName}</p>
+                  <p className="truncate text-[10px] text-zinc-500 font-mono">{displayEmail || "View Profile"}</p>
                 </div>
               </Link>
 
@@ -165,7 +165,7 @@ export default function Sidebar({
                 <button
                   type="button"
                   title="Sign Out of QuantFlow"
-                  className="flex size-7 shrink-0 items-center justify-center rounded-lg text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-colors"
+                  className="flex size-7 shrink-0 items-center justify-center rounded text-zinc-400 hover:bg-red-50 hover:text-red-600 transition-colors"
                 >
                   <LogOut className="size-3.5" />
                 </button>
@@ -174,14 +174,14 @@ export default function Sidebar({
           </div>
         ) : (
           <div className="flex flex-col items-center gap-3 w-full">
-            <div className="group relative flex size-8 items-center justify-center rounded-lg text-emerald-500 bg-emerald-500/10 border border-emerald-500/20">
+            <div className="group relative flex size-8 items-center justify-center rounded text-emerald-600 bg-emerald-50 border border-emerald-200">
               <span className="relative flex size-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-50" />
                 <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
               </span>
             </div>
 
-            <div className="w-5 border-t border-white/10 my-0.5" />
+            <div className="w-5 border-t border-zinc-200 my-0.5" />
 
             <Link href="/profile" title="View Profile">
               {user?.imageUrl ? (
@@ -191,10 +191,10 @@ export default function Sidebar({
                   width={32}
                   height={32}
                   unoptimized
-                  className="size-8 shrink-0 rounded-full object-cover border border-slate-600 hover:border-indigo-400 transition-colors"
+                  className="size-8 shrink-0 rounded-full object-cover border border-zinc-200 hover:border-zinc-400 transition-colors"
                 />
               ) : (
-                <div className="size-8 shrink-0 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white hover:bg-indigo-500 transition-colors">
+                <div className="size-8 shrink-0 rounded-full bg-zinc-900 flex items-center justify-center text-xs font-mono font-bold text-white hover:bg-zinc-800 transition-colors">
                   {initials || "QF"}
                 </div>
               )}
@@ -204,7 +204,7 @@ export default function Sidebar({
               <button
                 type="button"
                 title="Sign Out"
-                className="flex size-7 shrink-0 items-center justify-center rounded-lg text-slate-500 hover:bg-red-500/10 hover:text-red-400 transition-colors"
+                className="flex size-7 shrink-0 items-center justify-center rounded text-zinc-400 hover:bg-red-50 hover:text-red-600 transition-colors"
               >
                 <LogOut className="size-3.5" />
               </button>

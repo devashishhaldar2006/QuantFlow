@@ -255,36 +255,36 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
     <div className="fixed inset-0 z-[100] flex items-start justify-center pt-20 px-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity animate-in fade-in duration-200"
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity animate-in fade-in duration-200"
         onClick={onClose}
       />
 
       {/* Modal Card */}
-      <div className="relative w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900/95 shadow-2xl shadow-indigo-500/10 overflow-hidden z-10 flex flex-col max-h-[75vh] animate-in zoom-in-95 duration-150">
+      <div className="relative w-full max-w-2xl rounded border border-zinc-200 bg-white shadow-2xl overflow-hidden z-10 flex flex-col max-h-[75vh] animate-in zoom-in-95 duration-150">
         {/* Search Bar Input */}
-        <div className="relative flex items-center px-4 border-b border-slate-800/80 bg-slate-950/60">
-          <Search className="w-4 h-4 text-indigo-400 shrink-0 mr-3" />
+        <div className="relative flex items-center px-4 border-b border-zinc-200 bg-white">
+          <Search className="w-4 h-4 text-zinc-500 shrink-0 mr-3" />
           <input
             ref={inputRef}
             type="text"
             placeholder="Type a command, strategy, or dataset..."
-            className="w-full h-14 bg-transparent text-sm text-slate-100 placeholder:text-slate-500 outline-none font-mono"
+            className="w-full h-14 bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 outline-none font-mono"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleInputKeyDown}
           />
-          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-800 bg-slate-900 text-[10px] font-mono text-slate-400 select-none shrink-0">
+          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded border border-zinc-200 bg-zinc-50 text-[10px] font-mono text-zinc-500 select-none shrink-0">
             ESC
           </kbd>
         </div>
 
         {/* Search Results Container */}
-        <div ref={listRef} className="overflow-y-auto p-2 space-y-4 divide-y divide-slate-800/40">
+        <div ref={listRef} className="overflow-y-auto p-2 space-y-4 divide-y divide-zinc-100">
           {filteredItems.length === 0 ? (
             <div className="p-8 text-center space-y-2">
-              <Command className="w-8 h-8 text-slate-600 mx-auto" />
-              <p className="text-sm font-semibold text-slate-300">No results found</p>
-              <p className="text-xs text-slate-500">
+              <Command className="w-8 h-8 text-zinc-400 mx-auto" />
+              <p className="text-sm font-semibold text-zinc-900">No results found</p>
+              <p className="text-xs text-zinc-500">
                 No commands, strategies, or datasets match &quot;{query}&quot;
               </p>
             </div>
@@ -295,7 +295,7 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
 
               return (
                 <div key={cat} className="pt-2 first:pt-0">
-                  <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">
+                  <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-zinc-500 font-mono">
                     {cat}
                   </div>
                   <div className="space-y-1 mt-1">
@@ -312,34 +312,34 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
                             else itemRefs.current.delete(itemGlobalIndex);
                           }}
                           onClick={() => handleSelectItem(item)}
-                          className={`flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition-all ${
+                          className={`flex items-center justify-between px-3 py-2.5 rounded cursor-pointer transition-all ${
                             isSelected
-                              ? "bg-indigo-600/20 border border-indigo-500/40 text-slate-100"
-                              : "hover:bg-slate-800/40 text-slate-300 border border-transparent"
+                              ? "bg-zinc-100 border border-zinc-300 text-zinc-950 font-medium"
+                              : "hover:bg-zinc-50 text-zinc-700 border border-transparent"
                           }`}
                         >
                           <div className="flex items-center gap-3 min-w-0">
                             <div
-                              className={`p-2 rounded-lg shrink-0 ${
+                              className={`p-2 rounded shrink-0 ${
                                 isSelected
-                                  ? "bg-indigo-500 text-white"
-                                  : "bg-slate-800/80 text-slate-400"
+                                  ? "bg-zinc-900 text-white"
+                                  : "bg-zinc-100 text-zinc-600 border border-zinc-200"
                               }`}
                             >
                               <Icon className="w-4 h-4" />
                             </div>
                             <div className="min-w-0 space-y-0.5">
                               <div className="flex items-center gap-2">
-                                <span className="text-xs font-semibold tracking-tight truncate">
+                                <span className="text-xs font-semibold tracking-tight text-zinc-900 truncate">
                                   {item.title}
                                 </span>
                                 {item.badge && (
-                                  <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                                  <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-zinc-100 text-zinc-600 border border-zinc-200">
                                     {item.badge}
                                   </span>
                                 )}
                               </div>
-                              <p className="text-[11px] text-slate-400 truncate">
+                              <p className="text-[11px] text-zinc-500 truncate">
                                 {item.description}
                               </p>
                             </div>
@@ -347,13 +347,13 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
 
                           <div className="flex items-center gap-2 shrink-0 ml-3">
                             {item.shortcut ? (
-                              <kbd className="px-1.5 py-0.5 rounded border border-slate-700 bg-slate-800 text-[10px] font-mono text-slate-400">
+                              <kbd className="px-1.5 py-0.5 rounded border border-zinc-200 bg-zinc-50 text-[10px] font-mono text-zinc-600">
                                 {item.shortcut}
                               </kbd>
                             ) : (
                               <ArrowRight
                                 className={`w-3.5 h-3.5 transition-transform ${
-                                  isSelected ? "text-indigo-400 translate-x-0.5" : "opacity-0"
+                                  isSelected ? "text-zinc-900 translate-x-0.5" : "opacity-0"
                                 }`}
                               />
                             )}
@@ -369,13 +369,13 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
         </div>
 
         {/* Footer Shortcut Legend */}
-        <div className="px-4 py-2.5 border-t border-slate-800/80 bg-slate-950/80 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+        <div className="px-4 py-2.5 border-t border-zinc-200 bg-zinc-50 flex items-center justify-between text-[11px] text-zinc-500 font-mono">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1">
-              <kbd className="px-1 py-0.2 rounded border border-slate-800 bg-slate-900 text-[9px]">↑↓</kbd> navigate
+              <kbd className="px-1 py-0.2 rounded border border-zinc-200 bg-white text-[9px] text-zinc-700">↑↓</kbd> navigate
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1 py-0.2 rounded border border-slate-800 bg-slate-900 text-[9px]">↵</kbd> select
+              <kbd className="px-1 py-0.2 rounded border border-zinc-200 bg-white text-[9px] text-zinc-700">↵</kbd> select
             </span>
           </div>
           <span>QuantFlow Terminal Command Palette</span>
