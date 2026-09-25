@@ -127,8 +127,8 @@ export function NotificationPopover() {
         <Bell className="size-4" />
         {unreadCount > 0 && (
           <>
-            <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-emerald-500 animate-ping" />
-            <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-emerald-600 border border-white" />
+            <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-zinc-950 animate-ping" />
+            <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-zinc-950 border border-white" />
           </>
         )}
       </button>
@@ -145,11 +145,11 @@ export function NotificationPopover() {
             {/* Header */}
             <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
               <div className="flex items-center gap-2">
-                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-900">
+                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-950">
                   NOTIFICATIONS
                 </h3>
                 {unreadCount > 0 && (
-                  <span className="rounded border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[10px] font-mono font-bold text-zinc-900">
+                  <span className="rounded border border-zinc-900 bg-zinc-950 px-2 py-0.5 text-[10px] font-mono font-bold text-white shadow-xs">
                     {unreadCount} new
                   </span>
                 )}
@@ -160,9 +160,9 @@ export function NotificationPopover() {
                   <button
                     type="button"
                     onClick={markAllAsRead}
-                    className="flex items-center gap-1 rounded px-2 py-1 text-[11px] font-mono font-medium text-zinc-600 hover:bg-zinc-50 hover:text-zinc-950 transition-colors"
+                    className="flex items-center gap-1 rounded px-2 py-1 text-[11px] font-mono font-bold text-zinc-900 hover:bg-zinc-100 hover:text-black transition-colors"
                   >
-                    <Check className="size-3 text-emerald-600" />
+                    <Check className="size-3 text-zinc-900" />
                     Mark Read
                   </button>
                 )}
@@ -194,7 +194,7 @@ export function NotificationPopover() {
                     className={`group relative rounded border p-3 transition-all cursor-pointer ${
                       item.read
                         ? "border-zinc-200 bg-white hover:bg-zinc-50/70"
-                        : "border-zinc-300 bg-zinc-50/80 hover:bg-zinc-100/80"
+                        : "border-zinc-900/30 bg-zinc-50 hover:bg-zinc-100/80"
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
@@ -202,14 +202,14 @@ export function NotificationPopover() {
                         <div className="flex items-center gap-1.5">
                           <span
                             className={`size-1.5 rounded-full ${
-                              item.read ? "bg-zinc-300" : "bg-emerald-600"
+                              item.read ? "bg-zinc-300" : "bg-zinc-950"
                             }`}
                           />
-                          <h4 className="text-xs font-semibold text-zinc-900">
+                          <h4 className="text-xs font-bold font-mono text-zinc-950">
                             {item.title}
                           </h4>
                         </div>
-                        <p className="text-[11px] text-zinc-600 leading-relaxed font-sans">
+                        <p className="text-[11px] text-zinc-600 leading-relaxed font-mono">
                           {item.message}
                         </p>
                       </div>
