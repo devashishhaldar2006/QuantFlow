@@ -26,58 +26,58 @@ export default function PortfolioActivity({
           description="We couldn't find any recent trades across your portfolio. Run a backtest to see activity here."
         />
       ) : (
-        <div className="overflow-x-auto rounded-xl glass-panel">
-          <table className="w-full min-w-[900px] text-sm">
-            <thead className="bg-slate-900/40 backdrop-blur-md text-xs uppercase font-semibold text-slate-400 border-b border-slate-700/50">
+        <div className="overflow-x-auto rounded border border-zinc-200 bg-white">
+          <table className="w-full min-w-[900px] text-xs">
+            <thead className="bg-zinc-50 text-[10px] uppercase font-bold font-mono text-zinc-500 border-b border-zinc-200">
               <tr>
-                <th className="px-4 py-3 text-left font-semibold">Time</th>
-                <th className="px-4 py-3 text-left font-semibold">Strategy</th>
-                <th className="px-4 py-3 text-left font-semibold">Side</th>
-                <th className="px-4 py-3 text-right font-semibold">Quantity</th>
-                <th className="px-4 py-3 text-right font-semibold">Price</th>
-                <th className="px-4 py-3 text-right font-semibold">Commission</th>
-                <th className="px-4 py-3 text-right font-semibold">Cash Flow</th>
+                <th className="px-4 py-3 text-left font-semibold">TIME</th>
+                <th className="px-4 py-3 text-left font-semibold">MODEL</th>
+                <th className="px-4 py-3 text-left font-semibold">SIDE</th>
+                <th className="px-4 py-3 text-right font-semibold">QUANTITY</th>
+                <th className="px-4 py-3 text-right font-semibold">PRICE</th>
+                <th className="px-4 py-3 text-right font-semibold">COMMISSION</th>
+                <th className="px-4 py-3 text-right font-semibold">CASH_FLOW</th>
               </tr>
             </thead>
             <tbody>
               {activities.map((activity, index) => (
                 <tr
                   key={`${activity.timestamp}-${activity.strategy}-${index}`}
-                  className="border-b border-slate-700/50 transition-colors last:border-0 hover:bg-slate-800/30"
+                  className="border-b border-zinc-200 transition-colors last:border-0 hover:bg-zinc-50"
                 >
-                  <td className="whitespace-nowrap px-4 py-3 font-mono text-xs text-slate-400">
+                  <td className="whitespace-nowrap px-4 py-3 font-mono text-xs text-zinc-500">
                     {formatDate(activity.timestamp)}
                   </td>
-                  <td className="px-4 py-3 text-xs font-medium text-slate-200">
+                  <td className="px-4 py-3 text-xs font-mono font-medium text-zinc-900">
                     {activity.strategy}
                   </td>
                   <td className="px-4 py-3">
                     <span
                       className={[
-                        "inline-flex rounded-md px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider",
+                        "inline-flex rounded px-1.5 py-0.2 font-mono text-[10px] font-bold uppercase tracking-wider border",
                         activity.side === "BUY"
-                          ? "bg-emerald-500/10 text-emerald-400"
-                          : "bg-red-500/10 text-red-400",
+                          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                          : "bg-red-50 text-red-700 border-red-200",
                       ].join(" ")}
                     >
                       {activity.side}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-right font-mono text-xs text-slate-300">
+                  <td className="px-4 py-3 text-right font-mono text-xs text-zinc-700">
                     {activity.quantity}
                   </td>
-                  <td className="px-4 py-3 text-right font-mono text-xs text-slate-300">
+                  <td className="px-4 py-3 text-right font-mono text-xs text-zinc-700">
                     {formatCurrency(activity.executionPrice)}
                   </td>
-                  <td className="px-4 py-3 text-right font-mono text-xs text-slate-500">
+                  <td className="px-4 py-3 text-right font-mono text-xs text-zinc-500">
                     {formatCurrency(activity.commission)}
                   </td>
                   <td
                     className={[
-                      "px-4 py-3 text-right font-mono text-xs font-medium",
+                      "px-4 py-3 text-right font-mono text-xs font-semibold",
                       activity.cashFlow >= 0
-                        ? "text-profit"
-                        : "text-loss",
+                        ? "text-emerald-600"
+                        : "text-red-600",
                     ].join(" ")}
                   >
                     {formatCurrency(activity.cashFlow)}

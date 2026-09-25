@@ -21,7 +21,7 @@ export default function SystemPillarsCard() {
     },
     {
       title: "Institutional Terminal UX",
-      desc: "High-density dark terminal interface engineered for professional clarity, fast keyboard shortcuts, and responsiveness.",
+      desc: "High-density clean terminal interface engineered for professional clarity, fast keyboard shortcuts, and responsiveness.",
       icon: Code2,
     },
   ];
@@ -31,25 +31,25 @@ export default function SystemPillarsCard() {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="rounded-3xl border border-slate-800 bg-slate-900/60 p-8 space-y-6 shadow-xl"
+      className="rounded border border-zinc-200 bg-white p-7 space-y-6"
     >
       <div className="space-y-1">
-        <span className="text-[10px] font-mono uppercase tracking-wider text-indigo-400 font-bold">Engineering Standard</span>
-        <h3 className="text-xl font-bold text-slate-100">QuantFlow Architectural Principles</h3>
-        <p className="text-xs text-slate-400">The core technical pillars guiding every line of code in the platform</p>
+        <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 font-bold">Engineering Standard</span>
+        <h3 className="text-xl font-bold font-mono text-zinc-900">QuantFlow Architectural Principles</h3>
+        <p className="text-xs text-zinc-500 font-sans">The core technical pillars guiding every line of code in the platform</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {pillars.map((pillar) => (
           <div
             key={pillar.title}
-            className="p-5 rounded-2xl bg-slate-950/60 border border-slate-800/80 space-y-2 hover:border-indigo-500/30 transition-colors"
+            className="p-4 rounded border border-zinc-200 bg-zinc-50/60 space-y-2 hover:border-zinc-400 transition-colors"
           >
-            <div className="size-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
-              <pillar.icon className="size-4.5" />
+            <div className="size-8 rounded border border-zinc-200 bg-white flex items-center justify-center text-zinc-900">
+              <pillar.icon className="size-4" />
             </div>
-            <h4 className="text-sm font-bold text-slate-200">{pillar.title}</h4>
-            <p className="text-xs text-slate-400 leading-relaxed">{pillar.desc}</p>
+            <h4 className="text-xs font-bold font-mono text-zinc-900">{pillar.title}</h4>
+            <p className="text-xs text-zinc-600 leading-relaxed font-sans">{pillar.desc}</p>
           </div>
         ))}
       </div>

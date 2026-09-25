@@ -52,12 +52,12 @@ export function EngineConnectionCard({
                 value={engineUrl}
                 onChange={(e) => onEngineUrlChange(e.target.value)}
                 placeholder="http://localhost:8080"
-                className="h-9 w-64 rounded-lg border border-slate-700/50 bg-slate-900/60 px-3 text-sm text-slate-100 font-mono outline-none transition-all focus:border-indigo-500/70 focus:ring-1 focus:ring-indigo-500/30"
+                className="h-9 w-64 rounded border border-zinc-200 bg-white px-3 text-sm text-zinc-900 font-mono outline-none transition-all focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900"
               />
             </SettingRow>
 
-            <div className="flex items-start gap-2 rounded-lg border border-indigo-500/20 bg-indigo-500/5 p-3 text-xs text-indigo-400">
-              <Info className="size-3.5 mt-0.5 shrink-0" />
+            <div className="flex items-start gap-2 rounded border border-zinc-200 bg-zinc-50 p-3 text-xs text-zinc-600">
+              <Info className="size-3.5 mt-0.5 shrink-0 text-zinc-900" />
               <span>
                 Default backtest calculations route automatically through the compiled C++ Docker daemon.
               </span>

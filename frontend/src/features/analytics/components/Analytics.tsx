@@ -19,14 +19,14 @@ export default function Analytics({ analytics }: AnalyticsProps) {
   return (
     <AnimatedPage>
       {/* Header with Export Action */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-slate-800/80 pb-5 mb-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 pb-5 mb-6">
         <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+          <div className="flex size-10 items-center justify-center rounded border border-zinc-200 bg-zinc-50 text-zinc-900">
             <TrendingUp className="size-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-slate-100">Strategy Analytics</h1>
-            <p className="text-xs text-slate-400">
+            <h1 className="text-xl font-bold font-mono tracking-tight text-zinc-900">STRATEGY_ANALYTICS</h1>
+            <p className="text-xs text-zinc-500 font-sans">
               Comparative return, Sharpe ratio, and drawdown benchmarks across strategy models.
             </p>
           </div>
@@ -37,20 +37,20 @@ export default function Analytics({ analytics }: AnalyticsProps) {
             <button
               type="button"
               onClick={() => exportAnalyticsCSV(analytics)}
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900/80 px-3.5 text-xs font-semibold text-slate-300 transition hover:border-slate-600 hover:bg-slate-800 hover:text-white shadow-sm"
+              className="inline-flex h-8 items-center gap-1.5 rounded border border-zinc-200 bg-white px-3 text-xs font-mono font-medium text-zinc-700 transition hover:bg-zinc-50 hover:text-black shadow-none"
               title="Export Strategy Rankings as CSV"
             >
-              <FileDown className="size-3.5 text-emerald-400" />
-              Export CSV
+              <FileDown className="size-3.5 text-zinc-600" />
+              EXPORT_CSV
             </button>
           )}
 
           <Link
             href="/backtests/new"
-            className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-indigo-600 px-4 text-xs font-semibold text-white shadow-lg shadow-indigo-500/25 transition hover:bg-indigo-500"
+            className="inline-flex h-8 items-center gap-1.5 rounded bg-zinc-950 px-3.5 text-xs font-mono font-semibold text-white shadow-sm transition hover:bg-zinc-800"
           >
             <Plus className="size-3.5" />
-            New Backtest
+            NEW_BACKTEST
           </Link>
         </div>
       </div>

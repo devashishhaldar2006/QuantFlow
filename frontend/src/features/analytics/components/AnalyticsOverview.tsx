@@ -8,7 +8,7 @@ type AnalyticsOverviewProps = {
 function Stat({
   label,
   value,
-  valueClass = "text-slate-100",
+  valueClass = "text-zinc-900",
 }: {
   label: string;
   value: string | number;
@@ -16,10 +16,10 @@ function Stat({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+      <span className="text-[10px] font-mono font-medium uppercase tracking-wider text-zinc-500">
         {label}
       </span>
-      <span className={`font-mono text-xl font-semibold tabular-nums ${valueClass}`}>
+      <span className={`font-mono text-xl font-bold tabular-nums ${valueClass}`}>
         {value}
       </span>
     </div>
@@ -28,39 +28,39 @@ function Stat({
 
 export default function AnalyticsOverview({ analytics }: AnalyticsOverviewProps) {
   return (
-    <section className="glass-panel rounded-2xl p-6">
-      <div className="mb-6 flex items-center gap-2">
-        <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-          Performance Analytics
+    <section className="rounded border border-zinc-200 bg-white p-6">
+      <div className="mb-5 flex items-center gap-2">
+        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500">
+          PERFORMANCE_ANALYTICS_OVERVIEW
         </span>
-        <div className="h-px flex-1 bg-slate-800/60" />
+        <div className="h-px flex-1 bg-zinc-200" />
       </div>
       <div className="grid grid-cols-2 gap-x-8 gap-y-6 md:grid-cols-6">
-        <Stat label="Backtests" value={analytics.totalBacktests} />
+        <Stat label="Backtests" value={analytics.totalBacktests} valueClass="text-zinc-900" />
         <Stat
           label="Avg Return"
           value={formatPercent(analytics.averageReturn)}
-          valueClass={analytics.averageReturn >= 0 ? "text-profit" : "text-loss"}
+          valueClass={analytics.averageReturn >= 0 ? "text-emerald-600 font-bold" : "text-red-600 font-bold"}
         />
         <Stat
           label="Best Return"
           value={formatPercent(analytics.bestReturn)}
-          valueClass={analytics.bestReturn >= 0 ? "text-profit" : "text-loss"}
+          valueClass={analytics.bestReturn >= 0 ? "text-emerald-600 font-bold" : "text-red-600 font-bold"}
         />
         <Stat
           label="Avg Sharpe"
           value={formatNumber(analytics.averageSharpe)}
-          valueClass={analytics.averageSharpe >= 1 ? "text-profit" : "text-slate-200"}
+          valueClass={analytics.averageSharpe >= 1 ? "text-emerald-600 font-bold" : "text-zinc-900"}
         />
         <Stat
           label="Best Sharpe"
           value={formatNumber(analytics.bestSharpe)}
-          valueClass={analytics.bestSharpe >= 1 ? "text-profit" : "text-slate-200"}
+          valueClass={analytics.bestSharpe >= 1 ? "text-emerald-600 font-bold" : "text-zinc-900"}
         />
         <Stat
           label="Best Drawdown"
           value={formatPercent(analytics.bestMaxDrawdown)}
-          valueClass={analytics.bestMaxDrawdown > 10 ? "text-loss" : "text-slate-200"}
+          valueClass={analytics.bestMaxDrawdown > 10 ? "text-red-600 font-bold" : "text-zinc-900"}
         />
       </div>
     </section>

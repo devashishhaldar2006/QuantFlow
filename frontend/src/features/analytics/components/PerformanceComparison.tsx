@@ -26,34 +26,34 @@ export default function PerformanceComparison({
         description="Visualizing the average percentage return for each strategy."
       />
 
-      <div className="rounded-xl glass-panel p-6">
+      <div className="rounded border border-zinc-200 bg-white p-6">
         <div className="space-y-6">
           {strategies.map((strategy) => {
             const width = (Math.abs(strategy.averageReturn) / maximum) * 100;
             const positive = strategy.averageReturn >= 0;
 
             return (
-               <div key={strategy.strategy} className="group">
+              <div key={strategy.strategy} className="group">
                 <div className="mb-2 flex items-center justify-between gap-4">
-                  <span className="text-sm font-medium text-slate-200 transition-colors group-hover:text-indigo-300">
+                  <span className="text-sm font-medium text-zinc-900">
                     {strategy.strategy}
                   </span>
 
                   <span
                     className={[
-                      "font-mono text-xs font-semibold",
-                      positive ? "text-profit" : "text-loss",
+                      "font-mono text-xs font-bold",
+                      positive ? "text-emerald-600" : "text-red-600",
                     ].join(" ")}
                   >
                     {formatSignedPercent(strategy.averageReturn)}
                   </span>
                 </div>
 
-                <div className="h-2 w-full overflow-hidden rounded-full bg-slate-800/50 shadow-inner">
+                <div className="h-2 w-full overflow-hidden rounded bg-zinc-100">
                   <div
                     className={[
-                      "h-full rounded-full transition-all duration-1000",
-                      positive ? "bg-gradient-to-r from-emerald-500/50 to-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" : "bg-gradient-to-r from-red-500/50 to-red-400 shadow-[0_0_8px_rgba(248,113,113,0.6)]",
+                      "h-full rounded transition-all duration-1000",
+                      positive ? "bg-emerald-500" : "bg-red-500",
                     ].join(" ")}
                     style={{
                       width: `${width}%`,
