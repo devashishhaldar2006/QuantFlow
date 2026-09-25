@@ -41,12 +41,7 @@ export default function AuthShowcase() {
     <div className="relative hidden w-full flex-col justify-between overflow-hidden bg-zinc-50 p-8 lg:flex lg:w-1/2 lg:p-12 border-r border-zinc-200">
       {/* Brand Header */}
       <div className="relative z-10 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <QuantFlowLogo className="size-7" textClassName="text-lg font-semibold" />
-          <span className="rounded border border-zinc-200 bg-white px-2 py-0.5 text-[10px] font-mono font-medium text-zinc-600 uppercase tracking-wider">
-            Terminal v2.4
-          </span>
-        </div>
+        <QuantFlowLogo className="size-7" textClassName="text-lg font-semibold" />
 
         <div className="flex items-center gap-2 rounded border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 font-mono">
           <span className="size-1.5 rounded-full bg-emerald-600 animate-pulse" />
