@@ -131,10 +131,10 @@ export default function RazorpayCheckout() {
         type="button"
         onClick={handleUpgrade}
         disabled={loading}
-        className="rounded-lg bg-indigo-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-50"
+        className="rounded bg-zinc-950 px-5 py-2.5 text-xs font-mono font-medium text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50 shadow-sm"
       >
         {loading
-          ? "Opening Checkout..."
+          ? "OPENING_CHECKOUT..."
           : "Upgrade to Pro"}
       </button>
 
