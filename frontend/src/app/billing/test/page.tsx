@@ -60,11 +60,11 @@ export default async function BillingTestPage() {
                   </div>
 
                   <div className="mt-7 flex items-baseline gap-2">
-                    <span className="font-mono text-4xl font-extrabold tracking-tight text-zinc-950 inline-block pl-1 pt-1">
+                    <span className="font-mono text-4xl font-extrabold tracking-tight text-zinc-950 inline-block">
                       ₹9
                     </span>
 
-                    <span className="text-xs font-mono text-zinc-500">
+                    <span className="text-sm font-mono text-zinc-500">
                       / month
                     </span>
                   </div>
