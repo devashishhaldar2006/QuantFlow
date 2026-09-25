@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -12,118 +7,91 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Plan {
-  FREE
-  PRO
-}
-
 model User {
-  id      String  @id @default(cuid())
-  clerkId String  @unique
-  email   String  @unique
-  name    String?
-
-  plan Plan @default(FREE)
-
-  datasets  Dataset[]
-  backtests Backtest[]
-  usage     BacktestUsage[]
-
-  subscriptions Subscription[]
+  id            String          @id @default(cuid())
+  clerkId       String          @unique
+  email         String          @unique
+  name          String?
+  plan          Plan            @default(FREE)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  backtests     Backtest[]
+  usage         BacktestUsage[]
+  datasets      Dataset[]
   notifications Notification[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  subscriptions Subscription[]
 }
 
 model Notification {
   id        String   @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   title     String
   message   String
-  type      String   @default("system") // backtest, sync, system, quota
+  type      String   @default("system")
   read      Boolean  @default(false)
   link      String?
   createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([userId, read])
 }
 
-enum DatasetStatus {
-  UNVALIDATED
-  VALIDATED
-  ERROR
-}
-
 model Dataset {
-  id          String   @id @default(cuid())
-  name        String
-  symbol      String
-  assetClass  String   @default("EQUITY") // EQUITY, CRYPTO, FOREX, INDEX
-  timeframe   String   @default("1d")     // 1m, 5m, 15m, 1h, 1d
-  source      String   @default("CSV_UPLOAD") // CSV_UPLOAD, SYSTEM_LIBRARY, API_PROVIDER
-  filePath    String
-  fileSize    Int
-  rowCount    Int      @default(0)
-  startDate   DateTime?
-  endDate     DateTime?
-  version     String   @default("v1.0.0")
-  status      DatasetStatus @default(VALIDATED)
-  columnMap   Json?    // Serialized mapping e.g. { timestamp: "date", open: "open", ... }
-  validation  Json?    // Detailed validation report
-
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  backtests   Backtest[]
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String        @id @default(cuid())
+  name       String
+  symbol     String
+  assetClass String        @default("EQUITY")
+  timeframe  String        @default("1d")
+  source     String        @default("CSV_UPLOAD")
+  filePath   String
+  fileSize   Int
+  rowCount   Int           @default(0)
+  startDate  DateTime?
+  endDate    DateTime?
+  version    String        @default("v1.0.0")
+  status     DatasetStatus @default(VALIDATED)
+  columnMap  Json?
+  validation Json?
+  userId     String
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  backtests  Backtest[]
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([userId, symbol])
 }
 
 model Backtest {
-  id String @id @default(cuid())
-
-  strategy           String
-  initialCapital     Float
-  finalEquity        Float
-  netProfit          Float
-  totalReturnPercent Float
-
-  totalTrades    Int
-  winningTrades  Int
-  losingTrades   Int
-  winRatePercent Float
-
-  averageWin  Float
-  averageLoss Float
-  largestWin  Float
-  largestLoss Float
-
+  id                   String        @id @default(cuid())
+  strategy             String
+  initialCapital       Float
+  finalEquity          Float
+  netProfit            Float
+  totalReturnPercent   Float
+  totalTrades          Int
+  winningTrades        Int
+  losingTrades         Int
+  winRatePercent       Float
+  averageWin           Float
+  averageLoss          Float
+  largestWin           Float
+  largestLoss          Float
   maximumDrawdown      Float
   profitFactor         Float
   expectancy           Float
   annualizedReturn     Float
   annualizedVolatility Float
   sharpeRatio          Float
-
-  status String
-
-  datasetId String?
-  dataset   Dataset? @relation(fields: [datasetId], references: [id], onDelete: SetNull)
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  trades      Trade[]
-  equityCurve EquityPoint[]
-
-  createdAt DateTime @default(now())
+  status               String
+  datasetId            String?
+  userId               String
+  createdAt            DateTime      @default(now())
+  dataset              Dataset?      @relation(fields: [datasetId], references: [id])
+  user                 User          @relation(fields: [userId], references: [id])
+  equityCurve          EquityPoint[]
+  trades               Trade[]
 
   @@index([userId])
   @@index([userId, createdAt])
@@ -137,34 +105,74 @@ model Trade {
   executionPrice Float
   commission     Float
   cashFlow       Float
-
-  backtestId String
-  backtest   Backtest @relation(fields: [backtestId], references: [id])
+  backtestId     String
+  backtest       Backtest @relation(fields: [backtestId], references: [id])
 }
 
 model EquityPoint {
-  id        String   @id @default(cuid())
-  timestamp DateTime
-  equity    Float
-
+  id         String   @id @default(cuid())
+  timestamp  DateTime
+  equity     Float
   backtestId String
   backtest   Backtest @relation(fields: [backtestId], references: [id])
 }
 
 model BacktestUsage {
-  id String @id @default(cuid())
-
-  userId String
-  date   DateTime
-  count  Int      @default(0)
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime
+  count     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, date])
   @@index([userId, date])
+}
+
+model Subscription {
+  id                     String             @id @default(cuid())
+  userId                 String
+  provider               String             @default("razorpay")
+  providerSubscriptionId String             @unique
+  status                 SubscriptionStatus @default(CREATED)
+  plan                   Plan
+  currentPeriodStart     DateTime?
+  currentPeriodEnd       DateTime?
+  cancelledAt            DateTime?
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+  user                   User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, status])
+}
+
+model BillingEvent {
+  id              String             @id @default(cuid())
+  provider        String             @default("razorpay")
+  providerEventId String             @unique
+  eventType       String
+  status          BillingEventStatus @default(RECEIVED)
+  payload         Json
+  processedAt     DateTime?
+  failedAt        DateTime?
+  errorMessage    String?
+  createdAt       DateTime           @default(now())
+
+  @@index([provider, eventType])
+  @@index([createdAt])
+}
+
+enum Plan {
+  FREE
+  PRO
+}
+
+enum DatasetStatus {
+  UNVALIDATED
+  VALIDATED
+  ERROR
 }
 
 enum SubscriptionStatus {
@@ -175,58 +183,8 @@ enum SubscriptionStatus {
   EXPIRED
 }
 
-model Subscription {
-  id String @id @default(cuid())
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  provider String @default("razorpay")
-
-  providerSubscriptionId String @unique
-
-  status SubscriptionStatus @default(CREATED)
-
-  plan Plan
-
-  currentPeriodStart DateTime?
-  currentPeriodEnd   DateTime?
-
-  cancelledAt DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-  @@index([userId, status])
-}
-
 enum BillingEventStatus {
   RECEIVED
   PROCESSED
   FAILED
-}
-
-model BillingEvent {
-  id String @id @default(cuid())
-
-  provider String @default("razorpay")
-
-  providerEventId String @unique
-
-  eventType String
-
-  status BillingEventStatus @default(RECEIVED)
-
-  payload Json
-
-  processedAt DateTime?
-  failedAt    DateTime?
-
-  errorMessage String?
-
-  createdAt DateTime @default(now())
-
-  @@index([provider, eventType])
-  @@index([createdAt])
 }

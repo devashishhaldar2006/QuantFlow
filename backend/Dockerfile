@@ -37,11 +37,10 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
-# Copy compiled binaries and configurations from builder
 COPY --from=builder /app/build/QuantFlowServer ./QuantFlowServer
 COPY --from=builder /app/build/QuantFlow ./QuantFlow
 COPY --from=builder /app/config ./config
-RUN mkdir -p /app/data
+COPY data/ ./data/
 
 # Expose default port (Render will bind to $PORT dynamically, or 8080 by default)
 EXPOSE 8080
