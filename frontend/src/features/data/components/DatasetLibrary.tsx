@@ -143,13 +143,13 @@ export function DatasetLibrary({ onNewDatasetClick }: DatasetLibraryProps) {
           ))}
         </div>
       ) : filteredDatasets.length === 0 ? (
-        <div className="flex flex-col items-center justify-center p-14 rounded border border-dashed border-zinc-300 bg-white text-center space-y-3">
-          <div className="p-3 rounded border border-zinc-200 bg-zinc-50 text-zinc-600">
-            <Database className="w-6 h-6" />
+        <div className="flex flex-col items-center justify-center p-14 rounded border border-zinc-200 bg-white text-center space-y-3 shadow-sm">
+          <div className="size-14 rounded border border-zinc-900 bg-zinc-950 flex items-center justify-center text-white shadow-sm">
+            <Database className="w-6 h-6 text-white" />
           </div>
           <div className="space-y-1">
-            <h4 className="font-mono font-bold text-zinc-900 text-sm">NO_DATASETS_FOUND</h4>
-            <p className="text-xs text-zinc-500 max-w-sm font-sans">
+            <h4 className="font-mono font-bold text-zinc-950 text-sm uppercase tracking-tight">NO_DATASETS_FOUND</h4>
+            <p className="text-xs text-zinc-600 max-w-sm font-mono leading-relaxed">
               {activeFilter === "USER"
                 ? 'You haven\'t uploaded any custom CSV datasets yet. Click "Import CSV Dataset" above to get started.'
                 : "No datasets match your search filter. Try clearing your search query."}

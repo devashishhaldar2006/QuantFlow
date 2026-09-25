@@ -57,17 +57,19 @@ export default function Portfolio({ portfolio }: PortfolioProps) {
 
       {!hasData ? (
         <AnimatedItem>
-          <div className="flex flex-col items-center justify-center py-24 rounded border border-zinc-200 bg-white text-center">
-            <div className="flex size-14 items-center justify-center rounded border border-zinc-200 bg-zinc-50 mb-4">
-              <Folder className="size-6 text-zinc-500" />
+          <div className="flex flex-col items-center justify-center py-24 rounded border border-zinc-200 bg-white text-center shadow-sm">
+            <div className="flex size-14 items-center justify-center rounded border border-zinc-900 bg-zinc-950 text-white mb-4 shadow-sm">
+              <Folder className="size-6 text-white" />
             </div>
-            <h2 className="text-lg font-bold font-mono text-zinc-900">NO_PORTFOLIO_DATA</h2>
-            <p className="mt-1.5 max-w-sm text-xs text-zinc-600 font-sans">
+            <h2 className="text-base font-bold font-mono tracking-tight text-zinc-950 uppercase">
+              NO_PORTFOLIO_DATA
+            </h2>
+            <p className="mt-1.5 max-w-sm text-xs text-zinc-600 font-mono leading-relaxed">
               Execute a strategy backtest to populate your quantitative portfolio with return analytics and order ledgers.
             </p>
             <Link
               href="/backtests/new"
-              className="mt-5 inline-flex h-9 items-center gap-2 rounded bg-zinc-950 px-5 text-xs font-mono font-medium text-white hover:bg-zinc-800 transition-all shadow-sm"
+              className="mt-6 inline-flex h-9 items-center gap-2 rounded bg-zinc-950 px-5 text-xs font-mono font-medium text-white hover:bg-zinc-800 transition-all shadow-sm"
             >
               LAUNCH_FIRST_BACKTEST
             </Link>
