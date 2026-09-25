@@ -39,31 +39,33 @@ export function RiskOfficerCard({ backtestId }: RiskOfficerCardProps) {
 
   const getScoreBadge = (score: number) => {
     if (score >= 78) {
-      return { label: "INSTITUTIONAL GRADE", color: "text-emerald-400 border-emerald-500/30 bg-emerald-500/10" };
+      return { label: "INSTITUTIONAL GRADE", color: "text-emerald-700 border-emerald-300 bg-emerald-50" };
     }
     if (score >= 55) {
-      return { label: "SPECULATIVE GRADE", color: "text-amber-400 border-amber-500/30 bg-amber-500/10" };
+      return { label: "SPECULATIVE GRADE", color: "text-amber-800 border-amber-300 bg-amber-50" };
     }
-    return { label: "ELEVATED TAIL RISK", color: "text-rose-400 border-rose-500/30 bg-rose-500/10" };
+    return { label: "ELEVATED TAIL RISK", color: "text-rose-700 border-rose-300 bg-rose-50" };
   };
 
   return (
-    <div className="rounded-2xl border border-slate-800 bg-[#0B1120] p-6 space-y-5">
+    <div className="rounded border border-zinc-200 bg-white p-5 space-y-5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 pb-4">
         <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400 shadow-sm">
+          <div className="flex size-10 items-center justify-center rounded border border-zinc-900 bg-zinc-950 text-white shrink-0">
             <ShieldCheck className="size-5" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              Autonomous Risk Committee Audit
-              <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20">
-                LangGraph + Mistral Small 2506
+            <div className="flex items-center gap-2 flex-wrap">
+              <h3 className="text-sm font-bold text-zinc-900 font-mono tracking-tight uppercase">
+                AUTONOMOUS_RISK_COMMITTEE_AUDIT
+              </h3>
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-zinc-900 bg-zinc-950 text-white tracking-wider">
+                LANGGRAPH • MISTRAL SMALL 2506
               </span>
-            </h3>
-            <p className="text-xs text-slate-400">
-              Continuous multi-node stress audit: luck concentration detector ➔ macro regime test ➔ CRO synthesized memo.
+            </div>
+            <p className="text-xs text-zinc-600 mt-0.5">
+              Continuous multi-node stress audit: luck concentration detector → macro regime test → CRO synthesized memo.
             </p>
           </div>
         </div>
@@ -73,17 +75,17 @@ export function RiskOfficerCard({ backtestId }: RiskOfficerCardProps) {
             type="button"
             disabled={isLoading}
             onClick={handleRunAudit}
-            className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-blue-500 transition disabled:opacity-50 shrink-0"
+            className="inline-flex h-8 items-center gap-1.5 rounded bg-zinc-950 px-3.5 text-xs font-mono font-semibold text-white transition-colors hover:bg-zinc-800 disabled:opacity-50 shrink-0"
           >
             {isLoading ? (
               <>
                 <Loader2 className="size-3.5 animate-spin" />
-                <span>Auditing Strategy...</span>
+                <span>AUDITING_STRATEGY...</span>
               </>
             ) : (
               <>
                 <Sparkles className="size-3.5" />
-                <span>Run Autonomous Audit</span>
+                <span>RUN_AUTONOMOUS_AUDIT</span>
               </>
             )}
           </button>
@@ -92,19 +94,19 @@ export function RiskOfficerCard({ backtestId }: RiskOfficerCardProps) {
 
       {/* Error View */}
       {error && (
-        <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-xs text-red-400 flex items-center gap-2">
-          <AlertOctagon className="size-4 shrink-0" />
+        <div className="p-3 rounded border border-red-200 bg-red-50 text-xs text-red-700 flex items-center gap-2 font-mono">
+          <AlertOctagon className="size-4 shrink-0 text-red-600" />
           <span>{error}</span>
         </div>
       )}
 
       {/* Initial Callout (Before Running) */}
       {!verdict && !isLoading && !error && (
-        <div className="rounded-xl border border-slate-800/80 bg-slate-900/40 p-5 text-center space-y-2">
-          <p className="text-xs text-slate-300 font-medium">
-            Subject this backtest to hedge-fund grade risk screening.
+        <div className="rounded border border-zinc-200 bg-zinc-50 p-6 text-center space-y-2">
+          <p className="text-xs text-zinc-900 font-mono font-semibold uppercase tracking-wide">
+            SUBJECT THIS BACKTEST TO HEDGE-FUND GRADE RISK SCREENING
           </p>
-          <p className="text-[11px] text-slate-500 max-w-lg mx-auto">
+          <p className="text-xs text-zinc-600 max-w-lg mx-auto">
             The LangGraph agent inspects trade distribution to flag curve-fitting anomalies, verifies sample size significance, and tests drawdowns under liquidity shock regimes.
           </p>
         </div>
@@ -112,17 +114,17 @@ export function RiskOfficerCard({ backtestId }: RiskOfficerCardProps) {
 
       {/* Loading Skeleton */}
       {isLoading && (
-        <div className="p-6 rounded-xl bg-slate-900/40 border border-slate-800 animate-pulse space-y-4">
+        <div className="p-6 rounded border border-zinc-200 bg-zinc-50/60 animate-pulse space-y-4">
           <div className="flex items-center gap-3">
-            <div className="size-12 rounded-xl bg-slate-800" />
+            <div className="size-10 rounded border border-zinc-200 bg-zinc-200" />
             <div className="space-y-1.5 flex-1">
-              <div className="h-4 w-48 rounded bg-slate-800" />
-              <div className="h-3 w-80 rounded bg-slate-800/60" />
+              <div className="h-4 w-48 rounded bg-zinc-200" />
+              <div className="h-3 w-80 rounded bg-zinc-200/70" />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3 pt-2">
-            <div className="h-20 rounded-lg bg-slate-800/50" />
-            <div className="h-20 rounded-lg bg-slate-800/50" />
+            <div className="h-20 rounded border border-zinc-200 bg-zinc-200/60" />
+            <div className="h-20 rounded border border-zinc-200 bg-zinc-200/60" />
           </div>
         </div>
       )}
@@ -132,24 +134,27 @@ export function RiskOfficerCard({ backtestId }: RiskOfficerCardProps) {
         <div className="space-y-5">
           {/* Health Score & Classification */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 text-center">
-              <span className="text-[10px] uppercase font-mono tracking-widest text-slate-400">Institutional Score</span>
-              <div className="text-3xl font-extrabold text-white mt-1">
-                {verdict.overallHealthScore}<span className="text-sm font-normal text-slate-500">/100</span>
+            <div className="rounded border border-zinc-200 bg-zinc-50/60 p-4 text-center flex flex-col justify-center items-center">
+              <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-zinc-500">
+                INSTITUTIONAL_SCORE
+              </span>
+              <div className="text-4xl font-extrabold text-zinc-950 font-mono mt-1">
+                {verdict.overallHealthScore}
+                <span className="text-sm font-normal text-zinc-400">/100</span>
               </div>
-              <div className="mt-2">
-                <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold border ${getScoreBadge(verdict.overallHealthScore).color}`}>
+              <div className="mt-2.5">
+                <span className={`inline-block px-2.5 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider border ${getScoreBadge(verdict.overallHealthScore).color}`}>
                   {verdict.classification.replace(/_/g, " ")}
                 </span>
               </div>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 sm:col-span-2 space-y-2">
-              <span className="text-[10px] uppercase font-mono tracking-widest text-slate-400 flex items-center gap-1.5">
-                <FileText className="size-3 text-blue-400" />
-                CRO Committee Decision Memo
+            <div className="rounded border border-zinc-200 bg-zinc-50/60 p-4 sm:col-span-2 space-y-2">
+              <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-zinc-900 flex items-center gap-1.5">
+                <FileText className="size-3.5 text-zinc-900" />
+                CRO_COMMITTEE_DECISION_MEMO
               </span>
-              <p className="text-xs text-slate-200 leading-relaxed font-sans">
+              <p className="text-xs text-zinc-700 leading-relaxed">
                 {verdict.summary}
               </p>
             </div>
@@ -158,20 +163,22 @@ export function RiskOfficerCard({ backtestId }: RiskOfficerCardProps) {
           {/* Sub-node Analyses */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Overfitting Node */}
-            <div className="rounded-xl border border-slate-800/80 bg-slate-900/50 p-4 space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-white">Overfitting & Curve-Fitting Check</span>
-                <span className="text-[11px] font-mono text-emerald-400">
-                  {verdict.overfittingAnalysis.score}/100 Robust
+            <div className="rounded border border-zinc-200 bg-white p-4 space-y-2.5">
+              <div className="flex items-center justify-between border-b border-zinc-200 pb-2">
+                <span className="text-xs font-bold text-zinc-900 font-mono uppercase tracking-wide">
+                  OVERFITTING_&_CURVE_FITTING
+                </span>
+                <span className="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
+                  {verdict.overfittingAnalysis.score}/100 ROBUST
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400">
-                Single Outlier Concentration: <strong className="text-slate-200">{verdict.overfittingAnalysis.luckConcentrationPercent}%</strong> of net profit.
+              <p className="text-xs text-zinc-600">
+                Single Outlier Concentration: <strong className="text-zinc-950 font-mono">{verdict.overfittingAnalysis.luckConcentrationPercent}%</strong> of net profit.
               </p>
-              <ul className="space-y-1 pt-1 text-[11px] text-slate-400">
+              <ul className="space-y-1.5 pt-1 text-xs text-zinc-600">
                 {verdict.overfittingAnalysis.observations.map((obs, idx) => (
-                  <li key={idx} className="flex items-start gap-1.5">
-                    <span className="text-blue-400 mt-0.5">•</span>
+                  <li key={idx} className="flex items-start gap-2">
+                    <span className="text-zinc-950 font-bold leading-tight mt-0.5">•</span>
                     <span>{obs}</span>
                   </li>
                 ))}
@@ -179,20 +186,22 @@ export function RiskOfficerCard({ backtestId }: RiskOfficerCardProps) {
             </div>
 
             {/* Regime Stress Node */}
-            <div className="rounded-xl border border-slate-800/80 bg-slate-900/50 p-4 space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-white">Macro Regime Stress Resilience</span>
-                <span className="text-[11px] font-mono text-blue-400">
-                  {verdict.regimeStressAnalysis.score}/100 Resilience
+            <div className="rounded border border-zinc-200 bg-white p-4 space-y-2.5">
+              <div className="flex items-center justify-between border-b border-zinc-200 pb-2">
+                <span className="text-xs font-bold text-zinc-900 font-mono uppercase tracking-wide">
+                  MACRO_REGIME_RESILIENCE
+                </span>
+                <span className="text-xs font-mono font-bold text-zinc-900 bg-zinc-100 border border-zinc-300 px-2 py-0.5 rounded">
+                  {verdict.regimeStressAnalysis.score}/100 RESILIENCE
                 </span>
               </div>
-              <p className="text-[11px] text-slate-300">
+              <p className="text-xs text-zinc-700">
                 {verdict.regimeStressAnalysis.stressTestSummary}
               </p>
-              <ul className="space-y-1 pt-1 text-[11px] text-slate-400">
+              <ul className="space-y-1.5 pt-1 text-xs text-zinc-600">
                 {verdict.regimeStressAnalysis.vulnerableConditions.map((cond, idx) => (
-                  <li key={idx} className="flex items-start gap-1.5">
-                    <span className="text-amber-400 mt-0.5">⚠</span>
+                  <li key={idx} className="flex items-start gap-2">
+                    <span className="text-amber-600 font-bold leading-tight">⚠</span>
                     <span>{cond}</span>
                   </li>
                 ))}
@@ -201,14 +210,14 @@ export function RiskOfficerCard({ backtestId }: RiskOfficerCardProps) {
           </div>
 
           {/* Actionable Risk Limits */}
-          <div className="rounded-xl border border-blue-500/20 bg-blue-950/20 p-4 space-y-2">
-            <span className="text-[11px] uppercase font-mono font-semibold tracking-wider text-blue-300 flex items-center gap-1.5">
-              <CheckCircle2 className="size-3.5 text-blue-400" />
-              Mandated Execution Limits & Controls
+          <div className="rounded border border-zinc-200 bg-zinc-50/60 p-4 space-y-2.5">
+            <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-zinc-900 flex items-center gap-1.5">
+              <CheckCircle2 className="size-3.5 text-zinc-900" />
+              MANDATED_EXECUTION_LIMITS_&_CONTROLS
             </span>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
               {verdict.actionableRecommendations.map((rec, idx) => (
-                <div key={idx} className="rounded-lg bg-black/40 border border-white/5 p-2.5 text-[11px] text-slate-300 font-mono">
+                <div key={idx} className="rounded border border-zinc-200 bg-white p-3 text-xs text-zinc-700 font-mono shadow-none">
                   {rec}
                 </div>
               ))}
@@ -221,10 +230,10 @@ export function RiskOfficerCard({ backtestId }: RiskOfficerCardProps) {
               type="button"
               disabled={isLoading}
               onClick={handleRunAudit}
-              className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition"
+              className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-500 hover:text-zinc-950 transition-colors"
             >
               <RefreshCw className="size-3" />
-              <span>Re-run Audit</span>
+              <span>RE_RUN_AUDIT</span>
             </button>
           </div>
         </div>
