@@ -50,7 +50,7 @@ export default async function BillingSuccessPage() {
             <div className="pt-2">
               <Link
                 href="/dashboard"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-indigo-500 active:scale-[0.99]"
+                className="inline-flex w-full items-center justify-center gap-2 rounded bg-zinc-950 px-5 py-3 text-xs font-mono font-medium text-white shadow-sm transition hover:bg-zinc-800 active:scale-[0.99]"
               >
                 Go to Dashboard
                 <ArrowRight className="size-4" />

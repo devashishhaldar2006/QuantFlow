@@ -81,7 +81,7 @@ export default function ContactPage() {
             </div>
             <button
               type="button"
-              className="w-full rounded-xl bg-indigo-600 py-2.5 text-xs font-bold text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all"
+              className="w-full rounded bg-zinc-950 py-2.5 text-xs font-mono font-medium text-white shadow-sm transition hover:bg-zinc-800"
             >
               Send Support Ticket
             </button>

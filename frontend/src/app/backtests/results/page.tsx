@@ -16,21 +16,21 @@ export default async function BacktestResultsPage() {
 
   if (!result) {
     return (
-      <div className="flex flex-col items-center justify-center p-16 text-center space-y-4">
-        <div className="size-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+      <div className="flex flex-col items-center justify-center py-24 rounded border border-zinc-200 bg-white p-8 text-center space-y-4">
+        <div className="size-14 rounded border border-zinc-200 bg-zinc-50 flex items-center justify-center text-zinc-600">
           <FlaskConical className="size-6" />
         </div>
         <div className="space-y-1">
-          <h1 className="text-xl font-bold text-slate-100">No Backtest Results Found</h1>
-          <p className="text-xs text-slate-400 max-w-sm">
+          <h1 className="text-lg font-bold font-mono text-zinc-900">NO_BACKTEST_RESULTS_FOUND</h1>
+          <p className="text-xs text-zinc-600 max-w-sm font-sans">
             Execute a new quantitative backtest to view performance analytics, equity curves, and trade ledgers.
           </p>
         </div>
         <Link
           href="/backtests/new"
-          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-xs font-semibold text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-500 transition-all"
+          className="inline-flex items-center gap-2 rounded bg-zinc-950 px-5 py-2.5 text-xs font-mono font-medium text-white hover:bg-zinc-800 transition-all shadow-sm"
         >
-          Launch New Backtest
+          LAUNCH_NEW_BACKTEST
         </Link>
       </div>
     );

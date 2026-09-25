@@ -38,7 +38,7 @@ export default function LegalPageLayout({
             </Link>
             <Link
               href="/sign-in"
-              className="rounded-xl bg-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all"
+              className="rounded bg-zinc-950 px-4 py-2 text-xs font-mono font-medium text-white shadow-sm hover:bg-zinc-800 transition"
             >
               Terminal Login
             </Link>

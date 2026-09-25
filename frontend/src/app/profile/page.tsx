@@ -34,7 +34,7 @@ export default function ProfilePage() {
           </p>
           <Link
             href="/sign-in"
-            className="inline-flex w-full items-center justify-center rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:bg-indigo-500"
+            className="inline-flex w-full items-center justify-center rounded bg-zinc-950 px-4 py-2.5 text-xs font-mono font-medium text-white shadow-sm transition hover:bg-zinc-800"
           >
             Sign In to QuantFlow
           </Link>
@@ -90,7 +90,7 @@ export default function ProfilePage() {
             <div className="pt-2">
               <Link
                 href="/billing"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:bg-indigo-500"
+                className="inline-flex w-full items-center justify-center gap-2 rounded bg-zinc-950 px-4 py-2.5 text-xs font-mono font-medium text-white shadow-sm transition hover:bg-zinc-800"
               >
                 <CreditCard className="size-4" />
                 Manage Plan & Billing

@@ -29,7 +29,7 @@ export default function GlobalError({
         <button
           type="button"
           onClick={() => reset()}
-          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-xs font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-500"
+          className="inline-flex items-center gap-2 rounded bg-zinc-950 px-5 py-2.5 text-xs font-mono font-medium text-white shadow-sm transition hover:bg-zinc-800"
         >
           <RotateCcw className="size-3.5" />
           Retry Connection

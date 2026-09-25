@@ -65,7 +65,7 @@ export default function SettingsPage() {
               type="button"
               onClick={handleSave}
               disabled={saving || loading}
-              className="inline-flex h-9 items-center gap-2 rounded-lg bg-indigo-600 px-5 text-xs font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-9 items-center gap-2 rounded bg-zinc-950 px-5 text-xs font-mono font-medium text-white shadow-sm transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {saving ? (
                 <Loader2 className="size-3.5 animate-spin" />
