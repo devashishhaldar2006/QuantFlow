@@ -141,15 +141,15 @@ export function NotificationPopover() {
             onClick={() => setIsOpen(false)}
           />
 
-          <div className="absolute right-0 top-11 z-50 w-80 sm:w-96 rounded-2xl border border-white/10 bg-[#090E1A]/95 p-4 shadow-2xl backdrop-blur-2xl animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="absolute right-0 top-11 z-50 w-80 sm:w-96 rounded border border-zinc-200 bg-white p-4 shadow-xl animate-in fade-in slide-in-from-top-2 duration-150">
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-white/5 pb-3">
+            <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
               <div className="flex items-center gap-2">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">
-                  Notifications
+                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-900">
+                  NOTIFICATIONS
                 </h3>
                 {unreadCount > 0 && (
-                  <span className="rounded-full bg-indigo-500/20 px-2 py-0.5 text-[10px] font-mono font-bold text-indigo-400 border border-indigo-500/30">
+                  <span className="rounded border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-[10px] font-mono font-bold text-zinc-900">
                     {unreadCount} new
                   </span>
                 )}
@@ -160,9 +160,9 @@ export function NotificationPopover() {
                   <button
                     type="button"
                     onClick={markAllAsRead}
-                    className="flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-medium text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-colors"
+                    className="flex items-center gap-1 rounded px-2 py-1 text-[11px] font-mono font-medium text-zinc-600 hover:bg-zinc-50 hover:text-zinc-950 transition-colors"
                   >
-                    <Check className="size-3 text-emerald-400" />
+                    <Check className="size-3 text-emerald-600" />
                     Mark Read
                   </button>
                 )}
@@ -171,7 +171,7 @@ export function NotificationPopover() {
                     type="button"
                     onClick={clearAll}
                     title="Clear All Notifications"
-                    className="p-1 rounded-md text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                    className="p-1 rounded text-zinc-400 hover:text-red-600 hover:bg-red-50 transition-colors"
                   >
                     <Trash2 className="size-3.5" />
                   </button>
@@ -182,19 +182,19 @@ export function NotificationPopover() {
             {/* List */}
             <div className="mt-3 max-h-[320px] space-y-2 overflow-y-auto pr-1">
               {notifications.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-8 text-center text-slate-500 space-y-2">
-                  <Activity className="size-6 text-slate-600" />
-                  <p className="text-xs">No notifications right now.</p>
+                <div className="flex flex-col items-center justify-center py-8 text-center text-zinc-400 space-y-2">
+                  <Activity className="size-6 text-zinc-300" />
+                  <p className="text-xs font-mono">No notifications right now.</p>
                 </div>
               ) : (
                 notifications.map((item) => (
                   <div
                     key={item.id}
                     onClick={() => markItemRead(item.id)}
-                    className={`group relative rounded-xl border p-3 transition-all ${
+                    className={`group relative rounded border p-3 transition-all cursor-pointer ${
                       item.read
-                        ? "border-white/5 bg-white/[0.01] hover:bg-white/[0.04]"
-                        : "border-indigo-500/25 bg-indigo-500/[0.06] hover:bg-indigo-500/[0.1]"
+                        ? "border-zinc-200 bg-white hover:bg-zinc-50/70"
+                        : "border-zinc-300 bg-zinc-50/80 hover:bg-zinc-100/80"
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
@@ -202,31 +202,31 @@ export function NotificationPopover() {
                         <div className="flex items-center gap-1.5">
                           <span
                             className={`size-1.5 rounded-full ${
-                              item.read ? "bg-slate-600" : "bg-indigo-400"
+                              item.read ? "bg-zinc-300" : "bg-emerald-600"
                             }`}
                           />
-                          <h4 className="text-xs font-semibold text-slate-200">
+                          <h4 className="text-xs font-semibold text-zinc-900">
                             {item.title}
                           </h4>
                         </div>
-                        <p className="text-[11px] text-slate-400 leading-relaxed">
+                        <p className="text-[11px] text-zinc-600 leading-relaxed font-sans">
                           {item.message}
                         </p>
                       </div>
-                      <span className="shrink-0 font-mono text-[10px] text-slate-500">
+                      <span className="shrink-0 font-mono text-[10px] text-zinc-400">
                         {item.timestamp}
                       </span>
                     </div>
 
                     {item.link && (
-                      <div className="mt-2 pt-2 border-t border-white/5 flex justify-end">
+                      <div className="mt-2 pt-2 border-t border-zinc-200 flex justify-end">
                         <Link
                           href={item.link}
                           onClick={() => setIsOpen(false)}
-                          className="inline-flex items-center gap-1 text-[10px] font-mono font-medium text-indigo-400 hover:text-indigo-300 transition-colors"
+                          className="inline-flex items-center gap-1 text-[10px] font-mono font-medium text-zinc-900 hover:text-black hover:underline transition-colors"
                         >
                           View Details
-                          <ArrowUpRight className="size-3" />
+                          <ArrowUpRight className="size-3 text-zinc-500" />
                         </Link>
                       </div>
                     )}
