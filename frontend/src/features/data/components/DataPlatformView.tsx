@@ -108,15 +108,15 @@ export function DataPlatformView() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 pb-5">
         <div className="space-y-1">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
-              <Database className="w-6 h-6" />
+            <div className="p-2 rounded border border-zinc-200 bg-zinc-50 text-zinc-900">
+              <Database className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-slate-100">Market Data Platform</h1>
-              <p className="text-xs text-slate-400">
+              <h1 className="text-xl font-bold font-mono text-zinc-900 tracking-tight">MARKET_DATA_PLATFORM</h1>
+              <p className="text-xs text-zinc-500 font-sans">
                 Ingest, normalize, validate, and manage historical OHLCV market datasets for reproducible research.
               </p>
             </div>
@@ -130,10 +130,10 @@ export function DataPlatformView() {
                 setActiveTab("upload");
                 setStep(1);
               }}
-              className="gap-2 text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold shadow-lg shadow-indigo-500/20 transition-all"
+              className="gap-2 text-xs font-mono bg-zinc-950 hover:bg-zinc-800 text-white font-semibold shadow-sm transition-all"
             >
               <Plus className="w-4 h-4" />
-              Import CSV Dataset
+              IMPORT_CSV_DATASET
             </Button>
           ) : (
             <Button
@@ -141,9 +141,9 @@ export function DataPlatformView() {
               onClick={() => {
                 setActiveTab("library");
               }}
-              className="text-xs border-slate-700 bg-slate-900/60 text-slate-300 hover:bg-slate-800 hover:text-white"
+              className="text-xs font-mono border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 hover:text-black"
             >
-              Back to Dataset Library
+              Back to Library
             </Button>
           )}
         </div>

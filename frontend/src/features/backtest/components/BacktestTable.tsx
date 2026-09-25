@@ -17,13 +17,25 @@ type BacktestTableProps = {
 function StatusIcon({ status }: { status: string }) {
   switch (status) {
     case "completed":
-      return <div className="flex items-center gap-1.5 text-slate-400"><CheckCircle2 className="size-3.5 text-emerald-500" /> Done</div>;
+      return (
+        <span className="inline-flex items-center gap-1 font-mono text-[10px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 font-medium">
+          EXECUTED
+        </span>
+      );
     case "running":
-      return <div className="flex items-center gap-1.5 text-slate-400"><Clock className="size-3.5 text-indigo-500" /> Running</div>;
+      return (
+        <span className="inline-flex items-center gap-1 font-mono text-[10px] text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.2 font-medium">
+          COMPILING
+        </span>
+      );
     case "failed":
-      return <div className="flex items-center gap-1.5 text-slate-400"><XCircle className="size-3.5 text-red-500" /> Failed</div>;
+      return (
+        <span className="inline-flex items-center gap-1 font-mono text-[10px] text-red-700 bg-red-50 border border-red-200 px-1.5 py-0.2 font-medium">
+          ABORTED
+        </span>
+      );
     default:
-      return <span className="text-slate-500">{status}</span>;
+      return <span className="font-mono text-[10px] text-zinc-500">{status}</span>;
   }
 }
 
@@ -46,55 +58,55 @@ export default function BacktestTable({
   }
 
   return (
-    <div className="overflow-x-auto rounded-md border border-slate-700">
-      <table className="w-full min-w-[800px] text-sm text-left">
-        <thead className="bg-slate-900/50 text-xs uppercase font-semibold text-slate-400 border-b border-slate-700">
+    <div className="overflow-x-auto rounded border border-zinc-200 bg-white">
+      <table className="w-full min-w-[800px] text-xs text-left">
+        <thead className="bg-zinc-50 font-mono text-[10px] uppercase font-bold text-zinc-500 border-b border-zinc-200 tracking-wider">
           <tr>
-            <th className="px-4 py-3 font-semibold">Strategy</th>
-            <th className="px-4 py-3 text-right font-semibold">Initial Capital</th>
-            <th className="px-4 py-3 text-right font-semibold">Return</th>
-            <th className="px-4 py-3 text-right font-semibold">Sharpe</th>
-            <th className="px-4 py-3 text-right font-semibold">Drawdown</th>
-            <th className="px-4 py-3 text-center font-semibold">Status</th>
+            <th className="px-4 py-3 font-semibold">MODEL / TIMESTAMP</th>
+            <th className="px-4 py-3 text-right font-semibold">CAPITAL</th>
+            <th className="px-4 py-3 text-right font-semibold">RETURN</th>
+            <th className="px-4 py-3 text-right font-semibold">SHARPE</th>
+            <th className="px-4 py-3 text-right font-semibold">MAX_DRAWDOWN</th>
+            <th className="px-4 py-3 text-center font-semibold">STATE</th>
           </tr>
         </thead>
         <tbody>
           {backtests.length === 0 ? (
             <tr>
-              <td colSpan={6} className="py-12 text-center text-sm text-slate-500 bg-slate-900/20">
-                No backtests found.
+              <td colSpan={6} className="py-12 text-center text-xs font-mono text-zinc-400 bg-white">
+                NO_EXECUTIONS_RECORDED
               </td>
             </tr>
           ) : (
             backtests.map((backtest) => (
               <tr
                 key={backtest.id}
-                className="border-b border-slate-800 transition-colors hover:bg-slate-800/50 last:border-0"
+                className="border-b border-zinc-200 transition-colors hover:bg-zinc-50 last:border-0"
               >
-                <td className="px-4 py-3 font-medium text-slate-200">
+                <td className="px-4 py-3 font-mono font-medium text-zinc-900">
                   <div className="flex flex-col gap-0.5">
-                    <Link href={`/backtests/${backtest.id}`} className="hover:underline decoration-slate-500 underline-offset-2 transition-all">
+                    <Link href={`/backtests/${backtest.id}`} className="hover:underline font-bold text-black transition-all">
                       {backtest.strategy}
                     </Link>
-                    <span className="text-[10px] font-normal text-slate-500">
+                    <span className="text-[10px] font-normal text-zinc-400">
                       {formatDateCompact(backtest.createdAt)}
                     </span>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-right font-mono text-slate-300">
+                <td className="px-4 py-3 text-right font-mono text-zinc-700">
                   {formatCurrency(backtest.initialCapital)}
                 </td>
-                <td className={`px-4 py-3 text-right font-mono ${backtest.totalReturnPercent >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+                <td className={`px-4 py-3 text-right font-mono font-semibold ${backtest.totalReturnPercent >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
                   {formatSignedPercent(backtest.totalReturnPercent)}
                 </td>
-                <td className="px-4 py-3 text-right font-mono text-slate-300">
+                <td className="px-4 py-3 text-right font-mono text-zinc-700">
                   {formatNumber(backtest.sharpeRatio)}
                 </td>
-                <td className="px-4 py-3 text-right font-mono text-slate-300">
+                <td className="px-4 py-3 text-right font-mono text-zinc-700">
                   {backtest.maximumDrawdown > 0 ? "-" : ""}
                   {formatNumber(backtest.maximumDrawdown)}%
                 </td>
-                <td className="px-4 py-3 flex justify-center">
+                <td className="px-4 py-3 flex justify-center items-center">
                   <StatusIcon status={backtest.status} />
                 </td>
               </tr>
@@ -103,39 +115,39 @@ export default function BacktestTable({
         </tbody>
       </table>
 
-      <div className="flex items-center justify-between border-t border-slate-700 bg-slate-900/30 p-4">
-        <p className="text-sm text-slate-500">
-          {total === 0 ? "No backtests" : `Showing ${startIndex}–${endIndex} of ${total}`}
+      <div className="flex items-center justify-between border-t border-zinc-200 bg-zinc-50/50 px-4 py-3 font-mono text-xs text-zinc-500">
+        <p>
+          {total === 0 ? "TOTAL: 0" : `SHOWING ${startIndex}–${endIndex} OF ${total}`}
         </p>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {page > 1 ? (
             <Link
               href={getPageUrl(page - 1)}
-              className="rounded border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-slate-100"
+              className="rounded border border-zinc-200 bg-white px-2.5 py-1 text-xs font-mono font-medium text-zinc-700 transition-colors hover:bg-zinc-50 hover:text-black"
             >
-              Previous
+              PREV
             </Link>
           ) : (
-            <span className="cursor-not-allowed rounded border border-slate-800 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-600">
-              Previous
+            <span className="rounded border border-zinc-200/60 bg-zinc-100 px-2.5 py-1 text-xs font-mono font-medium text-zinc-400 cursor-not-allowed">
+              PREV
             </span>
           )}
 
-          <span className="text-xs font-medium text-slate-500">
-            Page {page} of {totalPages}
+          <span className="text-xs font-mono text-zinc-600">
+            {page} / {totalPages || 1}
           </span>
 
           {page < totalPages ? (
             <Link
               href={getPageUrl(page + 1)}
-              className="rounded border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-700 hover:text-slate-100"
+              className="rounded border border-zinc-200 bg-white px-2.5 py-1 text-xs font-mono font-medium text-zinc-700 transition-colors hover:bg-zinc-50 hover:text-black"
             >
-              Next
+              NEXT
             </Link>
           ) : (
-            <span className="cursor-not-allowed rounded border border-slate-800 bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-600">
-              Next
+            <span className="rounded border border-zinc-200/60 bg-zinc-100 px-2.5 py-1 text-xs font-mono font-medium text-zinc-400 cursor-not-allowed">
+              NEXT
             </span>
           )}
         </div>

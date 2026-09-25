@@ -29,36 +29,33 @@ export default function BacktestDetails({ backtest }: BacktestDetailsProps) {
   return (
     <AnimatedPage>
       {/* Page Header */}
-      <div className="mb-8">
+      <div className="mb-6">
         {/* Breadcrumb */}
-        <div className="mb-4 flex items-center gap-1.5 text-xs text-slate-500">
-          <Link href="/backtests" className="transition-colors hover:text-slate-300">
-            Backtests
+        <div className="mb-3 flex items-center gap-1.5 text-xs font-mono text-zinc-500">
+          <Link href="/backtests" className="transition-colors hover:text-black">
+            BACKTESTS
           </Link>
-          <ChevronRight className="size-3" />
-          <span className="font-mono text-slate-400">#{backtest.id.slice(0, 8)}</span>
+          <ChevronRight className="size-3 text-zinc-400" />
+          <span className="font-mono text-zinc-800">#{backtest.id.slice(0, 8)}</span>
         </div>
 
-        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between border-b border-zinc-200 pb-5">
           <div>
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-2xl font-bold tracking-tight text-slate-100">
+              <h1 className="text-xl font-bold font-mono tracking-tight text-zinc-900">
                 {backtest.strategy}
               </h1>
-              <div className="flex items-center gap-1.5">
-                <span className={`size-2 rounded-full ${statusStyle.dot}`} />
-                <span className={`text-xs font-medium capitalize ${statusStyle.text}`}>
-                  {backtest.status}
-                </span>
-              </div>
+              <span className="font-mono text-[10px] font-bold px-1.5 py-0.5 border border-zinc-200 bg-zinc-50 uppercase text-zinc-800">
+                {backtest.status}
+              </span>
             </div>
 
-            <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-slate-500">
+            <div className="mt-2 flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-500">
               <span className="flex items-center gap-1.5">
-                <CalendarDays className="size-3.5" />
+                <CalendarDays className="size-3.5 text-zinc-400" />
                 {formatDate(backtest.createdAt)}
               </span>
-              <span className="font-mono text-[10px] text-slate-600">
+              <span className="font-mono text-[10px] text-zinc-400">
                 ID: {backtest.id}
               </span>
             </div>
@@ -68,35 +65,35 @@ export default function BacktestDetails({ backtest }: BacktestDetailsProps) {
             <button
               type="button"
               onClick={() => exportBacktestCSV(backtest)}
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900/80 px-3 text-xs font-semibold text-slate-300 transition hover:border-slate-600 hover:bg-slate-800 hover:text-white shadow-sm"
+              className="inline-flex h-8 items-center gap-1.5 rounded border border-zinc-200 bg-white px-3 text-xs font-mono font-medium text-zinc-700 transition hover:bg-zinc-50 hover:text-black shadow-none"
               title="Export Full Backtest Data to CSV"
             >
-              <FileDown className="size-3.5 text-emerald-400" />
-              Export CSV
+              <FileDown className="size-3.5 text-zinc-600" />
+              EXPORT_CSV
             </button>
 
             <button
               type="button"
               onClick={() => exportBacktestPDF(backtest)}
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-indigo-500/30 bg-indigo-600/10 px-3 text-xs font-semibold text-indigo-300 transition hover:bg-indigo-600/20 hover:border-indigo-500/50 shadow-sm"
+              className="inline-flex h-8 items-center gap-1.5 rounded border border-zinc-200 bg-white px-3 text-xs font-mono font-medium text-zinc-700 transition hover:bg-zinc-50 hover:text-black shadow-none"
               title="Print / Download PDF Tear Sheet"
             >
-              <Printer className="size-3.5 text-indigo-400" />
-              Export PDF
+              <Printer className="size-3.5 text-zinc-600" />
+              EXPORT_PDF
             </button>
 
             <Link
               href="/backtests"
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3.5 text-xs font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-slate-100"
+              className="inline-flex h-8 items-center gap-1.5 rounded border border-zinc-200 bg-white px-3 text-xs font-mono font-medium text-zinc-700 transition-colors hover:bg-zinc-50 hover:text-black"
             >
               <ArrowLeft className="size-3.5" />
-              All Backtests
+              ALL_BACKTESTS
             </Link>
             <Link
               href="/backtests/new"
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-indigo-500 px-3.5 text-xs font-medium text-white transition-colors hover:bg-indigo-600 shadow-md shadow-indigo-500/20"
+              className="inline-flex h-8 items-center gap-1.5 rounded bg-zinc-950 px-3.5 text-xs font-mono font-semibold text-white transition-colors hover:bg-zinc-800 shadow-none"
             >
-              Run Again
+              RUN_AGAIN
             </Link>
           </div>
         </div>
@@ -132,22 +129,22 @@ export default function BacktestDetails({ backtest }: BacktestDetailsProps) {
 
 export function BacktestNotFound() {
   return (
-    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 text-center">
-      <div className="flex size-14 items-center justify-center rounded-full border border-slate-700 bg-slate-900">
-        <FlaskConical className="size-6 text-slate-500" />
+    <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 text-center">
+      <div className="flex size-12 items-center justify-center rounded border border-zinc-200 bg-zinc-50">
+        <FlaskConical className="size-5 text-zinc-600" />
       </div>
       <div>
-        <h2 className="text-lg font-semibold text-slate-200">Backtest Not Found</h2>
-        <p className="mt-1 text-sm text-slate-500">
-          The requested backtest does not exist or is no longer available.
+        <h2 className="text-sm font-bold font-mono text-zinc-900 uppercase">RECORD_NOT_FOUND</h2>
+        <p className="mt-1 text-xs text-zinc-500 font-sans">
+          The requested execution session does not exist or has expired from memory.
         </p>
       </div>
       <Link
         href="/backtests"
-        className="inline-flex h-9 items-center gap-2 rounded-md border border-slate-700 bg-slate-900 px-4 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-slate-100"
+        className="inline-flex h-8 items-center gap-2 rounded border border-zinc-200 bg-white px-3 text-xs font-mono font-medium text-zinc-700 transition-colors hover:bg-zinc-50 hover:text-black"
       >
-        <ArrowLeft className="size-4" />
-        Back to Backtests
+        <ArrowLeft className="size-3.5" />
+        RETURN_TO_EXECUTIONS
       </Link>
     </div>
   );

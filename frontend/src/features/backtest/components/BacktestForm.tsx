@@ -117,7 +117,7 @@ function FieldInput({
       max={max}
       step={step}
       disabled={disabled}
-      className="h-10 w-full rounded-lg border border-slate-700/50 bg-slate-900/60 px-3 text-sm text-slate-100 placeholder:text-slate-600 shadow-inner outline-none transition-all focus:border-indigo-500/70 focus:bg-slate-900 focus:ring-1 focus:ring-indigo-500/30 disabled:cursor-not-allowed disabled:opacity-40 font-mono"
+      className="h-9 w-full rounded border border-zinc-200 bg-white px-3 text-xs text-zinc-900 placeholder:text-zinc-400 outline-none transition-all focus:border-black focus:ring-1 focus:ring-black disabled:cursor-not-allowed disabled:bg-zinc-50 disabled:text-zinc-400 font-mono"
     />
   );
 }
@@ -134,13 +134,13 @@ function FormSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="glass-panel space-y-4 rounded-xl p-5">
-      <div className="flex items-center gap-2.5 border-b border-slate-700/40 pb-3">
-        <div className="flex size-7 items-center justify-center rounded-md border border-indigo-500/20 bg-indigo-500/10">
-          <Icon className="size-3.5 text-indigo-400" />
+    <div className="space-y-4 rounded border border-zinc-200 bg-white p-5">
+      <div className="flex items-center gap-2.5 border-b border-zinc-200 pb-3">
+        <div className="flex size-6 items-center justify-center rounded border border-zinc-200 bg-zinc-50 text-zinc-900">
+          <Icon className="size-3 text-zinc-700" />
         </div>
 
-        <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+        <span className="text-[10px] font-bold font-mono uppercase tracking-wider text-zinc-600">
           {title}
         </span>
       </div>
@@ -458,13 +458,13 @@ export default function BacktestForm({
 
       {/* STRATEGY & DATA */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-        <span className="text-[11px] font-mono uppercase text-slate-400">Institutional Strategy Builder</span>
+        <span className="text-[11px] font-mono uppercase text-zinc-500 font-bold">Institutional Strategy Builder</span>
         <button
           type="button"
           onClick={() => setCopilotOpen(true)}
-          className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-blue-500/30 bg-blue-600/15 px-3 py-2 sm:py-1.5 text-xs font-semibold text-blue-300 hover:bg-blue-600/25 hover:border-blue-400 transition shadow-sm"
+          className="inline-flex items-center justify-center gap-1.5 rounded border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-xs font-mono font-medium text-zinc-900 hover:bg-zinc-100 hover:border-zinc-300 transition shadow-none"
         >
-          <Sparkles className="size-3.5 text-blue-400" />
+          <Sparkles className="size-3.5 text-zinc-700" />
           <span>AI Strategy Architect (LangGraph)</span>
         </button>
       </div>
@@ -504,17 +504,17 @@ export default function BacktestForm({
             >
               <SelectTrigger
                 id="strategy"
-                className="h-10 w-full rounded-lg border border-slate-700/50 bg-slate-900/60 px-3 text-sm text-slate-100 outline-none focus:border-indigo-500/70 focus:ring-1 focus:ring-indigo-500/30 font-mono disabled:cursor-not-allowed disabled:opacity-40"
+                className="h-9 w-full rounded border border-zinc-200 bg-white px-3 text-xs text-zinc-900 outline-none focus:border-black focus:ring-1 focus:ring-black font-mono disabled:cursor-not-allowed disabled:bg-zinc-50 disabled:text-zinc-400"
               >
                 <SelectValue placeholder="Select a strategy..." />
               </SelectTrigger>
 
-              <SelectContent className="rounded-lg border border-slate-700/50 bg-slate-900 shadow-2xl backdrop-blur-xl">
+              <SelectContent className="rounded border border-zinc-200 bg-white shadow-xl">
                 {strategies.map((item) => (
                   <SelectItem
                     key={item.name}
                     value={item.name}
-                    className="cursor-pointer text-sm text-slate-200 hover:bg-slate-800 focus:bg-slate-800 font-mono"
+                    className="cursor-pointer text-xs text-zinc-900 hover:bg-zinc-100 focus:bg-zinc-100 font-mono"
                   >
                     {item.name}
                   </SelectItem>
@@ -523,12 +523,12 @@ export default function BacktestForm({
             </Select>
 
             {strategy && (
-              <div className="mt-3 rounded-lg border border-indigo-500/20 bg-indigo-500/5 p-3">
-                <p className="text-xs font-semibold text-indigo-300">
+              <div className="mt-3 rounded border border-zinc-200 bg-zinc-50 p-3">
+                <p className="text-xs font-mono font-bold text-zinc-900">
                   {strategy.name}
                 </p>
 
-                <p className="mt-0.5 text-xs text-slate-400">
+                <p className="mt-0.5 text-xs text-zinc-600">
                   {strategy.description}
                 </p>
               </div>
@@ -543,10 +543,10 @@ export default function BacktestForm({
             {/* Upload area */}
             <label
               htmlFor="csv-upload-input"
-              className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed px-4 py-5 transition-all ${
+              className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded border border-dashed px-4 py-5 transition-all ${
                 limitReached || csvUploading
-                  ? "cursor-not-allowed border-slate-800/60 opacity-40"
-                  : "border-slate-700/50 hover:border-indigo-500/50 hover:bg-indigo-500/5"
+                  ? "cursor-not-allowed border-zinc-200 bg-zinc-50 opacity-40"
+                  : "border-zinc-300 bg-zinc-50/50 hover:border-black hover:bg-zinc-50"
               }`}
               onDragOver={(e) => e.preventDefault()}
               onDrop={(e) => {
@@ -570,15 +570,15 @@ export default function BacktestForm({
 
               {csvUploading ? (
                 <>
-                  <Loader2 className="size-6 animate-spin text-indigo-400" />
-                  <span className="text-xs text-slate-400">Uploading…</span>
+                  <Loader2 className="size-5 animate-spin text-zinc-900" />
+                  <span className="text-xs font-mono text-zinc-500">Uploading…</span>
                 </>
               ) : uploadedFile ? (
                 <>
-                  <CheckCircle2 className="size-6 text-emerald-400" />
-                  <div className="text-center">
-                    <p className="text-xs font-semibold text-emerald-300">{uploadedFile.name}</p>
-                    <p className="text-[10px] text-slate-500">{uploadedFile.rows.toLocaleString()} data rows</p>
+                  <CheckCircle2 className="size-5 text-emerald-600" />
+                  <div className="text-center font-mono">
+                    <p className="text-xs font-bold text-zinc-900">{uploadedFile.name}</p>
+                    <p className="text-[10px] text-zinc-500">{uploadedFile.rows.toLocaleString()} data rows</p>
                   </div>
                   <button
                     type="button"
@@ -587,21 +587,21 @@ export default function BacktestForm({
                       setUploadedFile(null);
                       updateField("csvFile", "data/sample.csv");
                     }}
-                    className="flex items-center gap-1 text-[10px] text-slate-500 hover:text-red-400 transition-colors"
+                    className="flex items-center gap-1 font-mono text-[10px] text-zinc-500 hover:text-red-600 transition-colors"
                   >
                     <X className="size-3" /> Use sample data
                   </button>
                 </>
               ) : (
                 <>
-                  <div className="flex size-9 items-center justify-center rounded-lg bg-indigo-500/10 border border-indigo-500/20">
-                    <Upload className="size-4 text-indigo-400" />
+                  <div className="flex size-8 items-center justify-center rounded border border-zinc-200 bg-white">
+                    <Upload className="size-3.5 text-zinc-700" />
                   </div>
-                  <div className="text-center">
-                    <p className="text-xs font-medium text-slate-300">
-                      Drop CSV or <span className="text-indigo-400">click to browse</span>
+                  <div className="text-center font-mono">
+                    <p className="text-xs font-medium text-zinc-800">
+                      Drop CSV or <span className="underline underline-offset-2 text-zinc-900 font-semibold">click to browse</span>
                     </p>
-                    <p className="text-[10px] text-slate-600">Requires: date, open, high, low, close columns</p>
+                    <p className="text-[10px] text-zinc-500">Requires: date, open, high, low, close columns</p>
                   </div>
                 </>
               )}
@@ -971,7 +971,7 @@ export default function BacktestForm({
         <button
           type="button"
           onClick={() => router.back()}
-          className="h-10 rounded-lg border border-slate-700/50 bg-transparent px-5 text-sm font-medium text-slate-300 transition-all hover:border-slate-600 hover:bg-slate-800/60 hover:text-slate-100"
+          className="h-9 rounded border border-zinc-200 bg-white px-4 text-xs font-mono font-medium text-zinc-700 transition-all hover:bg-zinc-50 hover:text-black"
         >
           Cancel
         </button>
@@ -983,20 +983,20 @@ export default function BacktestForm({
             strategies.length === 0 ||
             limitReached
           }
-          className="inline-flex h-10 items-center gap-2 rounded-lg bg-indigo-600 px-6 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-500 hover:shadow-indigo-500/30 disabled:cursor-not-allowed disabled:bg-slate-800 disabled:text-slate-500 disabled:shadow-none"
+          className="inline-flex h-9 items-center gap-2 rounded bg-zinc-950 px-5 text-xs font-mono font-semibold text-white shadow-sm transition-all hover:bg-zinc-800 disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-500"
         >
           {isSubmitting ? (
             <>
-              <Loader2 className="size-4 animate-spin" />
-              Running...
+              <Loader2 className="size-3.5 animate-spin" />
+              EXECUTING_MODEL...
             </>
           ) : limitReached ? (
-            <>Daily Limit Reached</>
+            <>DAILY_LIMIT_REACHED</>
           ) : (
             <>
-              <TrendingUp className="size-4" />
-              Run Backtest
-              <ArrowRight className="size-4" />
+              <TrendingUp className="size-3.5" />
+              RUN_BACKTEST
+              <ArrowRight className="size-3.5" />
             </>
           )}
         </button>

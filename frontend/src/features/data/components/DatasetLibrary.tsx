@@ -88,19 +88,19 @@ export function DatasetLibrary({ onNewDatasetClick }: DatasetLibraryProps) {
   return (
     <div className="space-y-6">
       {/* Toolbar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/60 backdrop-blur-xl border border-slate-800/80 p-3 rounded-2xl">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-zinc-200 p-2.5 rounded">
         <div className="relative flex-1 max-w-md">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
           <Input
             id="dataset-search"
             placeholder="Search datasets by symbol or name…"
-            className="pl-10 text-xs h-9 bg-slate-950/70 border-slate-800 focus:border-indigo-500/70 text-slate-100 placeholder:text-slate-500 rounded-xl"
+            className="pl-8 text-xs h-8 bg-zinc-50 border-zinc-200 focus:border-black text-zinc-900 placeholder:text-zinc-400 rounded font-mono"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
-        <div className="flex items-center gap-1.5 bg-slate-950/80 p-1 rounded-xl border border-slate-800 text-xs">
+        <div className="flex items-center gap-1 bg-zinc-50 p-0.5 rounded border border-zinc-200 text-xs">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeFilter === tab.key;
@@ -109,19 +109,19 @@ export function DatasetLibrary({ onNewDatasetClick }: DatasetLibraryProps) {
                 key={tab.key}
                 id={`dataset-filter-${tab.key.toLowerCase()}`}
                 onClick={() => setActiveFilter(tab.key)}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono font-medium transition-all ${
                   isActive
-                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/20"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+                    ? "bg-zinc-950 text-white shadow-none"
+                    : "text-zinc-600 hover:text-black hover:bg-zinc-200/50"
                 }`}
               >
-                <Icon className="w-3.5 h-3.5" />
+                <Icon className="w-3 h-3" />
                 <span>{tab.label}</span>
                 <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
+                  className={`text-[9px] px-1 rounded font-mono font-bold ${
                     isActive
-                      ? "bg-white/20 text-white"
-                      : "bg-slate-800 text-slate-400"
+                      ? "bg-zinc-800 text-white"
+                      : "bg-zinc-200 text-zinc-600"
                   }`}
                 >
                   {tab.count}
@@ -138,18 +138,18 @@ export function DatasetLibrary({ onNewDatasetClick }: DatasetLibraryProps) {
           {[1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              className="h-48 rounded-2xl bg-slate-900/40 animate-pulse border border-slate-800/60"
+              className="h-44 rounded bg-zinc-100 animate-pulse border border-zinc-200"
             />
           ))}
         </div>
       ) : filteredDatasets.length === 0 ? (
-        <div className="flex flex-col items-center justify-center p-14 rounded-2xl border border-dashed border-slate-800 bg-slate-900/30 text-center space-y-3">
-          <div className="p-3 rounded-full bg-slate-800/60 text-slate-400 border border-slate-700/50">
-            <Database className="w-7 h-7" />
+        <div className="flex flex-col items-center justify-center p-14 rounded border border-dashed border-zinc-300 bg-white text-center space-y-3">
+          <div className="p-3 rounded border border-zinc-200 bg-zinc-50 text-zinc-600">
+            <Database className="w-6 h-6" />
           </div>
           <div className="space-y-1">
-            <h4 className="font-semibold text-slate-200 text-sm">No Datasets Found</h4>
-            <p className="text-xs text-slate-400 max-w-sm">
+            <h4 className="font-mono font-bold text-zinc-900 text-sm">NO_DATASETS_FOUND</h4>
+            <p className="text-xs text-zinc-500 max-w-sm font-sans">
               {activeFilter === "USER"
                 ? 'You haven\'t uploaded any custom CSV datasets yet. Click "Import CSV Dataset" above to get started.'
                 : "No datasets match your search filter. Try clearing your search query."}

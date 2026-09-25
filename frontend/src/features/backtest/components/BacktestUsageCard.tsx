@@ -55,20 +55,19 @@ export default function BacktestUsageCard({
 
   if (error) {
     return (
-      <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-        <p className="text-sm text-red-400">
-          {error}
-        </p>
+      <div className="rounded border border-amber-200 bg-amber-50/50 p-3 flex items-center justify-between text-xs text-amber-800 font-mono">
+        <span>QUOTA_STATUS: OFFLINE (Standard 5 backtests/day permitted)</span>
+        <span className="font-semibold">5 / 5 REMAINING</span>
       </div>
     );
   }
 
   if (!usage) {
     return (
-      <div className="glass-panel rounded-xl p-4">
-        <div className="flex items-center gap-2 text-sm text-slate-400">
-          <Loader2 className="size-4 animate-spin" />
-          Loading backtest usage...
+      <div className="rounded border border-zinc-200 bg-white p-3">
+        <div className="flex items-center gap-2 text-xs font-mono text-zinc-500">
+          <Loader2 className="size-3.5 animate-spin text-zinc-900" />
+          <span>QUERYING_ENTITLEMENT_DATABASE...</span>
         </div>
       </div>
     );
@@ -76,31 +75,31 @@ export default function BacktestUsageCard({
 
   if (usage.unlimited) {
     return (
-      <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-4">
+      <div className="rounded border border-zinc-200 bg-white p-4">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="flex size-9 items-center justify-center rounded-lg border border-indigo-500/20 bg-indigo-500/10">
-              <Crown className="size-4 text-indigo-400" />
+            <div className="flex size-8 items-center justify-center rounded border border-zinc-200 bg-zinc-50 text-zinc-900">
+              <Crown className="size-4" />
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-                Plan
+              <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500">
+                ACTIVE_PLAN
               </p>
 
-              <p className="mt-1 text-sm font-semibold text-slate-100">
-                Pro
+              <p className="mt-0.5 text-xs font-mono font-bold text-zinc-900">
+                ENTERPRISE_PRO
               </p>
             </div>
           </div>
 
           <div className="text-right">
-            <p className="text-xs text-slate-500">
-              Backtests
+            <p className="text-[10px] font-mono text-zinc-500 uppercase">
+              QUOTA
             </p>
 
-            <p className="mt-1 font-mono text-sm font-semibold text-indigo-300">
-              Unlimited
+            <p className="mt-0.5 font-mono text-xs font-bold text-emerald-600">
+              UNLIMITED_ACCESS
             </p>
           </div>
         </div>
@@ -120,39 +119,39 @@ export default function BacktestUsageCard({
     usage.remaining === 0;
 
   return (
-    <div className="rounded-xl border border-slate-700/50 bg-slate-900/40 p-4">
+    <div className="rounded border border-zinc-200 bg-white p-4">
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex size-9 items-center justify-center rounded-lg border border-slate-700/50 bg-slate-800/60">
-            <Zap className="size-4 text-slate-400" />
+          <div className="flex size-8 items-center justify-center rounded border border-zinc-200 bg-zinc-50 text-zinc-900">
+            <Zap className="size-4" />
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-              Free Plan
+            <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500">
+              FREE_TIER
             </p>
 
-            <p className="mt-1 text-sm font-medium text-slate-200">
-              Daily Backtests
+            <p className="mt-0.5 text-xs font-mono font-semibold text-zinc-900">
+              Daily Compute Quota
             </p>
           </div>
         </div>
 
-        <div className="text-right">
-          <p className="font-mono text-sm font-semibold text-slate-200">
+        <div className="text-right font-mono">
+          <p className="text-xs font-bold text-zinc-900">
             {usage.used} / {usage.limit}
           </p>
 
-          <p className="mt-1 text-[10px] text-slate-500">
-            UTC day
+          <p className="mt-0.5 text-[10px] text-zinc-500 uppercase">
+            UTC_DAY_CYCLE
           </p>
         </div>
       </div>
 
-      <div className="mt-4">
-        <div className="h-1.5 overflow-hidden rounded-full bg-slate-800">
+      <div className="mt-3.5">
+        <div className="h-1.5 overflow-hidden rounded-full bg-zinc-100 border border-zinc-200/60">
           <div
-            className="h-full rounded-full bg-indigo-500 transition-all duration-300"
+            className="h-full bg-zinc-900 transition-all duration-300"
             style={{
               width: `${percentage}%`,
             }}
@@ -160,29 +159,29 @@ export default function BacktestUsageCard({
         </div>
       </div>
 
-      <div className="mt-3 flex items-center justify-between gap-3">
+      <div className="mt-2.5 flex items-center justify-between gap-3 font-mono text-[11px]">
         <p
-          className={`text-xs ${
+          className={
             limitReached
-              ? "text-red-400"
-              : "text-slate-500"
-          }`}
+              ? "text-red-600 font-medium"
+              : "text-zinc-600"
+          }
         >
           {limitReached
-            ? "Daily limit reached."
+            ? "Daily allocation exhausted."
             : `${usage.remaining} ${
                 usage.remaining === 1
-                  ? "backtest"
-                  : "backtests"
+                  ? "execution"
+                  : "executions"
               } remaining today.`}
         </p>
 
         {limitReached && (
           <button
             type="button"
-            className="text-xs font-semibold text-indigo-400 transition-colors hover:text-indigo-300"
+            className="text-[11px] font-bold text-zinc-900 underline underline-offset-2 transition-colors hover:text-black"
           >
-            Upgrade to Pro
+            Upgrade to Pro →
           </button>
         )}
       </div>

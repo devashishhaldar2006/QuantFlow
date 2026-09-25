@@ -81,22 +81,22 @@ export function DatasetCard({ dataset, onDelete, onSyncSuccess }: DatasetCardPro
       case "CRYPTO":
         return {
           icon: Coins,
-          color: "text-amber-400 border-amber-500/30 bg-amber-500/10",
+          color: "text-zinc-800 border-zinc-200 bg-zinc-50",
         };
       case "FOREX":
         return {
           icon: Globe,
-          color: "text-emerald-400 border-emerald-500/30 bg-emerald-500/10",
+          color: "text-zinc-800 border-zinc-200 bg-zinc-50",
         };
       case "INDEX":
         return {
           icon: LineChart,
-          color: "text-purple-400 border-purple-500/30 bg-purple-500/10",
+          color: "text-zinc-800 border-zinc-200 bg-zinc-50",
         };
       default:
         return {
           icon: TrendingUp,
-          color: "text-blue-400 border-blue-500/30 bg-blue-500/10",
+          color: "text-zinc-800 border-zinc-200 bg-zinc-50",
         };
     }
   };
@@ -105,30 +105,30 @@ export function DatasetCard({ dataset, onDelete, onSyncSuccess }: DatasetCardPro
   const AssetIcon = assetInfo.icon;
 
   return (
-    <div className="group relative flex flex-col justify-between rounded-2xl border border-slate-800/80 bg-slate-900/60 p-5 backdrop-blur-xl transition-all duration-300 hover:border-indigo-500/40 hover:bg-slate-900/90 hover:shadow-2xl hover:shadow-indigo-500/10">
+    <div className="group relative flex flex-col justify-between rounded border border-zinc-200 bg-white p-5 transition-all hover:border-zinc-400">
       {/* Header Info */}
       <div className="space-y-3">
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <h3 className="font-bold tracking-tight text-slate-100 group-hover:text-indigo-300 transition-colors">
+              <h3 className="font-mono text-sm font-bold text-zinc-900 group-hover:text-black transition-colors">
                 {dataset.name}
               </h3>
               {isSystem && (
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-zinc-100 text-zinc-700 border border-zinc-200">
                   SYSTEM
                 </span>
               )}
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-mono text-xs text-indigo-400 font-semibold">{dataset.symbol}</span>
-              <span className="text-[10px] text-slate-500">•</span>
-              <span className="font-mono text-[11px] text-slate-400 uppercase">{dataset.timeframe}</span>
+              <span className="font-mono text-xs text-zinc-900 font-bold">{dataset.symbol}</span>
+              <span className="text-[10px] text-zinc-400">•</span>
+              <span className="font-mono text-[11px] text-zinc-500 uppercase">{dataset.timeframe}</span>
             </div>
           </div>
 
           <Badge variant="outline" className={`text-[10px] font-mono tracking-wider shrink-0 gap-1 ${assetInfo.color}`}>
-            <AssetIcon className="w-3 h-3" />
+            <AssetIcon className="w-3 h-3 text-zinc-600" />
             {dataset.assetClass}
           </Badge>
         </div>
@@ -139,8 +139,8 @@ export function DatasetCard({ dataset, onDelete, onSyncSuccess }: DatasetCardPro
             variant="outline"
             className={`text-[10px] font-mono tracking-wider shrink-0 gap-1 ${
               dataset.status === "VALIDATED"
-                ? "text-emerald-400 border-emerald-500/30 bg-emerald-500/10"
-                : "text-rose-400 border-rose-500/30 bg-rose-500/10"
+                ? "text-emerald-700 border-emerald-200 bg-emerald-50"
+                : "text-red-700 border-red-200 bg-red-50"
             }`}
           >
             <ShieldCheck className="w-3 h-3" />
@@ -148,45 +148,45 @@ export function DatasetCard({ dataset, onDelete, onSyncSuccess }: DatasetCardPro
           </Badge>
 
           {syncMessage && (
-            <span className="text-[10px] font-mono text-indigo-400 flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+            <span className="text-[10px] font-mono text-emerald-700 flex items-center gap-1 font-semibold">
+              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
               {syncMessage}
             </span>
           )}
         </div>
 
         {/* Metadata Details Grid */}
-        <div className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-slate-800/60 font-mono">
-          <div className="flex items-center gap-2 text-slate-400">
-            <Calendar className="w-3.5 h-3.5 text-indigo-400/80 shrink-0" />
+        <div className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-zinc-200 font-mono">
+          <div className="flex items-center gap-1.5 text-zinc-500">
+            <Calendar className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
             <span className="truncate text-[11px]">
               {formatDate(dataset.startDate)} → {formatDate(dataset.endDate)}
             </span>
           </div>
-          <div className="flex items-center gap-2 text-slate-400">
-            <BarChart3 className="w-3.5 h-3.5 text-indigo-400/80 shrink-0" />
+          <div className="flex items-center gap-1.5 text-zinc-500">
+            <BarChart3 className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
             <span className="text-[11px]">{dataset.rowCount.toLocaleString()} candles</span>
           </div>
-          <div className="flex items-center gap-2 text-slate-400">
-            <Clock className="w-3.5 h-3.5 text-indigo-400/80 shrink-0" />
+          <div className="flex items-center gap-1.5 text-zinc-500">
+            <Clock className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
             <span className="text-[11px]">Ver: {dataset.version}</span>
           </div>
-          <div className="flex items-center gap-2 text-slate-400">
-            <Globe className="w-3.5 h-3.5 text-indigo-400/80 shrink-0" />
+          <div className="flex items-center gap-1.5 text-zinc-500">
+            <Globe className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
             <span className="text-[11px] truncate">{dataset.source}</span>
           </div>
         </div>
       </div>
 
       {/* Action Footer */}
-      <div className="flex items-center gap-2 pt-3 mt-3 border-t border-slate-800/60">
+      <div className="flex items-center gap-2 pt-3 mt-3 border-t border-zinc-200">
         <Link href={`/backtests/new?datasetId=${dataset.id}`} className="flex-1">
           <Button
             size="sm"
-            className="w-full text-xs gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium shadow-lg shadow-indigo-500/20 transition-all"
+            className="w-full text-xs gap-1.5 bg-zinc-950 hover:bg-zinc-800 text-white font-mono font-semibold shadow-sm transition-all"
           >
-            <Play className="w-3.5 h-3.5 fill-current" />
-            Run Backtest
+            <Play className="w-3 h-3 fill-current" />
+            RUN_BACKTEST
           </Button>
         </Link>
 
@@ -197,12 +197,12 @@ export function DatasetCard({ dataset, onDelete, onSyncSuccess }: DatasetCardPro
           disabled={syncing}
           onClick={handleSyncData}
           title="Fetch latest live market candles from API provider"
-          className="text-xs border-slate-800 bg-slate-950/60 text-slate-300 hover:bg-slate-800 hover:text-white gap-1 px-2.5"
+          className="text-xs border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100 hover:text-black gap-1 px-2.5 font-mono"
         >
           {syncing ? (
-            <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-400" />
+            <Loader2 className="w-3.5 h-3.5 animate-spin text-zinc-900" />
           ) : (
-            <RefreshCw className="w-3.5 h-3.5 text-indigo-400" />
+            <RefreshCw className="w-3.5 h-3.5 text-zinc-600" />
           )}
           <span className="hidden sm:inline text-[11px]">Sync</span>
         </Button>

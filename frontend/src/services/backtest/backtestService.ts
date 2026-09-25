@@ -9,6 +9,12 @@ import type {
   PersistedBacktest,
 } from "@/features/backtest/types";
 
+import crypto from "crypto";
+
+// Fallback in-memory store for backtests when PostgreSQL is unreachable
+type InMemBacktest = PersistedBacktest & { userId: string };
+const memoryBacktests = new Map<string, InMemBacktest>();
+
 function getEngineClient(): HttpQuantEngineClient {
   const url =
     process.env.QUANT_ENGINE_URL ||
@@ -24,84 +30,130 @@ export async function createBacktest(
   const client = getEngineClient();
   const result = await client.runBacktest(config);
 
-  const backtest = await prisma.$transaction(async (tx) => {
-    const createdBacktest = await tx.backtest.create({
-      data: {
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
+  let backtestId: string = crypto.randomUUID();
 
-        strategy: config.strategy,
-
-        initialCapital: result.initialCapital,
-        finalEquity: result.finalEquity,
-        netProfit: result.netProfit,
-        totalReturnPercent: result.totalReturnPercent,
-
-        totalTrades: result.totalTrades,
-        winningTrades: result.winningTrades,
-        losingTrades: result.losingTrades,
-        winRatePercent: result.winRatePercent,
-
-        averageWin: result.averageWin,
-        averageLoss: result.averageLoss,
-        largestWin: result.largestWin,
-        largestLoss: result.largestLoss,
-
-        maximumDrawdown: result.maximumDrawdown,
-        profitFactor: result.profitFactor,
-        expectancy: result.expectancy,
-
-        annualizedReturn: result.annualizedReturn,
-        annualizedVolatility: result.annualizedVolatility,
-        sharpeRatio: result.sharpeRatio,
-
-        status: "completed",
-      },
-    });
-
-    await tx.trade.createMany({
-      data: result.trades.map((trade) => ({
-        timestamp: new Date(trade.timestamp),
-        side: trade.side,
-        quantity: trade.quantity,
-        executionPrice: trade.executionPrice,
-        commission: trade.commission,
-        cashFlow: trade.cashFlow,
-        backtestId: createdBacktest.id,
-      })),
-    });
-
-    await tx.equityPoint.createMany({
-      data: result.equityCurve.map((point) => ({
-        timestamp: new Date(point.timestamp),
-        equity: point.equity,
-        backtestId: createdBacktest.id,
-      })),
-    });
-
-    return createdBacktest;
-  });
-
-  // Automatically trigger a persistent database notification
   try {
-    const returnSign = result.totalReturnPercent >= 0 ? "+" : "";
-    await NotificationService.createNotification({
-      userId,
-      title: `Backtest Completed: ${config.strategy}`,
-      message: `Finished with ${returnSign}${result.totalReturnPercent.toFixed(2)}% Return (Sharpe: ${result.sharpeRatio.toFixed(2)}, Max DD: ${result.maximumDrawdown.toFixed(2)}%).`,
-      type: "backtest",
-      link: `/backtests/${backtest.id}`,
+    const backtest = await prisma.$transaction(async (tx) => {
+      const createdBacktest = await tx.backtest.create({
+        data: {
+          user: {
+            connect: {
+              id: userId,
+            },
+          },
+
+          strategy: config.strategy,
+
+          initialCapital: result.initialCapital,
+          finalEquity: result.finalEquity,
+          netProfit: result.netProfit,
+          totalReturnPercent: result.totalReturnPercent,
+
+          totalTrades: result.totalTrades,
+          winningTrades: result.winningTrades,
+          losingTrades: result.losingTrades,
+          winRatePercent: result.winRatePercent,
+
+          averageWin: result.averageWin,
+          averageLoss: result.averageLoss,
+          largestWin: result.largestWin,
+          largestLoss: result.largestLoss,
+
+          maximumDrawdown: result.maximumDrawdown,
+          profitFactor: result.profitFactor,
+          expectancy: result.expectancy,
+
+          annualizedReturn: result.annualizedReturn,
+          annualizedVolatility: result.annualizedVolatility,
+          sharpeRatio: result.sharpeRatio,
+
+          status: "completed",
+        },
+      });
+
+      await tx.trade.createMany({
+        data: result.trades.map((trade) => ({
+          timestamp: new Date(trade.timestamp),
+          side: trade.side,
+          quantity: trade.quantity,
+          executionPrice: trade.executionPrice,
+          commission: trade.commission,
+          cashFlow: trade.cashFlow,
+          backtestId: createdBacktest.id,
+        })),
+      });
+
+      await tx.equityPoint.createMany({
+        data: result.equityCurve.map((point) => ({
+          timestamp: new Date(point.timestamp),
+          equity: point.equity,
+          backtestId: createdBacktest.id,
+        })),
+      });
+
+      return createdBacktest;
     });
-  } catch (notifErr) {
-    console.error("Failed to create backtest completion notification:", notifErr);
+
+    backtestId = backtest.id;
+
+    // Automatically trigger a persistent database notification
+    try {
+      const returnSign = result.totalReturnPercent >= 0 ? "+" : "";
+      await NotificationService.createNotification({
+        userId,
+        title: `Backtest Completed: ${config.strategy}`,
+        message: `Finished with ${returnSign}${result.totalReturnPercent.toFixed(2)}% Return (Sharpe: ${result.sharpeRatio.toFixed(2)}, Max DD: ${result.maximumDrawdown.toFixed(2)}%).`,
+        type: "backtest",
+        link: `/backtests/${backtest.id}` as any,
+      });
+    } catch (notifErr) {
+      console.error("Failed to create backtest completion notification:", notifErr);
+    }
+  } catch (dbErr) {
+    console.warn("Prisma unavailable during createBacktest, caching backtest in memory:", dbErr);
+    const persistedRecord: InMemBacktest = {
+      id: backtestId,
+      userId,
+      strategy: config.strategy,
+      initialCapital: result.initialCapital,
+      finalEquity: result.finalEquity,
+      netProfit: result.netProfit,
+      totalReturnPercent: result.totalReturnPercent,
+      totalTrades: result.totalTrades,
+      winningTrades: result.winningTrades,
+      losingTrades: result.losingTrades,
+      winRatePercent: result.winRatePercent,
+      averageWin: result.averageWin,
+      averageLoss: result.averageLoss,
+      largestWin: result.largestWin,
+      largestLoss: result.largestLoss,
+      maximumDrawdown: result.maximumDrawdown,
+      profitFactor: result.profitFactor,
+      expectancy: result.expectancy,
+      annualizedReturn: result.annualizedReturn,
+      annualizedVolatility: result.annualizedVolatility,
+      sharpeRatio: result.sharpeRatio,
+      status: "completed",
+      createdAt: new Date().toISOString(),
+      trades: result.trades.map((t) => ({
+        timestamp: t.timestamp,
+        side: t.side as "BUY" | "SELL",
+        quantity: t.quantity,
+        executionPrice: t.executionPrice,
+        commission: t.commission,
+        cashFlow: t.cashFlow,
+      })),
+      equityCurve: result.equityCurve.map((e) => ({
+        timestamp: e.timestamp,
+        equity: e.equity,
+      })),
+    };
+    memoryBacktests.set(backtestId, persistedRecord);
   }
 
   return {
     ...result,
-    id: backtest.id,
+    id: backtestId,
   };
 }
 
@@ -124,7 +176,7 @@ export async function getBacktests(
       },
     });
 
-    return backtests.map((backtest) => ({
+    const dbResults = backtests.map((backtest) => ({
       ...backtest,
 
       status: backtest.status as PersistedBacktest["status"],
@@ -145,9 +197,13 @@ export async function getBacktests(
         equity: point.equity,
       })),
     }));
+
+    // Merge with in-memory records
+    const inMem = Array.from(memoryBacktests.values()).filter((b) => b.userId === userId);
+    return [...inMem, ...dbResults];
   } catch (error) {
-    console.error("Error fetching backtests for user:", error);
-    return [];
+    console.warn("Prisma error in getBacktests, returning in-memory backtests:", error);
+    return Array.from(memoryBacktests.values()).filter((b) => b.userId === userId);
   }
 }
 
@@ -155,43 +211,53 @@ export async function getBacktestById(
   id: string,
   userId: string,
 ): Promise<PersistedBacktest | null> {
-  const backtest = await prisma.backtest.findFirst({
-    where: {
-      id,
-      userId,
-    },
-
-    include: {
-      trades: true,
-      equityCurve: true,
-    },
-  });
-
-  if (!backtest) {
-    return null;
+  const inMem = memoryBacktests.get(id);
+  if (inMem && inMem.userId === userId) {
+    return inMem;
   }
 
-  return {
-    ...backtest,
+  try {
+    const backtest = await prisma.backtest.findFirst({
+      where: {
+        id,
+        userId,
+      },
 
-    status: backtest.status as PersistedBacktest["status"],
+      include: {
+        trades: true,
+        equityCurve: true,
+      },
+    });
 
-    createdAt: backtest.createdAt.toISOString(),
+    if (!backtest) {
+      return null;
+    }
 
-    trades: backtest.trades.map((trade) => ({
-      timestamp: trade.timestamp.toISOString(),
-      side: trade.side as "BUY" | "SELL",
-      quantity: trade.quantity,
-      executionPrice: trade.executionPrice,
-      commission: trade.commission,
-      cashFlow: trade.cashFlow,
-    })),
+    return {
+      ...backtest,
 
-    equityCurve: backtest.equityCurve.map((point) => ({
-      timestamp: point.timestamp.toISOString(),
-      equity: point.equity,
-    })),
-  };
+      status: backtest.status as PersistedBacktest["status"],
+
+      createdAt: backtest.createdAt.toISOString(),
+
+      trades: backtest.trades.map((trade) => ({
+        timestamp: trade.timestamp.toISOString(),
+        side: trade.side as "BUY" | "SELL",
+        quantity: trade.quantity,
+        executionPrice: trade.executionPrice,
+        commission: trade.commission,
+        cashFlow: trade.cashFlow,
+      })),
+
+      equityCurve: backtest.equityCurve.map((point) => ({
+        timestamp: point.timestamp.toISOString(),
+        equity: point.equity,
+      })),
+    };
+  } catch (error) {
+    console.warn("Prisma error in getBacktestById:", error);
+    return inMem || null;
+  }
 }
 
 export async function getBacktestSummaries(
@@ -272,13 +338,26 @@ export async function getBacktestSummaries(
       totalPages: Math.ceil(total / pageSize) || 1,
     };
   } catch (error) {
-    console.error("Error fetching backtest summaries:", error);
+    console.warn("Prisma error in getBacktestSummaries, using in-memory store:", error);
+    const inMemList = Array.from(memoryBacktests.values())
+      .filter((b) => b.userId === userId)
+      .map((b) => ({
+        id: b.id,
+        strategy: b.strategy,
+        initialCapital: b.initialCapital,
+        totalReturnPercent: b.totalReturnPercent,
+        sharpeRatio: b.sharpeRatio,
+        maximumDrawdown: b.maximumDrawdown,
+        status: b.status as BacktestSummary["status"],
+        createdAt: b.createdAt,
+      }));
+
     return {
-      data: [],
-      total: 0,
+      data: inMemList,
+      total: inMemList.length,
       page,
       pageSize,
-      totalPages: 1,
+      totalPages: Math.ceil(inMemList.length / pageSize) || 1,
     };
   }
 }

@@ -25,15 +25,13 @@ export default function Strategies({ strategies }: StrategiesProps) {
               <StrategyCard key={strategy.name} strategy={strategy} />
             ))
           ) : (
-            <div className="glass-panel rounded-xl p-12 flex flex-col items-center justify-center text-center">
-              <div className="size-16 rounded-full bg-slate-800/50 flex items-center justify-center mb-4">
-                <svg className="size-8 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
+            <div className="rounded border border-zinc-200 bg-white p-12 flex flex-col items-center justify-center text-center">
+              <div className="size-12 rounded border border-zinc-200 bg-zinc-50 flex items-center justify-center mb-3">
+                <LineChart className="size-5 text-zinc-500" />
               </div>
-              <h3 className="text-lg font-medium text-slate-200">Engine Offline</h3>
-              <p className="mt-2 text-sm text-slate-400 max-w-sm">
-                The QuantFlow backend engine is currently unreachable. Start the C++ engine to view and backtest strategies.
+              <h3 className="text-sm font-bold font-mono text-zinc-900 uppercase">ENGINE_OFFLINE</h3>
+              <p className="mt-1 text-xs text-zinc-500 max-w-sm font-sans">
+                The QuantFlow computation engine is currently unreachable. Start the backend engine to compile and backtest quantitative models.
               </p>
             </div>
           )}
