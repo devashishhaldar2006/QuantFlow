@@ -44,7 +44,7 @@ export default function NavSection({
                     : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-950",
                 ].join(" ")}
               >
-                {isActive && (
+                {isActive && !isCollapsed && (
                   <span className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-0.5 rounded-r bg-zinc-950" />
                 )}
 
