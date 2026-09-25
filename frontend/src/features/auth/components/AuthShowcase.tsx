@@ -1,15 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
-  Zap,
-  ShieldCheck,
   Cpu,
   BarChart3,
-  CheckCircle2,
-  TrendingUp,
   Activity,
-  Layers,
+  Check,
 } from "lucide-react";
 import { QuantFlowLogo } from "@/components/common/QuantFlowLogo";
 
@@ -17,24 +12,21 @@ export default function AuthShowcase() {
   const metrics = [
     {
       label: "Engine Latency",
-      value: "< 0.5 ms",
+      value: "< 0.38 ms",
       description: "Compiled C++ Execution",
       icon: Cpu,
-      color: "text-emerald-400",
     },
     {
       label: "Data Throughput",
       value: "1.48M+ ticks/sec",
       description: "C++ Strategy Core",
       icon: Activity,
-      color: "text-indigo-400",
     },
     {
       label: "Strategy Engines",
       value: "7 Models",
       description: "MACD, RSI, EMA, Bollinger",
       icon: BarChart3,
-      color: "text-amber-400",
     },
   ];
 
@@ -46,116 +38,75 @@ export default function AuthShowcase() {
   ];
 
   return (
-    <div className="relative hidden w-full flex-col justify-between overflow-hidden bg-[#070D18] p-8 lg:flex lg:w-1/2 lg:p-12 border-r border-white/5">
-      {/* Background Lighting & FX */}
-      <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -left-20 -top-20 size-96 rounded-full bg-indigo-600/20 blur-3xl pointer-events-none"
-      />
-      <motion.div
-        animate={{ scale: [1, 1.15, 1], opacity: [0.1, 0.2, 0.1] }}
-        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute -bottom-20 -right-20 size-96 rounded-full bg-emerald-600/15 blur-3xl pointer-events-none"
-      />
-      <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-20 pointer-events-none" />
-
+    <div className="relative hidden w-full flex-col justify-between overflow-hidden bg-zinc-50 p-8 lg:flex lg:w-1/2 lg:p-12 border-r border-zinc-200">
       {/* Brand Header */}
       <div className="relative z-10 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <QuantFlowLogo className="size-9" textClassName="text-xl font-extrabold" />
-          <span className="rounded-full border border-blue-500/20 bg-blue-500/10 px-2.5 py-0.5 text-[10px] font-semibold text-blue-400 uppercase tracking-wider">
+          <QuantFlowLogo className="size-7" textClassName="text-lg font-semibold" />
+          <span className="rounded border border-zinc-200 bg-white px-2 py-0.5 text-[10px] font-mono font-medium text-zinc-600 uppercase tracking-wider">
             Terminal v2.4
           </span>
         </div>
 
-        <div className="flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
-          <span className="relative flex size-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-50" />
-            <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-          </span>
+        <div className="flex items-center gap-2 rounded border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 font-mono">
+          <span className="size-1.5 rounded-full bg-emerald-600 animate-pulse" />
           C++ Core Active
         </div>
       </div>
 
-      {/* Hero Showcase Content */}
-      <div className="relative z-10 my-auto space-y-8 py-8">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="space-y-4 max-w-lg"
-        >
-          <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl leading-tight">
+      {/* Main Copy */}
+      <div className="relative z-10 my-auto space-y-8 py-10 max-w-lg">
+        <div className="space-y-3">
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-zinc-950 leading-tight">
             Institutional Quantitative Terminal & C++ Engine
           </h2>
-          <p className="text-sm leading-relaxed text-slate-400">
+          <p className="text-sm text-zinc-600 leading-relaxed">
             Simulate high-frequency algorithmic strategies on tick-level market data with sub-millisecond execution speeds.
           </p>
-        </motion.div>
-
-        {/* Technical Metrics Grid with Motion */}
-        <div className="grid gap-4 sm:grid-cols-3">
-          {metrics.map((m, idx) => {
-            const Icon = m.icon;
-            return (
-              <motion.div
-                key={m.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                whileHover={{ y: -4 }}
-                className="glass-panel rounded-xl p-4 border border-white/10 bg-white/[0.03] backdrop-blur-xl transition hover:border-indigo-500/30"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-medium uppercase tracking-wider text-slate-400">
-                    {m.label}
-                  </span>
-                  <Icon className={`size-4 ${m.color}`} />
-                </div>
-                <div className="mt-2 text-lg font-bold text-white">
-                  {m.value}
-                </div>
-                <div className="mt-0.5 text-[11px] text-slate-400 truncate">
-                  {m.description}
-                </div>
-              </motion.div>
-            );
-          })}
         </div>
 
-        {/* Feature List */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="space-y-3 rounded-2xl border border-white/10 bg-white/[0.02] p-5 backdrop-blur-md"
-        >
-          <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-            <Layers className="size-3.5 text-indigo-400" />
+        {/* 3 Metric Cards */}
+        <div className="grid grid-cols-3 gap-3">
+          {metrics.map((m) => (
+            <div
+              key={m.label}
+              className="rounded-sm border border-zinc-200 bg-white p-3.5 space-y-1.5 shadow-sm"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono uppercase text-zinc-400 font-medium">
+                  {m.label}
+                </span>
+                <m.icon className="size-3.5 text-zinc-700" />
+              </div>
+              <p className="text-sm font-semibold text-zinc-950 font-mono">
+                {m.value}
+              </p>
+              <p className="text-[10px] text-zinc-500 leading-tight">
+                {m.description}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Checklist */}
+        <div className="rounded-sm border border-zinc-200 bg-white p-4 space-y-2.5 shadow-sm">
+          <p className="text-xs font-semibold text-zinc-900 font-mono uppercase tracking-wider">
             Core Infrastructure Capabilities
-          </div>
-          <div className="grid gap-2.5 sm:grid-cols-2 pt-1">
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-zinc-600">
             {features.map((feat) => (
-              <div key={feat} className="flex items-start gap-2.5">
-                <CheckCircle2 className="size-4 shrink-0 text-emerald-400 mt-0.5" />
-                <span className="text-xs text-slate-300 leading-snug">{feat}</span>
+              <div key={feat} className="flex items-center gap-2">
+                <Check className="size-3.5 text-emerald-600 shrink-0" />
+                <span>{feat}</span>
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
 
-      {/* Footer Quote */}
-      <div className="relative z-10 border-t border-white/5 pt-4 flex items-center justify-between text-xs text-slate-500">
-        <div className="flex items-center gap-2">
-          <ShieldCheck className="size-4 text-slate-400" />
-          <span>Encrypted Session & HMAC Verified Integrity</span>
-        </div>
-        <div className="flex items-center gap-1 font-mono text-[11px] text-slate-600">
-          <TrendingUp className="size-3 text-emerald-500" />
-          <span>QuantFlow OS</span>
-        </div>
+      {/* Footer */}
+      <div className="relative z-10 text-xs text-zinc-500 font-mono">
+        Deterministic C++ execution pipeline • PostgreSQL persisted telemetry
       </div>
     </div>
   );

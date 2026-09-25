@@ -74,10 +74,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} dark h-full`}
+      className={`${inter.variable} ${jetbrainsMono.variable} h-full`}
     >
-      <body className="min-h-full bg-slate-950 font-sans text-slate-100 antialiased">
-        <ClerkProvider appearance={{ theme: dark }}>
+      <body className="min-h-full bg-white text-zinc-900 antialiased font-sans">
+        <ClerkProvider>
           <AppShell>{children}</AppShell>
         </ClerkProvider>
       </body>

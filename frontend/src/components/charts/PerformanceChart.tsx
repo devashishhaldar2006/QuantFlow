@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import type { EquityPoint } from "@/features/backtest/types";
 import { formatCurrency } from "@/lib/format";
 import {
@@ -19,23 +20,28 @@ type PerformanceChartProps = {
 
 export default function PerformanceChart({
   data,
-  height = 320,
+  height = 300,
 }: PerformanceChartProps) {
+  const [activeRange, setActiveRange] = useState<"ALL" | "1Y" | "6M">("ALL");
+
   if (!data || data.length === 0) {
     return (
       <div
-        className="flex items-center justify-center rounded-md border border-slate-700 bg-slate-900/50 text-sm text-slate-500"
+        className="flex items-center justify-center border border-zinc-200 bg-zinc-50 text-xs font-mono text-zinc-400"
         style={{ height }}
       >
-        No equity data available
+        [ NO_EQUITY_DATA ]
       </div>
     );
   }
 
-  // Calculate proper Y-axis domain with 2% padding
   const equityValues = data.map((d) => d.equity);
   const minEquity = Math.min(...equityValues);
   const maxEquity = Math.max(...equityValues);
+  const isNetPositive = equityValues[equityValues.length - 1] >= equityValues[0];
+  const strokeColor = isNetPositive ? "#16A34A" : "#DC2626";
+  const fillColor = isNetPositive ? "rgba(22, 163, 74, 0.08)" : "rgba(220, 38, 38, 0.08)";
+
   const range = maxEquity - minEquity;
   const padding = range > 0 ? range * 0.05 : maxEquity * 0.02;
 
@@ -43,93 +49,121 @@ export default function PerformanceChart({
   const yMax = Math.ceil((maxEquity + padding) / 100) * 100;
 
   return (
-    <div style={{ height, width: "100%" }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={data} margin={{ top: 8, right: 0, left: 0, bottom: 0 }}>
-          <defs>
-            <linearGradient id="colorEquity" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#6366F1" stopOpacity={0.2} />
-              <stop offset="100%" stopColor="#6366F1" stopOpacity={0} />
-            </linearGradient>
-          </defs>
+    <div className="w-full flex flex-col space-y-2">
+      {/* Precision Chart Controls Header */}
+      <div className="flex items-center justify-between border-b border-zinc-200 pb-2 px-1 text-xs">
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-zinc-900">
+            EQUITY_CURVE
+          </span>
+          <span className="inline-flex items-center gap-1.5 font-mono text-[10px] text-zinc-600 font-medium">
+            <span className="size-1.5 rounded-full" style={{ backgroundColor: strokeColor }} />
+            {isNetPositive ? "BULLISH_TREND" : "BEARISH_TREND"}
+          </span>
+        </div>
 
-          <CartesianGrid
-            strokeDasharray="0"
-            stroke="#334155"
-            strokeOpacity={0.3}
-            vertical={false}
-          />
+        <div className="flex items-center gap-1 font-mono">
+          {(["ALL", "1Y", "6M"] as const).map((r) => (
+            <button
+              key={r}
+              type="button"
+              onClick={() => setActiveRange(r)}
+              className={`px-2 py-0.5 text-[10px] border transition-colors ${
+                activeRange === r
+                  ? "bg-zinc-900 border-zinc-900 text-white font-bold"
+                  : "bg-white border-zinc-200 text-zinc-600 hover:text-black hover:border-zinc-400"
+              }`}
+            >
+              {r}
+            </button>
+          ))}
+        </div>
+      </div>
 
-          <XAxis
-            dataKey="timestamp"
-            tickFormatter={(value: string) => {
-              const date = new Date(value);
-              return date.toLocaleDateString("en-IN", {
-                day: "2-digit",
-                month: "short",
-              });
-            }}
-            stroke="#64748B"
-            tick={{ fontSize: 12, fill: "#64748B" }}
-            tickLine={false}
-            axisLine={{ stroke: "#334155", opacity: 0.3 }}
-          />
+      <div style={{ height, width: "100%" }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
+            <defs>
+              <linearGradient id="quantEquityGradWhite" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={strokeColor} stopOpacity={0.12} />
+                <stop offset="100%" stopColor={strokeColor} stopOpacity={0} />
+              </linearGradient>
+            </defs>
 
-          <YAxis
-            domain={[yMin, yMax]}
-            tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
-            stroke="#64748B"
-            tick={{ fontSize: 12, fill: "#64748B" }}
-            tickLine={false}
-            axisLine={false}
-            width={60}
-          />
+            <CartesianGrid
+              strokeDasharray="2 2"
+              stroke="#E4E4E7"
+              vertical={false}
+            />
 
-          <Tooltip
-            contentStyle={{
-              backgroundColor: "#0F1520",
-              border: "1px solid #334155",
-              borderRadius: "4px",
-              fontSize: "13px",
-              color: "#E7EDF7",
-              boxShadow: "0 10px 15px rgba(0,0,0,0.35)",
-            }}
-            cursor={{ stroke: "#475569", strokeDasharray: "4" }}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            formatter={(value: any) => [
-              formatCurrency(Number(value)),
-              "Equity",
-            ]}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            labelFormatter={(label: any) => {
-              const date = new Date(label);
-              return date.toLocaleString("en-IN", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              });
-            }}
-          />
+            <XAxis
+              dataKey="timestamp"
+              tickFormatter={(value: string) => {
+                const date = new Date(value);
+                return date.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                });
+              }}
+              stroke="#A1A1AA"
+              tick={{ fontSize: 10, fill: "#71717A", fontFamily: "monospace" }}
+              tickLine={false}
+              axisLine={{ stroke: "#E4E4E7" }}
+            />
 
-          <Area
-            type="monotone"
-            dataKey="equity"
-            stroke="#6366F1"
-            strokeWidth={2}
-            fill="url(#colorEquity)"
-            dot={false}
-            isAnimationActive={false}
-            activeDot={{
-              r: 4,
-              fill: "#6366F1",
-              stroke: "#0F1520",
-              strokeWidth: 2,
-            }}
-          />
-        </AreaChart>
-      </ResponsiveContainer>
+            <YAxis
+              domain={[yMin, yMax]}
+              tickFormatter={(value) => `$${(value / 1000).toFixed(1)}k`}
+              stroke="#A1A1AA"
+              tick={{ fontSize: 10, fill: "#71717A", fontFamily: "monospace" }}
+              tickLine={false}
+              axisLine={false}
+              width={50}
+            />
+
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "#FFFFFF",
+                border: "1px solid #18181B",
+                borderRadius: "0px",
+                fontSize: "11px",
+                fontFamily: "monospace",
+                color: "#09090B",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                padding: "6px 10px",
+              }}
+              cursor={{ stroke: "#18181B", strokeWidth: 1, strokeDasharray: "2 2" }}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              formatter={(value: any) => [
+                formatCurrency(Number(value)),
+                "NAV",
+              ]}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              labelFormatter={(label: any) => {
+                const date = new Date(label);
+                return `UTC ${date.toISOString().replace("T", " ").substring(0, 16)}`;
+              }}
+            />
+
+            <Area
+              type="monotone"
+              dataKey="equity"
+              stroke={strokeColor}
+              strokeWidth={1.5}
+              fill="url(#quantEquityGradWhite)"
+              dot={false}
+              isAnimationActive={true}
+              animationDuration={600}
+              activeDot={{
+                r: 3,
+                fill: strokeColor,
+                stroke: "#FFFFFF",
+                strokeWidth: 2,
+              }}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }

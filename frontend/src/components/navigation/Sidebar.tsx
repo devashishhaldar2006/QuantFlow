@@ -219,7 +219,7 @@ export default function Sidebar({
     <>
       {/* Desktop Sidebar */}
       <aside 
-        className={`fixed left-0 top-[60px] z-40 hidden h-[calc(100vh-60px)] flex-col border-r border-slate-800/80 bg-slate-900/50 backdrop-blur-md md:flex transition-all duration-200 ${
+        className={`fixed left-0 top-[48px] z-40 hidden h-[calc(100vh-48px)] flex-col border-r border-zinc-200 bg-white md:flex transition-all duration-200 ${
           isCollapsed ? "w-[64px]" : "w-[240px]"
         }`}
       >
@@ -235,7 +235,7 @@ export default function Sidebar({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm md:hidden"
               onClick={() => setMobileOpen(false)}
             />
 
@@ -244,7 +244,7 @@ export default function Sidebar({
               animate={{ x: 0 }}
               exit={{ x: -260 }}
               transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
-              className="fixed left-0 top-0 z-50 flex h-full w-[260px] max-w-[85vw] flex-col border-r border-slate-800 bg-[#0B1120] md:hidden shadow-2xl"
+              className="fixed left-0 top-0 z-50 flex h-full w-[260px] max-w-[85vw] flex-col border-r border-zinc-200 bg-white md:hidden shadow-lg"
             >
               {renderContent(true)}
             </motion.aside>

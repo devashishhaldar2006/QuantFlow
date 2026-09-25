@@ -38,7 +38,7 @@ export default function AppShell({ children }: AppShellProps) {
 
   // When logged in (or on protected app routes), render institutional terminal chrome with TopNavbar and Sidebar
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-white text-zinc-900">
       <TopNavbar
         isCollapsed={isCollapsed}
         setIsCollapsed={setIsCollapsed}
@@ -46,7 +46,7 @@ export default function AppShell({ children }: AppShellProps) {
         setMobileOpen={setMobileOpen}
       />
 
-      <div className="flex pt-[60px]">
+      <div className="flex pt-[48px]">
         <Sidebar
           isCollapsed={isCollapsed}
           mobileOpen={mobileOpen}
@@ -54,7 +54,7 @@ export default function AppShell({ children }: AppShellProps) {
         />
 
         <main className={`flex-1 min-w-0 flex flex-col transition-all duration-200 ${isCollapsed ? 'md:ml-[64px]' : 'md:ml-[240px]'}`}>
-          <div className="flex-1 min-w-0 w-full p-4 sm:p-6">
+          <div className="flex-1 min-w-0 w-full p-4 sm:p-5">
             {children}
           </div>
         </main>

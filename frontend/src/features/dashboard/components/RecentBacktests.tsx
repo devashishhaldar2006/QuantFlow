@@ -1,7 +1,8 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
-import { ArrowUpRight, CheckCircle2, Clock, XCircle } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { formatCurrency, formatSignedPercent, formatNumber, formatDateCompact } from "@/lib/format";
 import type { PersistedBacktest } from "@/features/backtest/types";
 
@@ -9,77 +10,103 @@ type RecentBacktestsProps = {
   backtests: PersistedBacktest[];
 };
 
-function StatusIcon({ status }: { status: string }) {
+function StatusBadge({ status }: { status: string }) {
   switch (status) {
     case "completed":
-      return <div className="flex items-center gap-1.5 text-slate-400"><CheckCircle2 className="size-3.5 text-emerald-500" /> Done</div>;
+      return (
+        <span className="inline-flex items-center gap-1 font-mono text-[10px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 font-medium">
+          EXECUTED
+        </span>
+      );
     case "running":
-      return <div className="flex items-center gap-1.5 text-slate-400"><Clock className="size-3.5 text-indigo-500" /> Running</div>;
+      return (
+        <span className="inline-flex items-center gap-1 font-mono text-[10px] text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.2 font-medium">
+          COMPILING
+        </span>
+      );
     case "failed":
-      return <div className="flex items-center gap-1.5 text-slate-400"><XCircle className="size-3.5 text-red-500" /> Failed</div>;
+      return (
+        <span className="inline-flex items-center gap-1 font-mono text-[10px] text-red-700 bg-red-50 border border-red-200 px-1.5 py-0.2 font-medium">
+          ABORTED
+        </span>
+      );
     default:
-      return <span className="text-slate-500">{status}</span>;
+      return <span className="font-mono text-[10px] text-zinc-500">{status}</span>;
   }
 }
 
 export default function RecentBacktests({ backtests }: RecentBacktestsProps) {
   return (
-    <div className="mt-8">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-slate-100 tracking-tight">Recent Backtests</h2>
+    <div className="mt-5">
+      <div className="mb-2 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <h2 className="text-xs font-bold font-mono uppercase text-zinc-900 tracking-tight">
+            RECENT_EXECUTIONS
+          </h2>
+          <span className="font-mono text-[10px] text-zinc-500 border border-zinc-200 bg-zinc-50 px-1.5 py-0.2">
+            {backtests.length} TOTAL
+          </span>
+        </div>
         <Link
           href="/backtests"
-          className="group inline-flex items-center gap-1 text-sm font-medium text-slate-400 transition-colors hover:text-slate-200"
+          className="group inline-flex items-center gap-1 text-[11px] font-mono text-zinc-600 hover:text-black transition-colors"
         >
-          View all
-          <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          VIEW_ALL_RECORDS
+          <ArrowUpRight className="size-3 text-zinc-400 group-hover:text-black transition-transform" />
         </Link>
       </div>
 
-      <div className="overflow-x-auto rounded-xl glass-panel">
-        <table className="w-full min-w-[800px] text-sm text-left">
-          <thead className="bg-slate-900/40 backdrop-blur-md text-xs uppercase font-semibold text-slate-400 border-b border-slate-700/50">
+      <div className="overflow-x-auto border border-zinc-200 bg-white">
+        <table className="w-full min-w-[700px] text-xs text-left">
+          <thead className="bg-zinc-50 font-mono text-[10px] uppercase text-zinc-500 border-b border-zinc-200">
             <tr>
-              <th className="px-4 py-3 font-semibold">Strategy</th>
-              <th className="px-4 py-3 text-right font-semibold">Capital</th>
-              <th className="px-4 py-3 text-right font-semibold">Return</th>
-              <th className="px-4 py-3 text-right font-semibold">Sharpe</th>
-              <th className="px-4 py-3 text-right font-semibold">Date</th>
-              <th className="px-4 py-3 text-center font-semibold">Status</th>
+              <th className="px-3.5 py-2 font-medium">STRATEGY_MODEL</th>
+              <th className="px-3.5 py-2 text-right font-medium">ALLOCATION</th>
+              <th className="px-3.5 py-2 text-right font-medium">NET_RETURN</th>
+              <th className="px-3.5 py-2 text-right font-medium">SHARPE</th>
+              <th className="px-3.5 py-2 text-right font-medium">TIMESTAMP</th>
+              <th className="px-3.5 py-2 text-center font-medium">STATUS</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-zinc-100">
             {backtests.length === 0 ? (
               <tr>
-                <td colSpan={6} className="py-12 text-center text-sm text-slate-500 bg-slate-900/20">
-                  No backtests run yet. Create your first backtest to get started.
+                <td colSpan={6} className="py-8 text-center font-mono text-xs text-zinc-400 bg-white">
+                  [ NO_EXECUTIONS_RECORDED ]
                 </td>
               </tr>
             ) : (
               backtests.map((backtest) => (
                 <tr
                   key={backtest.id}
-                  className="border-b border-slate-800 transition-colors hover:bg-slate-800/50 last:border-0"
+                  className="transition-colors hover:bg-zinc-50"
                 >
-                  <td className="px-4 py-3 font-medium text-slate-200">
-                    <Link href={`/backtests/${backtest.id}`} className="hover:underline decoration-slate-500 underline-offset-2 transition-all">
+                  <td className="px-3.5 py-2 font-medium text-zinc-900">
+                    <Link
+                      href={`/backtests/${backtest.id}`}
+                      className="hover:underline font-mono text-xs"
+                    >
                       {backtest.strategy}
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-right font-mono text-slate-300">
+                  <td className="px-3.5 py-2 text-right font-mono text-zinc-700">
                     {formatCurrency(backtest.initialCapital)}
                   </td>
-                  <td className={`px-4 py-3 text-right font-mono ${backtest.totalReturnPercent >= 0 ? 'text-profit' : 'text-loss'}`}>
+                  <td
+                    className={`px-3.5 py-2 text-right font-mono font-bold ${
+                      backtest.totalReturnPercent >= 0 ? "text-emerald-600" : "text-red-600"
+                    }`}
+                  >
                     {formatSignedPercent(backtest.totalReturnPercent)}
                   </td>
-                  <td className="px-4 py-3 text-right font-mono text-slate-300">
+                  <td className="px-3.5 py-2 text-right font-mono text-zinc-700">
                     {formatNumber(backtest.sharpeRatio)}
                   </td>
-                  <td className="px-4 py-3 text-right font-mono text-slate-400 text-xs">
+                  <td className="px-3.5 py-2 text-right font-mono text-zinc-400 text-[11px]">
                     {formatDateCompact(backtest.createdAt)}
                   </td>
-                  <td className="px-4 py-3 flex justify-center">
-                    <StatusIcon status={backtest.status} />
+                  <td className="px-3.5 py-2 text-center">
+                    <StatusBadge status={backtest.status} />
                   </td>
                 </tr>
               ))

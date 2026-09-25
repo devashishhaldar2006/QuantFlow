@@ -4,7 +4,6 @@ import { useClerk, useAuth, useSignUp } from "@clerk/nextjs";
 import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import {
   Mail,
   Lock,
@@ -112,7 +111,7 @@ export default function CustomSignUpForm() {
         await clerk.setActive({ session: completeSignUp.createdSessionId });
         router.push("/dashboard");
       } else {
-        setError("Verification incomplete. Please verify all requirements.");
+        setError("Verification incomplete. Please try again.");
       }
     } catch (err: unknown) {
       const clerkErr = err as { errors?: { message: string }[] };
@@ -128,24 +127,19 @@ export default function CustomSignUpForm() {
 
   if (pendingVerification) {
     return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4 }}
-        className="relative w-full max-w-md space-y-6 rounded-2xl border border-indigo-500/20 bg-[#090D18]/90 p-8 backdrop-blur-2xl shadow-[0_0_50px_rgba(99,102,241,0.15)]"
-      >
+      <div className="w-full max-w-md space-y-6 rounded-md border border-zinc-200 bg-white p-8 shadow-sm">
         <div className="text-center space-y-2">
-          <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
-            <Mail className="size-6" />
+          <div className="inline-flex size-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 mb-1">
+            <Mail className="size-5" />
           </div>
-          <h2 className="text-xl font-bold text-slate-100">Verify Your Email</h2>
-          <p className="text-xs text-slate-400">
-            We sent a verification code to <span className="font-semibold text-slate-200">{email}</span>
+          <h2 className="text-xl font-semibold text-zinc-950">Verify your email</h2>
+          <p className="text-xs text-zinc-500">
+            We sent a 6-digit confirmation code to <strong className="text-zinc-800">{email}</strong>
           </p>
         </div>
 
         {error && (
-          <div className="flex items-center gap-2.5 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs font-medium text-red-400">
+          <div className="flex items-center gap-2 rounded border border-red-200 bg-red-50 p-2.5 text-xs text-red-700">
             <AlertCircle className="size-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -153,7 +147,7 @@ export default function CustomSignUpForm() {
 
         <form onSubmit={handleVerify} className="space-y-4">
           <div className="space-y-1.5">
-            <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+            <label className="text-[11px] font-mono uppercase tracking-wider text-zinc-500">
               Verification Code
             </label>
             <input
@@ -162,16 +156,14 @@ export default function CustomSignUpForm() {
               value={code}
               onChange={(e) => setCode(e.target.value)}
               placeholder="Enter 6-digit code"
-              className="w-full text-center font-mono text-lg tracking-widest rounded-xl border border-white/10 bg-slate-950/80 py-3 text-slate-100 placeholder-slate-600 transition-all focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              className="w-full text-center font-mono text-lg tracking-widest rounded border border-zinc-300 bg-white py-2.5 text-zinc-900 placeholder-zinc-400 focus:border-zinc-950 focus:outline-none"
             />
           </div>
 
-          <motion.button
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
+          <button
             type="submit"
             disabled={isLoading}
-            className="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:from-indigo-500 hover:to-violet-500 disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 rounded bg-zinc-950 py-2.5 text-xs font-medium text-white hover:bg-zinc-800 transition-colors disabled:opacity-50"
           >
             {isLoading ? (
               <Loader2 className="size-4 animate-spin" />
@@ -181,42 +173,33 @@ export default function CustomSignUpForm() {
                 <span>Verify & Enter Terminal</span>
               </>
             )}
-          </motion.button>
+          </button>
         </form>
-      </motion.div>
+      </div>
     );
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.98 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
-      className="relative w-full max-w-md space-y-6 rounded-2xl border border-slate-800 bg-[#0B1120] p-8 shadow-xl"
-    >
+    <div className="w-full max-w-md space-y-6 rounded-md border border-zinc-200 bg-white p-8 shadow-sm">
       {/* Social OAuth Buttons */}
-      <div className="grid grid-cols-2 gap-3.5">
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+      <div className="grid grid-cols-2 gap-3">
+        <button
           type="button"
           onClick={() => handleSocialAuth("oauth_github")}
-          className="group flex items-center justify-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.03] py-3 px-4 text-xs font-semibold text-slate-200 transition-all duration-200 hover:border-indigo-500/40 hover:bg-indigo-600/15 hover:text-white shadow-sm"
+          className="flex items-center justify-center gap-2 rounded border border-zinc-200 bg-zinc-50 py-2.5 px-3 text-xs font-medium text-zinc-800 hover:bg-zinc-100 hover:border-zinc-300 transition-colors"
         >
-          <svg className="size-4 fill-current transition-transform group-hover:scale-110" viewBox="0 0 24 24">
+          <svg className="size-4 fill-current" viewBox="0 0 24 24">
             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
           </svg>
           GitHub
-        </motion.button>
+        </button>
 
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+        <button
           type="button"
           onClick={() => handleSocialAuth("oauth_google")}
-          className="group flex items-center justify-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.03] py-3 px-4 text-xs font-semibold text-slate-200 transition-all duration-200 hover:border-indigo-500/40 hover:bg-indigo-600/15 hover:text-white shadow-sm"
+          className="flex items-center justify-center gap-2 rounded border border-zinc-200 bg-zinc-50 py-2.5 px-3 text-xs font-medium text-zinc-800 hover:bg-zinc-100 hover:border-zinc-300 transition-colors"
         >
-          <svg className="size-4 transition-transform group-hover:scale-110" viewBox="0 0 24 24">
+          <svg className="size-4" viewBox="0 0 24 24">
             <path
               fill="#4285F4"
               d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"
@@ -235,83 +218,78 @@ export default function CustomSignUpForm() {
             />
           </svg>
           Google
-        </motion.button>
+        </button>
       </div>
 
       {/* Divider */}
-      <div className="relative flex items-center justify-center my-2">
-        <div className="w-full border-t border-white/10" />
-        <span className="absolute bg-[#090D18] px-3 text-[10px] font-mono uppercase tracking-wider text-slate-500">
+      <div className="relative flex items-center justify-center my-1">
+        <div className="w-full border-t border-zinc-200" />
+        <span className="absolute bg-white px-2.5 text-[10px] font-mono uppercase tracking-wider text-zinc-400">
           Or register with email
         </span>
       </div>
 
-      {/* Error Banner */}
       {error && (
-        <motion.div
-          initial={{ opacity: 0, y: -5 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-2.5 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs font-medium text-red-400"
-        >
+        <div className="flex items-center gap-2 rounded border border-red-200 bg-red-50 p-2.5 text-xs text-red-700">
           <AlertCircle className="size-4 shrink-0" />
           <span>{error}</span>
-        </motion.div>
+        </div>
       )}
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-1.5">
-          <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <div className="space-y-1">
+          <label className="text-xs font-medium text-zinc-700">
             Full Name
           </label>
           <div className="relative">
-            <User className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-500" />
+            <User className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400" />
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="John Doe"
-              className="w-full rounded-xl border border-white/10 bg-slate-950/80 py-3 pl-10 pr-4 text-sm text-slate-100 placeholder-slate-600 transition-all focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              className="w-full rounded border border-zinc-300 bg-white py-2 pl-9 pr-3 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-950 focus:outline-none"
             />
           </div>
         </div>
 
-        <div className="space-y-1.5">
-          <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <div className="space-y-1">
+          <label className="text-xs font-medium text-zinc-700">
             Email Address
           </label>
           <div className="relative">
-            <Mail className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-500" />
+            <Mail className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400" />
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="trader@quantflow.io"
-              className="w-full rounded-xl border border-white/10 bg-slate-950/80 py-3 pl-10 pr-4 text-sm text-slate-100 placeholder-slate-600 transition-all focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              className="w-full rounded border border-zinc-300 bg-white py-2 pl-9 pr-3 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-950 focus:outline-none"
             />
           </div>
         </div>
 
-        <div className="space-y-1.5">
-          <label className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+        <div className="space-y-1">
+          <label className="text-xs font-medium text-zinc-700">
             Password
           </label>
           <div className="relative">
-            <Lock className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-500" />
+            <Lock className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400" />
             <input
               type={showPassword ? "text" : "password"}
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••••••"
-              className="w-full rounded-xl border border-white/10 bg-slate-950/80 py-3 pl-10 pr-10 text-sm text-slate-100 placeholder-slate-600 transition-all focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+              className="w-full rounded border border-zinc-300 bg-white py-2 pl-9 pr-9 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-950 focus:outline-none"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
             >
               {showPassword ? (
                 <EyeOff className="size-4" />
@@ -322,36 +300,34 @@ export default function CustomSignUpForm() {
           </div>
         </div>
 
-        <motion.button
-          whileHover={{ scale: 1.01 }}
-          whileTap={{ scale: 0.99 }}
+        <button
           type="submit"
           disabled={isLoading}
-          className="group relative flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-500/25 transition-all duration-200 hover:from-indigo-500 hover:to-violet-500 disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded bg-zinc-950 py-2.5 text-xs font-medium text-white hover:bg-zinc-800 transition-colors disabled:opacity-50 shadow-sm"
         >
           {isLoading ? (
             <Loader2 className="size-4 animate-spin" />
           ) : (
             <>
               <span>Create Account</span>
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="size-3.5" />
             </>
           )}
-        </motion.button>
+        </button>
       </form>
 
       {/* Switch to Sign In */}
-      <div className="text-center pt-3 border-t border-white/5">
-        <p className="text-xs text-slate-400">
+      <div className="text-center pt-2 border-t border-zinc-100">
+        <p className="text-xs text-zinc-500">
           Already have an account?{" "}
           <Link
             href="/sign-in"
-            className="font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
+            className="font-semibold text-zinc-950 underline underline-offset-2"
           >
             Sign In
           </Link>
         </p>
       </div>
-    </motion.div>
+    </div>
   );
 }

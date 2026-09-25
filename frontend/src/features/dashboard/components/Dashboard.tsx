@@ -24,78 +24,12 @@ import {
 } from "@/lib/format";
 
 import {
-  LayoutDashboard,
   TrendingUp,
   TrendingDown,
+  Terminal,
 } from "lucide-react";
 
 import { getCurrentUser } from "@/services/auth/currentUser";
-
-const mockEquityData: EquityPoint[] = [
-  {
-    timestamp: "2024-01-01T10:00:00Z",
-    equity: 100000,
-  },
-  {
-    timestamp: "2024-02-01T10:00:00Z",
-    equity: 103500,
-  },
-  {
-    timestamp: "2024-03-01T10:00:00Z",
-    equity: 101800,
-  },
-  {
-    timestamp: "2024-04-01T10:00:00Z",
-    equity: 108200,
-  },
-  {
-    timestamp: "2024-05-01T10:00:00Z",
-    equity: 112400,
-  },
-  {
-    timestamp: "2024-06-01T10:00:00Z",
-    equity: 118700,
-  },
-  {
-    timestamp: "2024-07-01T10:00:00Z",
-    equity: 124680,
-  },
-];
-
-const mockBacktest: PersistedBacktest = {
-  id: "mock-1",
-  strategy: "SMA Crossover (Demo)",
-
-  initialCapital: 100000,
-  finalEquity: 124680,
-  netProfit: 24680,
-  totalReturnPercent: 24.68,
-
-  totalTrades: 42,
-  winningTrades: 24,
-  losingTrades: 18,
-  winRatePercent: 57.1,
-
-  averageWin: 1200,
-  averageLoss: -600,
-  largestWin: 3400,
-  largestLoss: -1200,
-
-  maximumDrawdown: 5.2,
-  profitFactor: 2.1,
-  expectancy: 150,
-
-  annualizedReturn: 0.35,
-  annualizedVolatility: 0.15,
-  sharpeRatio: 2.1,
-
-  status: "completed",
-
-  createdAt: new Date().toISOString(),
-
-  equityCurve: mockEquityData,
-  trades: [],
-};
 
 export default async function Dashboard() {
   const user = await getCurrentUser();
@@ -114,96 +48,96 @@ export default async function Dashboard() {
   return (
     <AnimatedPage>
       <PageHeader
-        title="Dashboard"
-        description="Quantitative performance overview and recent execution activity."
-        icon={LayoutDashboard}
+        title="Terminal Overview"
+        description="Low-latency execution telemetry, risk vectors, and portfolio performance."
+        icon={Terminal}
         action={{
-          label: "New Backtest",
+          label: "Execute New Model",
           href: "/backtests/new",
         }}
       />
 
       {!latestBacktest ? (
-        <div className="space-y-6">
+        <div className="space-y-4">
           <AnimatedItem>
-            <div className="glass-panel flex flex-col items-center justify-center py-20 px-4 rounded-2xl text-center space-y-4">
-              <div className="flex size-14 items-center justify-center rounded-2xl border border-indigo-500/20 bg-indigo-500/10 text-indigo-400 shadow-inner">
-                <LayoutDashboard className="size-7" />
+            <div className="border border-zinc-200 bg-white flex flex-col items-center justify-center py-16 px-4 text-center space-y-3">
+              <div className="flex size-10 items-center justify-center border border-zinc-900 bg-zinc-950 text-white shadow-sm">
+                <Terminal className="size-4" />
               </div>
               <div className="space-y-1 max-w-md">
-                <h2 className="text-xl font-bold text-slate-100">Welcome to QuantFlow Terminal</h2>
-                <p className="text-xs text-slate-400">
-                  Execute your first high-frequency or multi-asset strategy against real historical market data to start tracking institutional analytics.
+                <h2 className="text-sm font-bold text-zinc-900 font-mono">
+                  QUANTFLOW_EXECUTION_STATION
+                </h2>
+                <p className="text-xs text-zinc-500 font-mono">
+                  No backtest instances compiled yet. Ingest market tick data and simulate your algorithmic models against historical order books.
                 </p>
               </div>
               <Link
                 href="/backtests/new"
-                className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-xs font-semibold text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-500 transition-all"
+                className="inline-flex items-center gap-2 border border-zinc-900 bg-zinc-950 px-4 py-2 text-xs font-mono font-medium text-white hover:bg-zinc-800 transition-colors"
               >
-                Launch First Backtest
+                Launch First Execution
               </Link>
             </div>
           </AnimatedItem>
         </div>
       ) : (
-        <div className="space-y-5">
+        <div className="space-y-4">
           {/* Hero: Portfolio Value + Chart */}
           <AnimatedItem>
-            <div className="glass-panel rounded-2xl overflow-hidden">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 pt-6 pb-4 border-b border-white/5">
+            <div className="border border-zinc-200 bg-white">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 py-3 border-b border-zinc-200 bg-zinc-50/60">
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-1.5">
-                    Latest Strategy Final Equity
-                  </p>
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 block mb-0.5">
+                    NET_ASSET_VALUE
+                  </span>
 
                   <div className="flex items-baseline gap-3 flex-wrap">
-                    <span className="font-mono text-3xl font-bold tracking-tight text-slate-100">
+                    <span className="font-mono text-2xl font-bold tracking-tight text-zinc-950">
                       {formatCurrency(latestBacktest.finalEquity)}
                     </span>
 
                     <div
-                      className={`flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                      className={`flex items-center gap-1 font-mono text-xs font-bold ${
                         latestBacktest.totalReturnPercent >= 0
-                          ? "bg-emerald-500/10 text-emerald-400"
-                          : "bg-red-500/10 text-red-400"
+                          ? "text-emerald-600"
+                          : "text-red-600"
                       }`}
                     >
-                      {latestBacktest.totalReturnPercent >= 0 ? <TrendingUp className="size-3" /> : <TrendingDown className="size-3" />}
-                      {latestBacktest.totalReturnPercent >= 0 ? "+" : ""}
-                      {formatCurrency(latestBacktest.netProfit)}
-                      {" ("}
-                      {formatSignedPercent(latestBacktest.totalReturnPercent)}
-                      {")"}
+                      {latestBacktest.totalReturnPercent >= 0 ? (
+                        <TrendingUp className="size-3" />
+                      ) : (
+                        <TrendingDown className="size-3" />
+                      )}
+                      <span>
+                        {latestBacktest.totalReturnPercent >= 0 ? "+" : ""}
+                        {formatCurrency(latestBacktest.netProfit)} (
+                        {formatSignedPercent(latestBacktest.totalReturnPercent)})
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="text-xs text-slate-400 font-mono">
-                  Strategy:{" "}
-                  <span className="text-indigo-400 font-semibold">
+                <div className="text-xs text-zinc-600 font-mono flex items-center gap-2">
+                  <span className="text-zinc-400">MODEL:</span>
+                  <span className="text-zinc-950 font-bold border border-zinc-200 bg-white px-2 py-0.5">
                     {latestBacktest.strategy}
                   </span>
                 </div>
               </div>
 
-              <div className="h-[300px] px-1 pt-2 pb-1">
-                <PerformanceChart data={latestBacktest.equityCurve} />
+              <div className="p-4">
+                <PerformanceChart data={latestBacktest.equityCurve} height={280} />
               </div>
             </div>
           </AnimatedItem>
 
-          {/* Metrics */}
+          {/* Key Financial Telemetry Metrics */}
           <AnimatedItem>
-            <div className="glass-panel rounded-2xl px-6 py-5">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-5">
-                Key Metrics
-              </p>
-
-              <MetricsGrid result={latestBacktest} />
-            </div>
+            <MetricsGrid result={latestBacktest} />
           </AnimatedItem>
 
-          {/* Recent Backtests */}
+          {/* Execution History Table */}
           <AnimatedItem>
             <RecentBacktests backtests={backtests.slice(0, 5)} />
           </AnimatedItem>

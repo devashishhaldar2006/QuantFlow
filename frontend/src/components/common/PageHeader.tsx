@@ -13,10 +13,6 @@ type PageHeaderProps = {
   };
 };
 
-/**
- * PageHeader — Premium page title component used across all feature pages.
- * Renders a gradient-accented heading with optional description, badge, and action CTA.
- */
 export default function PageHeader({
   title,
   description,
@@ -25,27 +21,27 @@ export default function PageHeader({
   action,
 }: PageHeaderProps) {
   return (
-    <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between border-b border-zinc-200 pb-4">
       <div className="flex items-start gap-3">
         {Icon && (
-          <div className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl border border-indigo-500/20 bg-indigo-500/10 shadow-[0_0_20px_rgba(99,102,241,0.15)]">
-            <Icon className="size-4.5 text-indigo-400" />
+          <div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded border border-zinc-200 bg-zinc-50 text-zinc-800">
+            <Icon className="size-4" />
           </div>
         )}
 
         <div>
-          <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400">
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-semibold tracking-tight text-zinc-950">
               {title}
             </h1>
             {badge && (
-              <span className="inline-flex items-center rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-indigo-400">
+              <span className="inline-flex items-center rounded border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 text-[10px] font-mono uppercase tracking-wider text-zinc-600">
                 {badge}
               </span>
             )}
           </div>
           {description && (
-            <p className="mt-1 text-sm text-slate-500 leading-relaxed">
+            <p className="mt-0.5 text-xs text-zinc-500 leading-relaxed">
               {description}
             </p>
           )}
@@ -55,9 +51,9 @@ export default function PageHeader({
       {action && (
         <Link
           href={action.href}
-          className="shrink-0 inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all hover:bg-indigo-500 hover:shadow-indigo-500/30 hover:-translate-y-0.5"
+          className="shrink-0 inline-flex items-center gap-1.5 rounded-md bg-zinc-950 px-3.5 py-1.5 text-xs font-medium text-white hover:bg-zinc-800 transition-colors shadow-sm"
         >
-          <Plus className="size-4" />
+          <Plus className="size-3.5" />
           {action.label}
         </Link>
       )}
