@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react";
 import Link from "next/link";
-import { ArrowLeft, Shield } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import AuthShowcase from "./AuthShowcase";
 import { QuantFlowLogo } from "@/components/common/QuantFlowLogo";
 
@@ -61,11 +61,7 @@ export default function AuthLayout({
         </div>
 
         {/* Footer */}
-        <div className="relative z-10 flex items-center justify-between border-t border-zinc-200 pt-4 text-xs text-zinc-500 font-mono">
-          <div className="flex items-center gap-1.5">
-            <Shield className="size-3.5 text-emerald-600" />
-            <span>256-bit SSL Encrypted & Clerk Authenticated</span>
-          </div>
+        <div className="relative z-10 flex items-center justify-end border-t border-zinc-200 pt-4 text-xs text-zinc-500 font-mono">
           <span>© {new Date().getFullYear()} QuantFlow</span>
         </div>
       </div>

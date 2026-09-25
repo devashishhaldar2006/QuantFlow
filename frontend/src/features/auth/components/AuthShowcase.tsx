@@ -103,11 +103,6 @@ export default function AuthShowcase() {
           </div>
         </div>
       </div>
-
-      {/* Footer */}
-      <div className="relative z-10 text-xs text-zinc-500 font-mono">
-        Deterministic C++ execution pipeline • PostgreSQL persisted telemetry
-      </div>
     </div>
   );
 }
