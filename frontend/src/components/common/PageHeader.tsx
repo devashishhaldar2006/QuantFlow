@@ -24,24 +24,24 @@ export default function PageHeader({
     <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between border-b border-zinc-200 pb-4">
       <div className="flex items-start gap-3">
         {Icon && (
-          <div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded border border-zinc-200 bg-zinc-50 text-zinc-800">
-            <Icon className="size-4" />
+          <div className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded border border-zinc-900 bg-zinc-950 text-white shadow-sm">
+            <Icon className="size-4 text-white" />
           </div>
         )}
 
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-semibold tracking-tight text-zinc-950">
+            <h1 className="text-xl font-bold font-mono tracking-tight text-zinc-950">
               {title}
             </h1>
             {badge && (
-              <span className="inline-flex items-center rounded border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 text-[10px] font-mono uppercase tracking-wider text-zinc-600">
+              <span className="inline-flex items-center rounded border border-zinc-900 bg-zinc-950 px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider text-white">
                 {badge}
               </span>
             )}
           </div>
           {description && (
-            <p className="mt-0.5 text-xs text-zinc-500 leading-relaxed">
+            <p className="mt-0.5 text-xs font-mono text-zinc-600 leading-relaxed">
               {description}
             </p>
           )}

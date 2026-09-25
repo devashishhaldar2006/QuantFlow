@@ -45,8 +45,8 @@ export default function NewBacktest() {
         </AnimatedItem>
 
         <AnimatedItem>
-          <div className="w-full rounded-2xl glass-panel p-6">
-            <Suspense fallback={<div className="h-64 flex items-center justify-center text-xs text-muted-foreground">Loading backtest form...</div>}>
+          <div className="w-full rounded border border-zinc-200 bg-white p-6 shadow-sm">
+            <Suspense fallback={<div className="h-64 flex items-center justify-center font-mono text-xs text-zinc-500">LOADING_BACKTEST_COMPILER...</div>}>
               <BacktestForm
                 onBacktestCreated={handleBacktestCreated}
               />

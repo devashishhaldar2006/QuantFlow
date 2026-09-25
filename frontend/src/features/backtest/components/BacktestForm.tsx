@@ -76,7 +76,7 @@ function FieldLabel({
   return (
     <label
       htmlFor={htmlFor}
-      className="mb-2 block text-[11px] font-semibold uppercase tracking-widest text-slate-500"
+      className="mb-2 block text-[11px] font-mono font-bold uppercase tracking-wider text-zinc-900"
     >
       {children}
     </label>
@@ -134,13 +134,13 @@ function FormSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-4 rounded border border-zinc-200 bg-white p-5">
+    <div className="space-y-4 rounded border border-zinc-200 bg-white p-5 shadow-sm">
       <div className="flex items-center gap-2.5 border-b border-zinc-200 pb-3">
-        <div className="flex size-6 items-center justify-center rounded border border-zinc-200 bg-zinc-50 text-zinc-900">
-          <Icon className="size-3 text-zinc-700" />
+        <div className="flex size-7 items-center justify-center rounded border border-zinc-900 bg-zinc-950 text-white shadow-sm">
+          <Icon className="size-3.5 text-white" />
         </div>
 
-        <span className="text-[10px] font-bold font-mono uppercase tracking-wider text-zinc-600">
+        <span className="text-[11px] font-bold font-mono uppercase tracking-wider text-zinc-950">
           {title}
         </span>
       </div>
@@ -458,13 +458,13 @@ export default function BacktestForm({
 
       {/* STRATEGY & DATA */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-        <span className="text-[11px] font-mono uppercase text-zinc-500 font-bold">Institutional Strategy Builder</span>
+        <span className="text-[11px] font-mono uppercase text-zinc-950 font-bold tracking-wider">Institutional Strategy Builder</span>
         <button
           type="button"
           onClick={() => setCopilotOpen(true)}
-          className="inline-flex items-center justify-center gap-1.5 rounded border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-xs font-mono font-medium text-zinc-900 hover:bg-zinc-100 hover:border-zinc-300 transition shadow-none"
+          className="inline-flex items-center justify-center gap-1.5 rounded border border-zinc-900 bg-zinc-950 px-3 py-1.5 text-xs font-mono font-medium text-white hover:bg-zinc-800 transition shadow-sm"
         >
-          <Sparkles className="size-3.5 text-zinc-700" />
+          <Sparkles className="size-3.5 text-white" />
           <span>AI Strategy Architect (LangGraph)</span>
         </button>
       </div>
@@ -546,7 +546,7 @@ export default function BacktestForm({
               className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded border border-dashed px-4 py-5 transition-all ${
                 limitReached || csvUploading
                   ? "cursor-not-allowed border-zinc-200 bg-zinc-50 opacity-40"
-                  : "border-zinc-300 bg-zinc-50/50 hover:border-black hover:bg-zinc-50"
+                  : "border-zinc-300 bg-zinc-50/50 hover:border-black hover:bg-zinc-100/50"
               }`}
               onDragOver={(e) => e.preventDefault()}
               onDrop={(e) => {
@@ -594,14 +594,14 @@ export default function BacktestForm({
                 </>
               ) : (
                 <>
-                  <div className="flex size-8 items-center justify-center rounded border border-zinc-200 bg-white">
-                    <Upload className="size-3.5 text-zinc-700" />
+                  <div className="flex size-9 items-center justify-center rounded border border-zinc-900 bg-zinc-950 text-white shadow-sm">
+                    <Upload className="size-4 text-white" />
                   </div>
                   <div className="text-center font-mono">
-                    <p className="text-xs font-medium text-zinc-800">
-                      Drop CSV or <span className="underline underline-offset-2 text-zinc-900 font-semibold">click to browse</span>
+                    <p className="text-xs font-medium text-zinc-900">
+                      Drop CSV or <span className="underline underline-offset-2 text-black font-bold">click to browse</span>
                     </p>
-                    <p className="text-[10px] text-zinc-500">Requires: date, open, high, low, close columns</p>
+                    <p className="text-[10px] font-medium text-zinc-500">Requires: date, open, high, low, close columns</p>
                   </div>
                 </>
               )}
@@ -614,13 +614,13 @@ export default function BacktestForm({
             )}
 
             {/* Quick link to Data Platform */}
-            <div className="mt-3 flex items-center justify-between text-xs text-slate-400 bg-slate-950/40 p-2.5 rounded-lg border border-slate-800/80">
-              <span className="text-[11px] text-slate-400">Want to use system benchmarks or saved datasets?</span>
+            <div className="mt-3 flex items-center justify-between text-xs font-mono bg-zinc-50 p-2.5 rounded border border-zinc-200">
+              <span className="text-[11px] text-zinc-600 font-medium">Want to use system benchmarks or saved datasets?</span>
               <button
                 type="button"
                 onClick={() => router.push("/data")}
                 aria-label="Browse Dataset Library"
-                className="text-[11px] text-indigo-400 hover:text-indigo-300 font-medium hover:underline flex items-center gap-1 shrink-0"
+                className="text-[11px] text-zinc-950 hover:text-black font-bold underline underline-offset-2 flex items-center gap-1 shrink-0"
               >
                 Browse Library →
               </button>
@@ -631,7 +631,7 @@ export default function BacktestForm({
         {/* Dynamic Strategy Parameters */}
         {form.strategy ===
           "MovingAverageCross" && (
-          <div className="grid gap-4 border-t border-slate-800/60 pt-2 sm:grid-cols-2">
+          <div className="grid gap-4 border-t border-zinc-200 pt-3 sm:grid-cols-2">
             <NumberField
               id="shortMAPeriod"
               label="Short MA Period"
@@ -659,7 +659,7 @@ export default function BacktestForm({
         )}
 
         {form.strategy === "EMACross" && (
-          <div className="grid gap-4 border-t border-slate-800/60 pt-2 sm:grid-cols-2">
+          <div className="grid gap-4 border-t border-zinc-200 pt-3 sm:grid-cols-2">
             <NumberField
               id="fastEMAPeriod"
               label="Fast EMA Period"
@@ -687,7 +687,7 @@ export default function BacktestForm({
         )}
 
         {form.strategy === "RSI" && (
-          <div className="grid gap-4 border-t border-slate-800/60 pt-2 sm:grid-cols-3">
+          <div className="grid gap-4 border-t border-zinc-200 pt-3 sm:grid-cols-3">
             <NumberField
               id="rsiPeriod"
               label="RSI Period"
@@ -723,7 +723,7 @@ export default function BacktestForm({
         )}
 
         {form.strategy === "MACD" && (
-          <div className="grid gap-4 border-t border-slate-800/60 pt-2 sm:grid-cols-3">
+          <div className="grid gap-4 border-t border-zinc-200 pt-3 sm:grid-cols-3">
             <NumberField
               id="macdFastPeriod"
               label="Fast Period"
@@ -763,7 +763,7 @@ export default function BacktestForm({
         )}
 
         {form.strategy === "Bollinger" && (
-          <div className="grid gap-4 border-t border-slate-800/60 pt-2 sm:grid-cols-2">
+          <div className="grid gap-4 border-t border-zinc-200 pt-3 sm:grid-cols-2">
             <NumberField
               id="bollingerPeriod"
               label="Period"
@@ -793,7 +793,7 @@ export default function BacktestForm({
         )}
 
         {form.strategy === "ATRFilter" && (
-          <div className="grid gap-4 border-t border-slate-800/60 pt-2 sm:grid-cols-2">
+          <div className="grid gap-4 border-t border-zinc-200 pt-3 sm:grid-cols-2">
             <NumberField
               id="atrPeriod"
               label="ATR Period"
@@ -823,9 +823,8 @@ export default function BacktestForm({
         )}
 
         {form.strategy === "AlwaysHold" && (
-          <p className="rounded-lg border border-slate-800/60 bg-slate-900/30 px-3 py-2.5 text-xs text-slate-500">
-            No additional parameters
-            required for Always Hold strategy.
+          <p className="rounded border border-zinc-200 bg-zinc-50 px-3 py-2.5 font-mono text-xs text-zinc-600">
+            No additional parameters required for Always Hold strategy.
           </p>
         )}
       </FormSection>

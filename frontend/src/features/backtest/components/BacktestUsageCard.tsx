@@ -75,26 +75,28 @@ export default function BacktestUsageCard({
 
   if (usage.unlimited) {
     return (
-      <div className="rounded border border-zinc-200 bg-white p-4">
+      <div className="rounded border border-zinc-200 bg-white p-4 shadow-sm">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="flex size-8 items-center justify-center rounded border border-zinc-200 bg-zinc-50 text-zinc-900">
-              <Crown className="size-4" />
+            <div className="flex size-9 items-center justify-center rounded border border-zinc-900 bg-zinc-950 text-white shadow-sm">
+              <Crown className="size-4 text-white" />
             </div>
 
             <div>
-              <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500">
-                ACTIVE_PLAN
-              </p>
+              <div className="flex items-center gap-1.5">
+                <span className="rounded bg-zinc-950 px-1.5 py-0.5 text-[9px] font-mono font-bold uppercase tracking-wider text-white">
+                  ACTIVE_PLAN
+                </span>
+              </div>
 
-              <p className="mt-0.5 text-xs font-mono font-bold text-zinc-900">
+              <p className="mt-1 text-xs font-mono font-bold text-zinc-950">
                 ENTERPRISE_PRO
               </p>
             </div>
           </div>
 
           <div className="text-right">
-            <p className="text-[10px] font-mono text-zinc-500 uppercase">
+            <p className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-wider">
               QUOTA
             </p>
 
@@ -119,39 +121,41 @@ export default function BacktestUsageCard({
     usage.remaining === 0;
 
   return (
-    <div className="rounded border border-zinc-200 bg-white p-4">
+    <div className="rounded border border-zinc-200 bg-white p-4 shadow-sm">
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex size-8 items-center justify-center rounded border border-zinc-200 bg-zinc-50 text-zinc-900">
-            <Zap className="size-4" />
+          <div className="flex size-9 items-center justify-center rounded border border-zinc-900 bg-zinc-950 text-white shadow-sm">
+            <Zap className="size-4 text-white" />
           </div>
 
           <div>
-            <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-500">
-              FREE_TIER
-            </p>
+            <div className="flex items-center gap-1.5">
+              <span className="rounded bg-zinc-950 px-1.5 py-0.5 text-[9px] font-mono font-bold uppercase tracking-wider text-white">
+                FREE_TIER
+              </span>
+            </div>
 
-            <p className="mt-0.5 text-xs font-mono font-semibold text-zinc-900">
+            <p className="mt-1 text-xs font-mono font-bold text-zinc-950 uppercase tracking-tight">
               Daily Compute Quota
             </p>
           </div>
         </div>
 
         <div className="text-right font-mono">
-          <p className="text-xs font-bold text-zinc-900">
+          <p className="text-sm font-bold text-zinc-950 tabular-nums">
             {usage.used} / {usage.limit}
           </p>
 
-          <p className="mt-0.5 text-[10px] text-zinc-500 uppercase">
+          <p className="mt-0.5 text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
             UTC_DAY_CYCLE
           </p>
         </div>
       </div>
 
       <div className="mt-3.5">
-        <div className="h-1.5 overflow-hidden rounded-full bg-zinc-100 border border-zinc-200/60">
+        <div className="h-2 overflow-hidden rounded-full bg-zinc-100 border border-zinc-200">
           <div
-            className="h-full bg-zinc-900 transition-all duration-300"
+            className="h-full bg-zinc-950 transition-all duration-300"
             style={{
               width: `${percentage}%`,
             }}
