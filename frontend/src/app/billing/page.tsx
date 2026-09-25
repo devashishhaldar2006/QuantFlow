@@ -81,14 +81,16 @@ export default async function BillingPage() {
                   </div>
                 </div>
 
-                <div className="mt-7 flex items-baseline gap-2">
-                  <span className="font-mono text-5xl font-extrabold tracking-tight text-zinc-950">
-                    ₹9
-                  </span>
-                  <span className="text-xs font-mono text-zinc-500">
-                    / month
-                  </span>
-                  <span className="ml-2 rounded border border-zinc-200 bg-zinc-50 px-2.5 py-0.5 text-[11px] font-mono text-zinc-600">
+                <div className="mt-7 flex flex-wrap items-baseline gap-2.5">
+                  <div className="flex items-baseline leading-none">
+                    <span className="font-mono text-5xl font-extrabold tracking-tight text-zinc-950 inline-block pl-1 pt-1">
+                      ₹9
+                    </span>
+                    <span className="text-xs font-mono text-zinc-500 ml-2">
+                      / month
+                    </span>
+                  </div>
+                  <span className="rounded border border-zinc-200 bg-zinc-50 px-2.5 py-0.5 text-[11px] font-mono text-zinc-600">
                     Billed monthly
                   </span>
                 </div>
