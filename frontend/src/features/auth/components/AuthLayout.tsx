@@ -61,7 +61,10 @@ export default function AuthLayout({
         </div>
 
         {/* Footer */}
-        <div className="relative z-10 flex items-center justify-end border-t border-zinc-200 pt-4 text-xs text-zinc-500 font-mono">
+        <div className="relative z-10 w-full max-w-md mx-auto border-t border-zinc-200 pt-4 flex items-center justify-between text-xs text-zinc-500 font-mono">
+          <Link href="/terms" className="hover:text-zinc-950 transition-colors">
+            Terms & Privacy
+          </Link>
           <span>© {new Date().getFullYear()} QuantFlow</span>
         </div>
       </div>
