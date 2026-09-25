@@ -164,13 +164,13 @@ export function StrategyCopilotModal({ isOpen, onClose, onApplyConfig }: Strateg
 
         {/* Agentic Progress State */}
         {isLoading && (
-          <div className="p-4 rounded-xl bg-blue-950/30 border border-blue-500/20 space-y-2">
-            <div className="flex items-center gap-2.5 text-xs font-semibold text-blue-300">
-              <Loader2 className="size-4 animate-spin text-blue-400" />
+          <div className="p-4 rounded border border-zinc-200 bg-zinc-50 space-y-2">
+            <div className="flex items-center gap-2.5 text-xs font-mono font-bold text-zinc-950">
+              <Loader2 className="size-4 animate-spin text-zinc-950" />
               <span>{stepStatus}</span>
             </div>
-            <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-              <div className="bg-blue-500 h-full w-2/3 animate-pulse" />
+            <div className="w-full bg-zinc-200 h-1.5 rounded-full overflow-hidden">
+              <div className="bg-zinc-950 h-full w-2/3 animate-pulse" />
             </div>
           </div>
         )}

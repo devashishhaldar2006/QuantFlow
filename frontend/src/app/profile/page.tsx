@@ -15,9 +15,9 @@ export default function ProfilePage() {
   if (!isLoaded) {
     return (
       <AnimatedPage className="flex min-h-[70vh] w-full items-center justify-center p-6">
-        <div className="flex items-center gap-3 text-slate-400">
-          <div className="size-6 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
-          <span className="text-sm font-medium">Loading profile…</span>
+        <div className="flex items-center gap-3 text-zinc-900 font-mono text-xs">
+          <div className="size-5 animate-spin rounded-full border-2 border-zinc-900 border-t-transparent" />
+          <span className="font-bold">LOADING_PROFILE…</span>
         </div>
       </AnimatedPage>
     );
