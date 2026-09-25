@@ -121,14 +121,14 @@ export function NotificationPopover() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="relative flex size-8 items-center justify-center rounded-lg text-slate-400 transition-all hover:bg-white/5 hover:text-slate-200"
+        className="relative flex size-8 items-center justify-center rounded border border-zinc-200 bg-white text-zinc-700 transition-all hover:bg-zinc-50 hover:text-zinc-950 hover:border-zinc-300"
         aria-label="Notifications"
       >
         <Bell className="size-4" />
         {unreadCount > 0 && (
           <>
-            <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-indigo-500 animate-ping" />
-            <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-indigo-500 border border-slate-950" />
+            <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-emerald-500 animate-ping" />
+            <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-emerald-600 border border-white" />
           </>
         )}
       </button>

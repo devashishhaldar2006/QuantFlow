@@ -219,7 +219,7 @@ export default function Sidebar({
     <>
       {/* Desktop Sidebar */}
       <aside 
-        className={`fixed left-0 top-[48px] z-40 hidden h-[calc(100vh-48px)] flex-col border-r border-zinc-200 bg-white md:flex transition-all duration-200 ${
+        className={`fixed left-0 top-[56px] z-40 hidden h-[calc(100vh-56px)] flex-col border-r border-zinc-200 bg-white md:flex transition-all duration-200 ${
           isCollapsed ? "w-[64px]" : "w-[240px]"
         }`}
       >

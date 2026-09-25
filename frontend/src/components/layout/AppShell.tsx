@@ -46,7 +46,7 @@ export default function AppShell({ children }: AppShellProps) {
         setMobileOpen={setMobileOpen}
       />
 
-      <div className="flex pt-[48px]">
+      <div className="flex pt-[56px]">
         <Sidebar
           isCollapsed={isCollapsed}
           mobileOpen={mobileOpen}
