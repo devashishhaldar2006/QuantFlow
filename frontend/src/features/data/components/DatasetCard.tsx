@@ -30,6 +30,7 @@ interface DatasetCardProps {
 export function DatasetCard({ dataset, onDelete, onSyncSuccess }: DatasetCardProps) {
   const [syncing, setSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState("");
+  const [syncError, setSyncError] = useState(false);
 
   const formatDate = (iso: string | null) => {
     if (!iso) return "N/A";
@@ -45,6 +46,7 @@ export function DatasetCard({ dataset, onDelete, onSyncSuccess }: DatasetCardPro
   const handleSyncData = async () => {
     setSyncing(true);
     setSyncMessage("");
+    setSyncError(false);
     try {
       const cleanName = dataset.name.replace(/\s*\(Live Sync\)/g, "").trim();
       const res = await fetch("/api/datasets/sync", {
@@ -64,13 +66,19 @@ export function DatasetCard({ dataset, onDelete, onSyncSuccess }: DatasetCardPro
         throw new Error(body.error || "Sync failed");
       }
 
+      setSyncError(false);
       setSyncMessage("Live market data updated!");
       if (onSyncSuccess) onSyncSuccess();
       setTimeout(() => setSyncMessage(""), 4000);
     } catch (err) {
       console.error("Sync error:", err);
-      setSyncMessage(err instanceof Error ? err.message : "Sync error");
-      setTimeout(() => setSyncMessage(""), 4000);
+      setSyncError(true);
+      const rawMsg = err instanceof Error ? err.message : "Sync error";
+      const cleanMsg = rawMsg.includes("prisma") || rawMsg.includes("Database") || rawMsg.includes("tenant")
+        ? "Database sync offline. Local cached data active."
+        : rawMsg;
+      setSyncMessage(cleanMsg);
+      setTimeout(() => setSyncMessage(""), 5000);
     } finally {
       setSyncing(false);
     }
@@ -148,9 +156,14 @@ export function DatasetCard({ dataset, onDelete, onSyncSuccess }: DatasetCardPro
           </Badge>
 
           {syncMessage && (
-            <span className="text-[10px] font-mono text-emerald-700 flex items-center gap-1 font-semibold">
-              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-              {syncMessage}
+            <span
+              className={`text-[10px] font-mono flex items-center gap-1 font-semibold max-w-[200px] truncate ${
+                syncError ? "text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded" : "text-emerald-700"
+              }`}
+              title={syncMessage}
+            >
+              <CheckCircle2 className={`w-3 h-3 shrink-0 ${syncError ? "text-amber-600" : "text-emerald-600"}`} />
+              <span className="truncate">{syncMessage}</span>
             </span>
           )}
         </div>
