@@ -17,10 +17,9 @@ frontend/src/generated/
 .env
 .env.local
 
-# Dynamic Uploads, Datasets & CSV files
+# Dynamic Uploads & Large Datasets
 uploads/
 public/uploads/
 backend/uploads/
-backend/data/
-*.csv
-**/*.csv
+backend/data/datasets/
+!backend/data/*.csv
