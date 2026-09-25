@@ -1,19 +1,19 @@
 # QuantFlow — High-Performance Quantitative Backtesting Platform & C++ Engine
 
 <p align="center">
-  <img src="frontend/public/logo.svg" alt="QuantFlow Logo" width="110" height="110" />
+  <img src="frontend/public/logo.svg" alt="QuantFlow Logo" width="100" height="100" />
 </p>
 
 <p align="center">
-  <strong>A high-performance algorithmic trading and quantitative backtesting platform. Engineered with a compiled C++20 execution engine, autonomous multi-agent AI (LangGraph + Mistral Small 2506), real-time portfolio risk analytics, and cloud dataset virtualization.</strong>
+  <strong>Institutional Quantitative Research Terminal & Algorithmic Trading Platform. Engineered with a compiled C++20 execution engine, autonomous multi-agent AI (LangGraph + Mistral Small 2506), real-time portfolio risk analytics, and cloud dataset virtualization.</strong>
 </p>
 
 <p align="center">
-  <a href="https://quantflow.hackcentral.me"><img src="https://img.shields.io/badge/Live%20Terminal-quantflow.hackcentral.me-0A84FF?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" /></a>
-  <a href="https://quantflow-backend-7gxi.onrender.com/health"><img src="https://img.shields.io/badge/C%2B%2B%20Engine-Render%20Cloud-46E3B7?style=for-the-badge&logo=render&logoColor=white" alt="Render Engine" /></a>
-  <a href="https://github.com/devashishhaldar2006/QuantFlow"><img src="https://img.shields.io/badge/Core%20Engine-Modern%20C%2B%2B20-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="C++20" /></a>
-  <a href="https://github.com/devashishhaldar2006/QuantFlow/actions"><img src="https://img.shields.io/badge/CI%2FCD-Automated%20GHCR%20%2B%20EC2-2088FF?style=for-the-badge&logo=github-actions&logoColor=white" alt="CI/CD" /></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge" alt="MIT License" /></a>
+  <a href="https://quantflow.hackcentral.me"><img src="https://img.shields.io/badge/Live%20Terminal-quantflow.hackcentral.me-09090b?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" /></a>
+  <a href="https://quantflow-backend-7gxi.onrender.com/health"><img src="https://img.shields.io/badge/C%2B%2B%20Engine-Render%20Cloud-18181b?style=for-the-badge&logo=render&logoColor=white" alt="Render Engine" /></a>
+  <a href="https://github.com/devashishhaldar2006/QuantFlow"><img src="https://img.shields.io/badge/Core%20Engine-Modern%20C%2B%2B20-27272a?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="C++20" /></a>
+  <a href="https://github.com/devashishhaldar2006/QuantFlow/actions"><img src="https://img.shields.io/badge/CI%2FCD-Automated%20GHCR%20%2B%20EC2-3f3f46?style=for-the-badge&logo=github-actions&logoColor=white" alt="CI/CD" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10b981?style=for-the-badge" alt="MIT License" /></a>
 </p>
 
 ---
@@ -22,7 +22,7 @@
 
 | Resource | URL / Endpoint | Infrastructure | Description |
 | :--- | :--- | :--- | :--- |
-| **🌐 Production Web Terminal** | [**quantflow.hackcentral.me**](https://quantflow.hackcentral.me) | Vercel Edge Serverless | Next.js 16 Quantitative Workstation |
+| **🌐 Production Web Terminal** | [**quantflow.hackcentral.me**](https://quantflow.hackcentral.me) | Vercel Edge Serverless | Next.js 16 Institutional Quantitative Terminal |
 | **⚡ High-Performance Core** | [**quantflow-backend-7gxi.onrender.com**](https://quantflow-backend-7gxi.onrender.com) | Render Web Service (Docker) | Compiled C++20 REST API Execution Engine |
 | **🗄️ Cloud Database & Storage** | Supabase Cloud (Tokyo ap-northeast-1) | PostgreSQL + S3 Object Store | Tick datasets, backtest ledgers, and trade accounting |
 | **⚠️ Model Limitations & Disclosures** | [**LIMITATIONS.md**](LIMITATIONS.md) | Technical Specification | Statistical assumptions, intrabar heuristics & scope limits |
@@ -127,6 +127,11 @@ QuantFlow follows a decoupled, asynchronous multi-tier architecture with strict 
 - **Data Virtualization**: Datasets are streamed securely from Supabase S3 / Cloudflare R2 object storage with automatic client-side schema validation.
 - **Strict Data Integrity**: The CSV parser strictly validates input formats and raises explicit errors for missing or corrupt datasets, prohibiting silent synthetic fallbacks during backtests.
 - **Secrets Management**: All sensitive credentials (Clerk secret keys, Razorpay secrets, S3 access keys, Mistral tokens) remain strictly server-side.
+
+### 4. Institutional Monochrome Terminal Design System
+- **High-Density Typography**: Engineered with monospace typographic hierarchy (`Geist Mono`, `JetBrains Mono`), uppercase terminal labels (`RUN_AGAIN`, `ALL_BACKTESTS`, `EXECUTED`), and high-contrast numerical metrics.
+- **Minimalist Palette**: Built on strict neutral monochrome tokens (`zinc-950`, `zinc-900`, `zinc-200`, `bg-white`) eliminating distracting colorful UI noise in quantitative workflows.
+- **Autonomous Agent Modals & Audit Panels**: Custom agentic modal surfaces (`StrategyCopilotModal`, `RiskOfficerCard`) formatted with structured monospace execution logs, live parameter reflection badges, and real-time stress testing summaries.
 
 ---
 
