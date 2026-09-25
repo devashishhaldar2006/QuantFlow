@@ -216,11 +216,24 @@ export function RiskOfficerCard({ backtestId }: RiskOfficerCardProps) {
               MANDATED_EXECUTION_LIMITS_&_CONTROLS
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
-              {verdict.actionableRecommendations.map((rec, idx) => (
-                <div key={idx} className="rounded border border-zinc-200 bg-white p-3 text-xs text-zinc-700 font-mono shadow-none">
-                  {rec}
-                </div>
-              ))}
+              {verdict.actionableRecommendations.map((rec, idx) => {
+                // Parse markdown bold **text** for clean terminal rendering
+                const parts = rec.split(/(\*\*[^*]+\*\*)/g);
+                return (
+                  <div key={idx} className="rounded border border-zinc-200 bg-white p-3.5 text-xs text-zinc-700 leading-relaxed font-mono shadow-none">
+                    {parts.map((part, pIdx) => {
+                      if (part.startsWith("**") && part.endsWith("**")) {
+                        return (
+                          <strong key={pIdx} className="font-bold text-zinc-950 bg-zinc-100 px-1 py-0.5 rounded">
+                            {part.slice(2, -2)}
+                          </strong>
+                        );
+                      }
+                      return part;
+                    })}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
