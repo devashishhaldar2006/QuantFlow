@@ -149,13 +149,13 @@ The reported **1.48M ticks/sec** throughput figure is based on:
 
 ## 📸 Screenshots
 
-![Landing Page](<https://i.postimg.cc/dtD8JFHk/Screenshot-(1754).png>)
-![Dashboard](<https://i.postimg.cc/sxxZfPJp/Screenshot-(1748).png>)
-![Portfolio](<https://i.postimg.cc/05XwW38t/Screenshot-(1749).png>)
-![Backtests](<https://i.postimg.cc/VL3b1C07/Screenshot-(1750).png>)
-![Data Platform](<https://i.postimg.cc/3wh40QBv/Screenshot-(1751).png>)
-![Strategies](<https://i.postimg.cc/prmpMW2K/Screenshot-(1752).png>)
-![Analytics](<https://i.postimg.cc/FzY7XrrN/Screenshot-(1753).png>)
+![Landing Page](<https://i.postimg.cc/qvrLRDK8/Screenshot-(1910).png>)
+![Dashboard](<https://i.postimg.cc/fbTf73Bd/Screenshot-(1911).png>)
+![Portfolio](<https://i.postimg.cc/TwBjXtGW/Screenshot-(1912).png>)
+![Backtests](<https://i.postimg.cc/dt22zRfs/Screenshot-(1913).png>)
+![Data Platform](<https://i.postimg.cc/sxFWL19Q/Screenshot-(1915).png>)
+![Strategies](<https://i.postimg.cc/wTQNWqtx/Screenshot-(1916).png>)
+![Analytics](<https://i.postimg.cc/htCdB21j/Screenshot-(1917).png>)
 
 ---
 
