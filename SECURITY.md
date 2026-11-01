@@ -41,3 +41,4 @@ When deploying or self-hosting QuantFlow:
 - **Never commit production secrets**: Keep `.env.local` and `.env` files in `.gitignore`.
 - **API Keys & Credentials**: Ensure Clerk keys, database connection strings (`DATABASE_URL`), and broker/exchange API secrets are kept strictly confidential.
 - **Network Isolation**: When hosting the C++ engine (`backend`) in production, restrict inbound network traffic so it is only reachable by the Next.js API or VPC reverse proxies.
+
