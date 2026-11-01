@@ -26,6 +26,8 @@
 | **⚡ High-Performance Core** | [**quantflow-backend-7gxi.onrender.com**](https://quantflow-backend-7gxi.onrender.com) | Render Web Service (Docker) | Compiled C++20 REST API Execution Engine |
 | **🗄️ Cloud Database & Storage** | Supabase Cloud (Tokyo ap-northeast-1) | PostgreSQL + S3 Object Store | Tick datasets, backtest ledgers, and trade accounting |
 | **⚠️ Model Limitations & Disclosures** | [**LIMITATIONS.md**](LIMITATIONS.md) | Technical Specification | Statistical assumptions, intrabar heuristics & scope limits |
+| **🤝 Community & Contributing** | [Contributing](CONTRIBUTING.md) & [Code of Conduct](CODE_OF_CONDUCT.md) | Community Guidelines | Contribution workflows & code of conduct standards |
+| **🛡️ Security Policy** | [SECURITY.md](SECURITY.md) | Security Policy | Vulnerability disclosure instructions & supported branches |
 | **📜 Open Source License** | [MIT License](LICENSE) | GitHub Repository | Permissive open-source license for researchers & devs |
 
 
@@ -304,7 +306,7 @@ The GitHub Actions workflow (`.github/workflows/ci.yml`) automatically builds an
 - **Email**: `workfordevashishhaldar@gmail.com`
 - **Phone**: `+91 9336009951`
 
-Pull requests and issues are welcome! Please follow conventional commits and ensure all tests pass before submitting PRs.
+Contributions are welcome! Please review our [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before submitting pull requests. For vulnerability disclosures, please review our [Security Policy](SECURITY.md).
 
 ---
 
